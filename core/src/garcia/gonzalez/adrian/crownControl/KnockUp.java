@@ -8,11 +8,14 @@ import garcia.gonzalez.adrian.enums.Enums;
 public class KnockUp extends CC {
 
     // El lanzamiento a los aires
+    private Vector2 inicio;
     private Vector2 golpe;
+    private float lerp;
+
 
     public KnockUp(String nombreIdentificativo, Enums.CrowdControl tipo, Vector2 golpe, float duracion) {
         super(nombreIdentificativo, tipo, duracion);
-
+        this.inicio = golpe;
         this.golpe = golpe;
     }
 
@@ -29,8 +32,16 @@ public class KnockUp extends CC {
     }
 
     @Override
-    public void aplicandoCC(Unidad unidad) {
-        // TODO: Aplicar la fuerza y reducir poco a poco
+    public void aplicandoCC(Unidad unidad, float tickUpdate) {
+        lerp += getDuracion() * tickUpdate;
+
+        if (lerp>1)
+            lerp=1;
+
+        // Reducimos el efecto del knockBack hasta llegar a 0
+        golpe = inicio.lerp(Vector2.Zero, lerp);
+
+        // TODO: Aplicar el efecto del golpe
     }
 
     @Override

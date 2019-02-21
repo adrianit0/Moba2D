@@ -39,8 +39,24 @@ public abstract class CC {
     public abstract void aplicarCC (Unidad unidad);
 
     // Aplicando el efecto del CC
-    public abstract void aplicandoCC (Unidad unidad);
+    public abstract void aplicandoCC (Unidad unidad, float tickUpdate);
 
     // Terminar el efecto del CC
     public abstract void terminarCC (Unidad unidad);
+
+    public String getNombreIdentificativo() {
+        return nombreIdentificativo;
+    }
+
+    public CrowdControl getTipo() {
+        return tipo;
+    }
+
+    public float getDuracion() {
+        return duracion;
+    }
+
+    public long getFinCC() {
+        return finCC;
+    }
 }

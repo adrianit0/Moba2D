@@ -1,13 +1,18 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
+import garcia.gonzalez.adrian.utiles.Assets;
 
 public class Esbirro extends Unidad {
-    public Esbirro(Bando bando) {
-        super(bando);
+    public Esbirro(Bando bando, int x, int y) {
+        super(bando, x, y);
     }
 
     @Override
@@ -46,7 +51,36 @@ public class Esbirro extends Unidad {
 
     @Override
     public void render(SpriteBatch batch) {
+        // TODO: Crear MECANIM
+        //TextureRegion region = Assets.instance.blueMinionAssets.;
+        // TODO: Hacer esto bien
+        float walkTimeSeconds = MathUtils.nanoToSec * (TimeUtils.nanoTime() - 0);
+        TextureRegion region;
+        if (getBando()==Bando.ALIADO)
+            region = (TextureRegion) Assets.instance.blueMinionAssets.andar.getKeyFrame(walkTimeSeconds);
+        else
+            region = (TextureRegion) Assets.instance.redMinionAssets.andar.getKeyFrame(walkTimeSeconds);
 
+        //TODO: Incluir OFFSET
+        Vector2 position = getPosition();
+
+        batch.draw(
+                region.getTexture(),
+                position.x,
+                position.y+5,
+                0,
+                0,
+                region.getRegionWidth(),
+                region.getRegionHeight(),
+                1,
+                1,
+                0,
+                region.getRegionX(),
+                region.getRegionY(),
+                region.getRegionWidth(),
+                region.getRegionHeight(),
+                false,
+                false);
     }
 
     @Override

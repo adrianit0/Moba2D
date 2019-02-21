@@ -11,6 +11,7 @@ public class Estadistica {
     HashMap<AtribEnum, Stat> estadisticas;
 
     public Estadistica () {
+        estadisticas = new HashMap<AtribEnum, Stat>();
         AtribEnum[] stats = AtribEnum.values();
 
         for(AtribEnum s : stats ) {

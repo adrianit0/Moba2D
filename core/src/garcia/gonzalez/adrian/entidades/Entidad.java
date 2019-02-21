@@ -1,6 +1,7 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Estadistica;
@@ -225,6 +226,8 @@ public abstract class Entidad {
         // a posteriori de la cura (Pe: "Consigue 10 de ataque durante 3s tras curarse").
         onAfterHeal(cantidad);
     }
+
+    public Vector2 getPosition () { return new Vector2(x,y); }
 
     protected Estadistica getEstadisticas() {
         return estadisticas;
