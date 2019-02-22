@@ -38,11 +38,22 @@ public abstract class CC {
     // Empezar el efecto del CC
     public abstract void aplicarCC (Unidad unidad);
 
-    // Aplicando el efecto del CC
-    public abstract void aplicandoCC (Unidad unidad, float tickUpdate);
+    // Aplicando el efecto del CC en cada tick. Sirve para el DOT.
+    public abstract void aplicandoCCTick (Unidad unidad, float deltaTick);
+
+    // Aplicando el efecto del CC en cada frame. Sirve para los Knock-back
+    public abstract void aplicandoCCUpdate (Unidad unidad, float deltaUpdate);
 
     // Terminar el efecto del CC
     public abstract void terminarCC (Unidad unidad);
+
+    /* Lo máximo de tenacidad es 99%*/
+    public void efectoTenacidad (float tenacidad) {
+        if (tenacidad>=1)
+            tenacidad=0.99f;
+
+        duracion *= tenacidad;
+    }
 
     public String getNombreIdentificativo() {
         return nombreIdentificativo;

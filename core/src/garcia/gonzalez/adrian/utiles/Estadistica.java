@@ -36,6 +36,18 @@ public class Estadistica {
         return Math.round(s.actual+s.bonus);
     }
 
+    /**
+     * Cogemos el valor actual de un atributo directamente como float.
+     * Perfecto para valores porcentuales.
+     * */
+    public float getAttrPorc (AtribEnum stat) {
+        Stat s = estadisticas.get(stat);
+        if (s==null)
+            return 0;
+
+        return s.actual+s.bonus;
+    }
+
     public int getMaxAttr (AtribEnum stat){
         Stat s = estadisticas.get(stat);
         if (s==null)

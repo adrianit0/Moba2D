@@ -1,6 +1,7 @@
 package garcia.gonzalez.adrian;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -25,11 +26,11 @@ public class Level {
         this.viewport = viewport;
 
         escenario = new Escenario(this.viewport);
-        minion = new Esbirro(Enums.Bando.ALIADO,0,0);   // DE PRUEBAS
         entidades = new DelayedRemovalArray<Entidad>();
 
-        entidades.add(minion);
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,0));
+        // Incluimos esbirro de pruebas
+        entidades.add(new Esbirro(Enums.Bando.ALIADO,-200,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,200,5, this));
     }
 
     private void nivel1() {
@@ -94,5 +95,20 @@ public class Level {
 
 
         batch.end();
+    }
+
+
+    // TODO: Cambiar y mejorar
+    /**
+     * Coge todas las entidades dentro de un posición en un rango
+     * */
+    public Entidad getEntidad(Vector2 pos, float distancia, Enums.Bando bando) {
+        for(Entidad e : entidades) {
+            // TODO incluir
+            if (e.getBando()==bando && pos.dst(e.getCenter()) < distancia) {
+                return e;
+            }
+        }
+        return null;
     }
 }

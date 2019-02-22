@@ -32,7 +32,7 @@ public class KnockUp extends CC {
     }
 
     @Override
-    public void aplicandoCC(Unidad unidad, float tickUpdate) {
+    public void aplicandoCCUpdate(Unidad unidad, float tickUpdate) {
         lerp += getDuracion() * tickUpdate;
 
         if (lerp>1)
@@ -43,6 +43,9 @@ public class KnockUp extends CC {
 
         // TODO: Aplicar el efecto del golpe
     }
+
+    @Override
+    public void aplicandoCCTick(Unidad unidad, float deltaTick) { }
 
     @Override
     public void terminarCC(Unidad unidad) {

@@ -1,8 +1,10 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Estadistica;
 
@@ -10,28 +12,25 @@ public abstract class Entidad {
     private Bando bando;
 
     // Posición, será algo en común en todas las entidades
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
     // ESTADISTICAS
     // Nivel de la entidad, este estará comprendido entre 1 y 18
     private int nivel;
 
+    // Acceso a la partida
+    protected Level level;
+
     // Ver enum "Enums" para ver cuantas estadísticas tiene una entidad.
     private Estadistica estadisticas;
 
-    public Entidad (Bando bando) {
-        x=0;
-        y=0;
-        estadisticas= new Estadistica();
-        this.bando = bando;
-    }
-
-    public Entidad(Bando bando, int x, int y) {
+    public Entidad(Bando bando, int x, int y, Level level) {
         this.x=x;
         this.y=y;
         estadisticas= new Estadistica();
         this.bando = bando;
+        this.level = level;
     }
 
     public Bando getBando() {
@@ -71,6 +70,15 @@ public abstract class Entidad {
 
     // Método que se activará al morir
     public abstract boolean onDeath ();
+
+    // Métodos abstractos de colisión:
+    // TODO: Implementar, unicamente si hace falta
+    //public abstract void onCollisionEnter(Entidad e);
+    //public abstract void onCollisionStay(Entidad e);
+    //public abstract void onCollisionExit(Entidad e);
+    // Colisionador del personaje
+    public abstract Rectangle getCollider ();
+    public abstract Vector2 getCenter();
 
 
     /**
@@ -231,5 +239,19 @@ public abstract class Entidad {
 
     protected Estadistica getEstadisticas() {
         return estadisticas;
+    }
+
+    public Level getGameManager () {
+        return level;
+    }
+
+    public void changePosition (Vector2 newPos) {
+        x = newPos.x;
+        y = newPos.y;
+    }
+
+    public void movePosition(Vector2 relPos) {
+        x+=relPos.x;
+        y+=relPos.y;
     }
 }

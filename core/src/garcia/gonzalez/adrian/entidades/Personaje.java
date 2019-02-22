@@ -2,6 +2,8 @@ package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 
@@ -10,15 +12,12 @@ import garcia.gonzalez.adrian.enums.Enums.*;
  * evitar forzar implementarlo en los hijos.
  * */
 public abstract class Personaje extends Unidad {
-    public Personaje(Enums.Bando bando) {
-        super(bando);
+
+    public Personaje(Enums.Bando bando, int x, int y, Level level) {
+        super(bando, x, y, level);
     }
 
-    public Personaje(Enums.Bando bando, int x, int y) {
-        super(bando, x, y);
-    }
-
-    // METODOS QUE SIGUEN ABSTRACTOS DE LOS HIJOS, por lo que tendrá que implementarlo los hijos
+    // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
     @Override
     public abstract void onCreate();
     @Override
@@ -48,8 +47,8 @@ public abstract class Personaje extends Unidad {
     }
 
     @Override
-    public float onCrownControl(Enums.CrowdControl cc, float time, Unidad destinatario) {
-        return time;
+    public boolean onCrownControl(CC cc, Unidad destinatario) {
+        return true;
     }
 
     @Override
