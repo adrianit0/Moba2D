@@ -1,6 +1,10 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -28,6 +32,12 @@ public abstract class Unidad extends Entidad {
     private Vector2 velocidad;  // Movimiento total del personaje
     private Vector2 knockUp;    // Movimiento involuntario, provocado por el enemigo
 
+
+
+    // TODO: Pruebas con Colisionadores, eliminar o comentar
+    private ShapeRenderer shapeRenderer;
+    static private boolean projectionMatrixSet;
+
     public Unidad(Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
 
@@ -35,10 +45,44 @@ public abstract class Unidad extends Entidad {
         crownControl = new ArrayList();
 
         velocidad = new Vector2(0,0);
+
+        shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
+    }
+
+    @Override
+    public final void render (SpriteBatch sprite) {
+        // Usamos el hijo
+        super.render(sprite);
+
+        //TODO: Probando las colisiones
+        sprite.end();
+        if(!projectionMatrixSet){
+            shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
+        }
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.GREEN);
+        Rectangle col = getCollider();
+        Vector2 centro = getCenter();
+        Vector2 position = getPosition();
+        shapeRenderer.rect(col.x, col.y, col.width, col.height);
+
+        // CENTRO DEL PERSONAJE
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(centro.x-1, centro.y-1, 1, 1);
+
+        // POSICION DEL PERSONAJE
+        shapeRenderer.setColor(Color.BLUE);
+        shapeRenderer.rect(position.x-1, position.y-1, 1, 1);
+        shapeRenderer.end();
+        sprite.begin();
+        //TODO: Borrar esto
     }
 
     // Cada vez que el personaje se mueva
     public abstract boolean onMove(Direccion dir);
+    // Cada vez que el personaje esté quiero
+    public abstract void onIdle ();
+
     // Al empezar el salto
     public abstract boolean onJumpStart (EstadoSalto estado);
     // Al caer al suelo
@@ -67,7 +111,6 @@ public abstract class Unidad extends Entidad {
             if (c.hasFinished(this,System.currentTimeMillis())) {
                 crownControl.remove(c);
                 i--;
-                Gdx.app.log("ACABADO", "El cc se acabo");
             }
         }
 
@@ -86,7 +129,13 @@ public abstract class Unidad extends Entidad {
             movePosition(new Vector2 (0, velocidad.y * delta)); //TODO: Mejorar la gravedad de los objetos
         } else {
             estadoSalto = estadoSalto.EN_SUELO;
+            getPosition().y = 5;
             velocidad.y = 0;
+        }
+
+        //TODO: MEJORAR
+        if (velocidad.x==0) {
+            onIdle();
         }
     }
 
@@ -174,11 +223,13 @@ public abstract class Unidad extends Entidad {
 
         // Aplicamos el primer efecto del CC, si procede.
         cc.aplicarCC(this);
-
-        Gdx.app.log("", "CC aplicado"); //TODO: Borrar log
     }
 
     public void aumentarKnockUp (Vector2 pos) {
         knockUp.add(pos);
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
     }
 }

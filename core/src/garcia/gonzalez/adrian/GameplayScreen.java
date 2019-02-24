@@ -51,7 +51,7 @@ public class GameplayScreen extends ScreenAdapter {
 
         //TODO: Programar la chase cam inteligente
         // Inicializamos la cámara que sigue al jugador
-        chaseCam = new ChaseCam(viewport.getCamera(), new Esbirro(Enums.Bando.ALIADO,0,0, null));
+        chaseCam = new ChaseCam(viewport.getCamera(), level.getPersonaje());
     }
 
     @Override

@@ -6,10 +6,23 @@ public class Constants {
     // CONFIGURACION INICIAL
     public static final Color BACKGROUND_COLOR = Color.SKY;
     public static final float WORLD_SIZE = 160; // Para la cámara
-    public static final String TEXTURE_ATLAS = "images/minions.atlas";
+    public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
+    public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
     public static final float CHASE_CAM_MOVE_SPEED = 128;   // Velocidad de la camara
     public static final float GRAVITY = 12;                 // Gravedad de todas las unidades
     public static final float TICK_UPDATE = 0.25f;          // Cada cuanto se hará el tick_update
+
+    public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica
+
+    // PERSONAJE JUGABLE 01
+    public static final String[] CHARACTER_01_IDLE = {
+            "character_1-00", "character_1-01", "character_1-02", "character_1-03",
+            "character_1-04", "character_1-05", "character_1-06", "character_1-07",
+            "character_1-08", "character_1-09", "character_1-10", "character_1-11"};
+    public static final String[] CHARACTER_01_WALK = {
+            "character_1-27", "character_1-28", "character_1-29", "character_1-30",
+            "character_1-31", "character_1-32", "character_1-33", "character_1-34",
+            "character_1-35", "character_1-36", "character_1-37", "character_1-38"};
 
     // MINIONS
     public static final String[] MINION_SPAWN =  { "minion_%s-05", "minion_%s-06", "minion_%s-07", "minion_%s-08", "minion_%s-09", "minion_%s-10" };

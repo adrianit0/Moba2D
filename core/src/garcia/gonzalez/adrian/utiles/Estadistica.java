@@ -29,7 +29,10 @@ public class Estadistica {
      * Pone un atributo a un personaje
      * */
     public void setAttr (AtribEnum atrib, float cantidad) {
-        estadisticas.put(atrib, new Stat (atrib, cantidad, 0));
+        estadisticas.put(atrib, new Stat (atrib, cantidad, 9));
+    }
+    public void setAttr (AtribEnum atrib, float cantidad, float porNivel) {
+        estadisticas.put(atrib, new Stat (atrib, cantidad, porNivel));
     }
 
     /**

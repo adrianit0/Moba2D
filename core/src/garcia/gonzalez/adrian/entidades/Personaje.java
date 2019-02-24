@@ -46,17 +46,77 @@ public abstract class Personaje extends Unidad {
 
     @Override
     public final void update(float delta) {
-        TeclasJugador[] teclas = TeclasJugador.values();
-        for (TeclasJugador t : teclas) {
-            controller.onKeyDown(t);
-        }
-        for (TeclasJugador t : teclas) {
-            controller.onKeyPressing(t);
-        }
-        for (TeclasJugador t : teclas) {
-            controller.onKeyUp(t);
-        }
+        if (controller!=null) {
+            // PRESS DOWN
+            if (controller.onKeyDown(TeclasJugador.MOVER_DERECHA)) {
+                mover(Direccion.DERECHA, delta);
+            }
+            if (controller.onKeyDown(TeclasJugador.MOVER_IZQUIERDA)) {
+                mover(Direccion.IZQUIERDA, delta);
+            }
+            if (controller.onKeyDown(TeclasJugador.SALTAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyDown(TeclasJugador.AGACHAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_1)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_2)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_3)) {
+                // TODO: HACER ESTE INPUT
+            }
 
+
+            // PRESSING
+            if (controller.onKeyPressing(TeclasJugador.MOVER_DERECHA)) {
+                mover(Direccion.DERECHA, delta);
+            }
+            if (controller.onKeyPressing(TeclasJugador.MOVER_IZQUIERDA)) {
+                mover(Direccion.IZQUIERDA, delta);
+            }
+            if (controller.onKeyPressing(TeclasJugador.SALTAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyPressing(TeclasJugador.AGACHAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_1)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_2)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_3)) {
+                // TODO: HACER ESTE INPUT
+            }
+
+            // PRESS UP
+            if (controller.onKeyUp(TeclasJugador.MOVER_DERECHA)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.MOVER_IZQUIERDA)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.SALTAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.AGACHAR)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_1)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_2)) {
+                // TODO: HACER ESTE INPUT
+            }
+            if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_3)) {
+                // TODO: HACER ESTE INPUT
+            }
+        }
 
         // aplicamos el update del padre
         super.update(delta);

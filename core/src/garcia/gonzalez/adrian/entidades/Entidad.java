@@ -93,7 +93,7 @@ public abstract class Entidad {
         onUpdate(delta);
     }
 
-    public final void render (SpriteBatch sprite) {
+    public void render (SpriteBatch sprite) {
         onRender(sprite);
     }
 

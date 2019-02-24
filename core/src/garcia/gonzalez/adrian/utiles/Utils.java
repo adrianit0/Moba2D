@@ -40,6 +40,20 @@ public class Utils {
                 false);
     }
 
+    /**
+     * Crea una animación a partir de un array de String para por ejemplo los personajes
+     * */
+    public static Animation<TextureRegion> createAnimation (TextureAtlas atlas, float duracion, String[] animaciones, Animation.PlayMode playmode) {
+        Array<AtlasRegion> sprites = new Array<AtlasRegion>();
+        for (String s : animaciones) {
+            sprites.add(atlas.findRegion(s));
+        }
+        return new Animation(duracion, sprites, playmode);
+    }
+
+    /**
+     * Crea una animación a partir de un array de String para por ejemplo los minions
+     * */
     public static Animation<TextureRegion> createAnimationMinions (TextureAtlas atlas, float duracion, String[] animaciones, Animation.PlayMode playmode, String extraInfo) {
         Array<AtlasRegion> sprites = new Array<AtlasRegion>();
         for (String s : animaciones) {

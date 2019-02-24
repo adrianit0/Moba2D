@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.crownControl.KnockUp;
+import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -65,6 +66,9 @@ public class Esbirro extends Unidad {
     public boolean onMove(Direccion dir) {
         return true;
     }
+
+    @Override
+    public void onIdle() { }
 
     @Override
     // Los minions por defecto no saltaran por voluntad propia
@@ -186,7 +190,7 @@ public class Esbirro extends Unidad {
         //TODO: Incluir OFFSET
         width=region.getRegionWidth();
         height=region.getRegionHeight();
-        Vector2 position = getCenter();
+        Vector2 position = getPosition();
 
         Color c = batch.getColor();
         batch.setColor(c.r, c.g, c.b, dissapearRatio);//set alpha to 0.3
@@ -255,7 +259,7 @@ public class Esbirro extends Unidad {
         Vector2 pos = getCenter();
         Vector2 size = getSize();
         final Rectangle rect = new Rectangle(
-                pos.x,
+                pos.x-size.x/2,
                 pos.y,
                 size.x,
                 size.y
@@ -266,7 +270,7 @@ public class Esbirro extends Unidad {
     @Override
     public Vector2 getCenter() {
         Vector2 pos = getPosition();
-        return new Vector2(pos.x-width/2, pos.y);
+        return new Vector2(pos.x+width/2, pos.y);
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import garcia.gonzalez.adrian.controladorPersonaje.Jugador1;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.Personaje;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Escenario;
@@ -19,7 +21,7 @@ public class Level {
     //TODO: Seguir con el escenarioAssets
     private Escenario escenario;
 
-    private Entidad minion;
+    private Personaje personaje;
 
     private float tickUpdate;
 
@@ -36,16 +38,22 @@ public class Level {
 
         // Incluimos esbirro de pruebas
         entidades.add(new Esbirro(Enums.Bando.ALIADO,-180,5, this));
-        entidades.add(new Esbirro(Enums.Bando.ALIADO,-140,5, this));
-        entidades.add(new Esbirro(Enums.Bando.ALIADO,-100,5, this));
-        entidades.add(new Esbirro(Enums.Bando.ALIADO,-60,5, this));
+        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-140,5, this));
+        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-100,5, this));
+        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-60,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
 
+        //Controlador controller, Bando bando, int x, int y, Level level
+        Personaje1 mainCharacter = new Personaje1(new Jugador1(), Enums.Bando.ALIADO, 0,5, this);
+        entidades.add(mainCharacter);
+        this.personaje = mainCharacter;
+    }
 
-
+    public Personaje getPersonaje () {
+        return personaje;
     }
 
     private void nivel1() {
@@ -113,7 +121,7 @@ public class Level {
         escenario.render(batch);
 
         for (Entidad entidad : entidades) {
-            entidad.onRender(batch);
+            entidad.render(batch);
         }
 
 

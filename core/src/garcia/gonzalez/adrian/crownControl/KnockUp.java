@@ -44,9 +44,7 @@ public class KnockUp extends CC {
 
         // Reducimos el efecto del knockBack hasta llegar a 0
         golpe = new Vector2(inicio.x, MathUtils.lerp(inicio.y,0, lerp));
-        //Gdx.app.log("GOLPE LERP", golpe.toString() + " DURACION: "+lerp); //TODO BORRAR LOG
 
-        // TODO: Aplicar el efecto del golpe
         // Incluimos el golpe del knock-up
         unidad.aumentarKnockUp(golpe);
     }

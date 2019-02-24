@@ -16,7 +16,7 @@ public class ChaseCam {
     private Entidad target;
 
     // Si la cámara sigue o no a GigaGal
-    private boolean following=false;
+    private boolean following=true;
 
     public ChaseCam(Camera camera, Entidad target) {
         this.camera = camera;
@@ -30,9 +30,6 @@ public class ChaseCam {
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)){
             following = ! following;
         }
-
-        //TODO: ELiminar esto
-        camera.position.x=0;
 
         if (following) {
             Vector2 position = target.getCenter();

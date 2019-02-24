@@ -22,7 +22,7 @@ public class Enums {
     };
 
     /**
-     * AtribEnum del personaje.
+     * Atributos del personaje.
      * */
     public enum AtribEnum {
         SALUD,          // Cantidad de salud que tiene un personaje, a salud<=0 este muere.

@@ -7,10 +7,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import garcia.gonzalez.adrian.enums.Enums;
 
@@ -22,6 +22,9 @@ public class Assets implements Disposable, AssetErrorListener {
 
     // Singleton EscenarioAssets
     public EscenarioAssets escenarioAssets;
+
+    // Personajes
+    public Character_01Assets personaje1;
 
     // Singleton minions
     public MinionAssets blueMinionAssets;
@@ -36,18 +39,23 @@ public class Assets implements Disposable, AssetErrorListener {
     public void init() {
         this.assetManager = new AssetManager();
         assetManager.setErrorListener(this);
-        assetManager.load(Constants.TEXTURE_ATLAS, TextureAtlas.class);
+        assetManager.load(Constants.TEXTURE_ATLAS_MINIONS, TextureAtlas.class);
+        assetManager.load(Constants.TEXTURE_ATLAS_CHARACTERS, TextureAtlas.class);
         assetManager.finishLoading();
 
-        TextureAtlas atlas = assetManager.get(Constants.TEXTURE_ATLAS);
+        TextureAtlas atlas_minions = assetManager.get(Constants.TEXTURE_ATLAS_MINIONS);
+        TextureAtlas atlas_characters = assetManager.get(Constants.TEXTURE_ATLAS_CHARACTERS);
 
         escenarioAssets = new EscenarioAssets();
 
-        blueMinionAssets = new MinionAssets(atlas, Enums.Bando.ALIADO);
-        redMinionAssets = new MinionAssets(atlas, Enums.Bando.ENEMIGO);
+        personaje1 = new Character_01Assets(atlas_characters);
+
+        blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
+        redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
 
         // Cargamos el singleton de la plataforma
-        platformAssets = new PlatformAssets(atlas);
+        // TODO: Si no meto plataformas, borrar esto
+        platformAssets = new PlatformAssets(atlas_minions);
     }
 
     @Override
@@ -58,6 +66,26 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         assetManager.dispose();
+    }
+
+    /**
+     * Assets del personaje número 1.
+     * */
+    // TODO: Ponerle un nombre y refactorizarlo
+    public class Character_01Assets {
+        public final Animation<TextureRegion> idle;
+        public final Animation<TextureRegion> running;
+        /*public final Animation<TextureRegion> jumping;
+        public final Animation<TextureRegion> attack01;
+        public final Animation<TextureRegion> attack02;
+        public final Animation<TextureRegion> death;*/
+
+        public Character_01Assets (TextureAtlas atlas) {
+            //TODO: Cambiar el temporizador
+            idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_IDLE, Animation.PlayMode.LOOP);
+            running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_WALK, Animation.PlayMode.LOOP);
+        }
+
     }
 
     public class MinionAssets {
