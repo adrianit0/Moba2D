@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.enums.Enums.*;
+import garcia.gonzalez.adrian.utiles.Constants;
 
 /**
  * La característica especial de las unidades respecto a estructura es que podran moverse
@@ -24,13 +25,16 @@ public abstract class Unidad extends Entidad {
     private Direccion direccion;
     private EstadoSalto estadoSalto;
 
-    private Vector2 knockUp;
+    private Vector2 velocidad;  // Movimiento total del personaje
+    private Vector2 knockUp;    // Movimiento involuntario, provocado por el enemigo
 
     public Unidad(Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
 
         estadoSalto=EstadoSalto.EN_SUELO;
         crownControl = new ArrayList();
+
+        velocidad = new Vector2(0,0);
     }
 
     // Cada vez que el personaje se mueva
@@ -50,9 +54,10 @@ public abstract class Unidad extends Entidad {
     /**
      * Activamos los CC, luego el update del super, y luego aplicamos el Knock-Up, si procede.
      * */
-    public final void update(float delta) {
+    public void update(float delta) {
         // Volvemos a poner el KnockUp a 0
         knockUp = new Vector2(0,0);
+        velocidad.y -= Constants.GRAVITY;
 
         // Aplicamos todos los CC
         for (int i = 0;i < crownControl.size(); i++) {
@@ -78,9 +83,10 @@ public abstract class Unidad extends Entidad {
         //TODO: Mejorar esto
         if (getPosition().y>5) {
             estadoSalto = EstadoSalto.SALTANDO;
-            movePosition(new Vector2 (0, -10 * delta)); //TODO: Mejorar la gravedad de los objetos
+            movePosition(new Vector2 (0, velocidad.y * delta)); //TODO: Mejorar la gravedad de los objetos
         } else {
             estadoSalto = estadoSalto.EN_SUELO;
+            velocidad.y = 0;
         }
     }
 
@@ -125,6 +131,8 @@ public abstract class Unidad extends Entidad {
         if (!saltar) {
             return;
         }
+
+
 
         int potenciaSalto = getEstadisticas().getAttr(AtribEnum.SALTO);
 

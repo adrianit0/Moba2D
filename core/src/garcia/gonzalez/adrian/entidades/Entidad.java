@@ -81,12 +81,24 @@ public abstract class Entidad {
     public abstract Vector2 getCenter();
     public abstract Vector2 getSize();      // Toma el valor real del personaje (Que no es siempre el Widht-Height del Sprite)
 
+    // Si una vez muerto, el personaje puede ser eliminado de la lista.
+    // Es probable que despues de muerto siga apareciendo para mostrar la animación de muerte.
+    // Asi que sea el propio personaje quien decida cuando eliminarse.
+    public abstract boolean canBeCleaned();
 
     /**
      * Método para el update
      * */
     public void update(float delta) {
         onUpdate(delta);
+    }
+
+    public final void render (SpriteBatch sprite) {
+        onRender(sprite);
+    }
+
+    public final void tickUpdate(float tickDelta) {
+        onTickUpdate(tickDelta);
     }
 
     /**
@@ -265,5 +277,13 @@ public abstract class Entidad {
     public void movePosition(Vector2 relPos) {
         x+=relPos.x;
         y+=relPos.y;
+    }
+
+    /**
+     * Mira si la entidad sigue viva o en su contrario ha muerto
+     * */
+    //TODO: Mirar y mejorar (Si procede)
+    public boolean estaVivo () {
+        return estadisticas.getSaludActual()>0;
     }
 }

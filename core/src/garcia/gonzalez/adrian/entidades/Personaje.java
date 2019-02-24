@@ -1,8 +1,11 @@
 package garcia.gonzalez.adrian.entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
@@ -15,8 +18,13 @@ import garcia.gonzalez.adrian.enums.Enums.*;
  * */
 public abstract class Personaje extends Unidad {
 
-    public Personaje(Enums.Bando bando, int x, int y, Level level) {
+    // Quien controla al personaje, este puede ser un jugador o la IA
+    private Controlador controller;
+
+    public Personaje(Controlador controller, Enums.Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
+
+        this.controller = controller;
     }
 
     // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
@@ -34,6 +42,25 @@ public abstract class Personaje extends Unidad {
     @Override
     public boolean onMove(Enums.Direccion dir) {
         return true;
+    }
+
+    @Override
+    public final void update(float delta) {
+        TeclasJugador[] teclas = TeclasJugador.values();
+        for (TeclasJugador t : teclas) {
+            controller.onKeyDown(t);
+        }
+        for (TeclasJugador t : teclas) {
+            controller.onKeyPressing(t);
+        }
+        for (TeclasJugador t : teclas) {
+            controller.onKeyUp(t);
+        }
+
+
+        // aplicamos el update del padre
+        super.update(delta);
+
     }
 
     @Override
@@ -81,5 +108,13 @@ public abstract class Personaje extends Unidad {
     @Override
     public boolean onDeath() {
         return true;
+    }
+
+    @Override
+    /**
+     * Los personaje al ser jugadores contrlados no podran ser borrados de la lista.
+     * */
+    public final boolean canBeCleaned() {
+        return false;
     }
 }

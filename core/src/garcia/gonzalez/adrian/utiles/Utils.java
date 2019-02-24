@@ -1,9 +1,14 @@
 package garcia.gonzalez.adrian.utiles;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 /**
@@ -33,6 +38,14 @@ public class Utils {
                 region.getRegionHeight(),
                 false,
                 false);
+    }
+
+    public static Animation<TextureRegion> createAnimationMinions (TextureAtlas atlas, float duracion, String[] animaciones, Animation.PlayMode playmode, String extraInfo) {
+        Array<AtlasRegion> sprites = new Array<AtlasRegion>();
+        for (String s : animaciones) {
+            sprites.add(atlas.findRegion(String.format(s, extraInfo)));
+        }
+        return new Animation(duracion, sprites, playmode);
     }
 
     public static float secondsSince(long timeNanos) {

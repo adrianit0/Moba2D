@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import garcia.gonzalez.adrian.enums.Enums;
+
 public class Assets implements Disposable, AssetErrorListener {
 
     public static final String TAG = Assets.class.getName();
@@ -22,8 +24,8 @@ public class Assets implements Disposable, AssetErrorListener {
     public EscenarioAssets escenarioAssets;
 
     // Singleton minions
-    public BlueMinionAssets blueMinionAssets;
-    public RedMinionAssets redMinionAssets;
+    public MinionAssets blueMinionAssets;
+    public MinionAssets redMinionAssets;
 
     // Singleton plataforma
     public PlatformAssets platformAssets;
@@ -41,8 +43,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         escenarioAssets = new EscenarioAssets();
 
-        blueMinionAssets = new BlueMinionAssets(atlas);
-        redMinionAssets = new RedMinionAssets(atlas);
+        blueMinionAssets = new MinionAssets(atlas, Enums.Bando.ALIADO);
+        redMinionAssets = new MinionAssets(atlas, Enums.Bando.ENEMIGO);
 
         // Cargamos el singleton de la plataforma
         platformAssets = new PlatformAssets(atlas);
@@ -58,40 +60,22 @@ public class Assets implements Disposable, AssetErrorListener {
         assetManager.dispose();
     }
 
-    public class BlueMinionAssets {
+    public class MinionAssets {
         // ANIMACIONES DE LOS MINIONS
+        public final Animation<TextureRegion> spawn;
         public final Animation<TextureRegion> andar;
         public final Animation<TextureRegion> atacar;
+        public final Animation<TextureRegion> muerte;
 
-        public BlueMinionAssets(TextureAtlas atlas) {
-            // Creamos la animación para el movimiento a la izquierda
-            Array<AtlasRegion> walkingLeftFrames = new Array<AtlasRegion>();
-            walkingLeftFrames.add(atlas.findRegion(Constants.BLUE_MINION_WALK1));
-            walkingLeftFrames.add(atlas.findRegion(Constants.BLUE_MINION_WALK2));
-            walkingLeftFrames.add(atlas.findRegion(Constants.BLUE_MINION_WALK3));
-            andar = new Animation(Constants.WALK_LOOP_DURATION, walkingLeftFrames, Animation.PlayMode.LOOP);
+        public MinionAssets(TextureAtlas atlas, Enums.Bando bando) {
+            String _bando = bando==Enums.Bando.ALIADO ? Constants.MINION_ALIADO : Constants.MINION_ENEMIGO;
 
-            Array<AtlasRegion> attacking = new Array<AtlasRegion>();
-            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK1));
-            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK2));
-            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK3));
-            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK4));
-            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK5));
-            atacar = new Animation(Constants.ATTACK_DURATION, attacking, Animation.PlayMode.NORMAL);
-        }
-    }
-
-    public class RedMinionAssets {
-        // ANIMACIONES DE LOS MINIONS
-        public final Animation<TextureRegion> andar;
-
-        public RedMinionAssets(TextureAtlas atlas) {
-            // Creamos la animación para el movimiento a la izquierda
-            Array<AtlasRegion> walkingLeftFrames = new Array<AtlasRegion>();
-            walkingLeftFrames.add(atlas.findRegion(Constants.RED_MINION_WALK1));
-            walkingLeftFrames.add(atlas.findRegion(Constants.RED_MINION_WALK2));
-            walkingLeftFrames.add(atlas.findRegion(Constants.RED_MINION_WALK3));
-            andar = new Animation(Constants.WALK_LOOP_DURATION, walkingLeftFrames, Animation.PlayMode.LOOP);
+            // Creamos la animación para el movimiento de los minions
+            //TODO: Configurar minions rojos para que miren tambien hacia la derecha
+            spawn = Utils.createAnimationMinions(atlas, Constants.MINION_SPAWN_DURATION, Constants.MINION_SPAWN, Animation.PlayMode.NORMAL, _bando);
+            andar = Utils.createAnimationMinions(atlas, Constants.MINION_WALK_DURATION, Constants.MINION_WALK, Animation.PlayMode.LOOP, _bando);
+            atacar = Utils.createAnimationMinions(atlas, Constants.MINION_ATTACK_DURATION, Constants.MINION_ATTACK, Animation.PlayMode.NORMAL, _bando);
+            muerte = Utils.createAnimationMinions(atlas, Constants.MINION_DEATH_DURATION, Constants.MINION_DEAD, Animation.PlayMode.NORMAL, _bando);
         }
     }
 

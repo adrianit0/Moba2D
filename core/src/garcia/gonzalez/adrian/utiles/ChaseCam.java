@@ -31,6 +31,9 @@ public class ChaseCam {
             following = ! following;
         }
 
+        //TODO: ELiminar esto
+        camera.position.x=0;
+
         if (following) {
             Vector2 position = target.getCenter();
             camera.position.x = position.x;

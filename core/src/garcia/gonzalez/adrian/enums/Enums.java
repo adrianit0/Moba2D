@@ -57,9 +57,9 @@ public class Enums {
     };
 
     public enum EstadoSalto {
-        SALTANDO,
-        CAYENDO,
-        EN_SUELO
+        PROPULSANDO,        // Los segundos entre que va a saltar y salta realmente
+        SALTANDO,           // Mientras que el personaje está en el cielo
+        EN_SUELO            // Cuando el personaje está en el suelo
     }
 
     /**
@@ -96,5 +96,21 @@ public class Enums {
         public TipoCC getTipo() {
             return tipo;
         }
+    }
+
+
+    /**
+     * Son las teclas de los jugadores que tendras que implementarse en
+     * el paquete controladorPersonaje.
+     *
+     * */
+    public enum TeclasJugador {
+        MOVER_DERECHA,
+        MOVER_IZQUIERDA,
+        SALTAR,
+        AGACHAR,
+        BOTON_HABILIDAD_1,
+        BOTON_HABILIDAD_2,
+        BOTON_HABILIDAD_3
     }
 }

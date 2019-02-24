@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
+import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums;
+import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Escenario;
 
 public class Level {
@@ -19,18 +21,31 @@ public class Level {
 
     private Entidad minion;
 
+    private float tickUpdate;
+
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
     //TODO: Incluir lista para escenarioAssets, proyectiles, particulas y plataformas
 
     public Level(Viewport viewport) {
         this.viewport = viewport;
 
+        tickUpdate = 0;
+
         escenario = new Escenario(this.viewport);
         entidades = new DelayedRemovalArray<Entidad>();
 
         // Incluimos esbirro de pruebas
-        entidades.add(new Esbirro(Enums.Bando.ALIADO,-200,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,200,5, this));
+        entidades.add(new Esbirro(Enums.Bando.ALIADO,-180,5, this));
+        entidades.add(new Esbirro(Enums.Bando.ALIADO,-140,5, this));
+        entidades.add(new Esbirro(Enums.Bando.ALIADO,-100,5, this));
+        entidades.add(new Esbirro(Enums.Bando.ALIADO,-60,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
+
+
+
     }
 
     private void nivel1() {
@@ -60,20 +75,28 @@ public class Level {
     }
 
     public void update(float delta) {
+        tickUpdate+=delta;
         // Actualizamos los enemigos
         for (int i = 0; i < entidades.size; i++) {
             Entidad entidad = entidades.get(i);
             entidad.update(delta);
 
             //TODO: Configurar que hacer cuando este muerto
-            /*
-            if (entidad.health < 1) {
-                spawnExplosion(entidad.position);
-                enemies.removeIndex(i);
-                // Sumamos los puntos en caso de matar al enemigo
-                score += Constants.ENEMY_KILL_SCORE;
-            }*/
+            if (entidad.canBeCleaned()) {
+                entidades.removeIndex(i);
+                i--;
+            }
         }
+
+        // Activamos el tick_update, cuando proceda
+        if (tickUpdate> Constants.TICK_UPDATE) {
+            for (Entidad e : entidades) {
+                e.tickUpdate(tickUpdate);
+            }
+            // Se reinicia a 0
+            tickUpdate=0;
+        }
+
 
         /*explosions.begin();
         for (int i = 0; i < explosions.size; i++) {
@@ -105,7 +128,7 @@ public class Level {
     public Entidad getEntidad(Vector2 pos, float distancia, Enums.Bando bando) {
         for(Entidad e : entidades) {
             // TODO incluir
-            if (e.getBando()==bando && pos.dst(e.getCenter()) < distancia) {
+            if (e.estaVivo() && e.getBando()==bando && pos.dst(e.getCenter()) < distancia) {
                 return e;
             }
         }

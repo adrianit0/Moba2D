@@ -24,6 +24,14 @@ public class Estadistica {
         // TODO: HACER
     }
 
+    //TODO: Eliminar despues de las pruebas
+    /**
+     * Pone un atributo a un personaje
+     * */
+    public void setAttr (AtribEnum atrib, float cantidad) {
+        estadisticas.put(atrib, new Stat (atrib, cantidad, 0));
+    }
+
     /**
      * Cogemos el valor actual de un atributo.
      * Si el atributo no existe, entonces devolvemos 0
@@ -119,14 +127,6 @@ public class Estadistica {
             this.actual = value;
             this.porNivel = porNivel;
             this.bonus = 0;
-        }
-
-        public Stat (AtribEnum tipo, float max, float actual, float porNivel) {
-            this.tipo = tipo;
-            this.max = max;
-            this.actual = actual;
-            this.bonus = 0;
-            this.porNivel = porNivel;
         }
 
         /**
