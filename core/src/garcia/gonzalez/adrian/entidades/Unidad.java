@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public abstract class Unidad extends Entidad {
     private Direccion direccion;
     private EstadoSalto estadoSalto;
 
+    private Vector2 knockUp;
 
     public Unidad(Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
@@ -40,6 +42,47 @@ public abstract class Unidad extends Entidad {
     // Al ser cceado, le pregunta al personaje si quiere ser afectado por su efecto.
     public abstract boolean onCrownControl (CC cc, Unidad destinatario);
 
+    public EstadoSalto getEstadoSalto() {
+        return estadoSalto;
+    }
+
+    @Override
+    /**
+     * Activamos los CC, luego el update del super, y luego aplicamos el Knock-Up, si procede.
+     * */
+    public final void update(float delta) {
+        // Volvemos a poner el KnockUp a 0
+        knockUp = new Vector2(0,0);
+
+        // Aplicamos todos los CC
+        for (int i = 0;i < crownControl.size(); i++) {
+            CC c = crownControl.get(i);
+
+            c.aplicandoCCUpdate(this, delta);
+            if (c.hasFinished(this,System.currentTimeMillis())) {
+                crownControl.remove(c);
+                i--;
+                Gdx.app.log("ACABADO", "El cc se acabo");
+            }
+        }
+
+        // Aplicamos el update de la clase padre
+        super.update(delta);
+
+        // Si el knock no es igual a 0
+        if (!knockUp.equals(Vector2.Zero)) {
+            movePosition(new Vector2(knockUp.x*delta, knockUp.y*delta));
+        }
+
+        // Si está por encima del suelo significa que tiene que caer
+        //TODO: Mejorar esto
+        if (getPosition().y>5) {
+            estadoSalto = EstadoSalto.SALTANDO;
+            movePosition(new Vector2 (0, -10 * delta)); //TODO: Mejorar la gravedad de los objetos
+        } else {
+            estadoSalto = estadoSalto.EN_SUELO;
+        }
+    }
 
     //TODO: Seguir
     /**
@@ -123,5 +166,11 @@ public abstract class Unidad extends Entidad {
 
         // Aplicamos el primer efecto del CC, si procede.
         cc.aplicarCC(this);
+
+        Gdx.app.log("", "CC aplicado"); //TODO: Borrar log
+    }
+
+    public void aumentarKnockUp (Vector2 pos) {
+        knockUp.add(pos);
     }
 }

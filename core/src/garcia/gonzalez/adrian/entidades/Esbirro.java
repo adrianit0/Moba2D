@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,8 +10,10 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.crownControl.CC;
+import garcia.gonzalez.adrian.crownControl.KnockUp;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
+import garcia.gonzalez.adrian.utiles.Utils;
 
 public class Esbirro extends Unidad {
 
@@ -18,6 +21,9 @@ public class Esbirro extends Unidad {
 
     private int width;
     private int height;
+
+    private long timeSinceStartAttack;
+    private Unidad seleccionado;
 
     private MaquinaEstados estado;
 
@@ -56,14 +62,33 @@ public class Esbirro extends Unidad {
     }
 
     @Override
-    public void update(float delta) {
+    public void onUpdate(float delta) {
         //TODO: cambiar esto
 
         if (estado==MaquinaEstados.ANDAR) {
             Bando bando = getBando();
-            mover(bando==Bando.ALIADO ? Direccion.DERECHA : Direccion.IZQUIERDA, delta);
-            if (level.getEntidad(getCenter(), 32, bando.getContrario())!=null)
+            Entidad e = level.getEntidad(getCenter(), 24, bando.getContrario());
+            if (e!=null) {
                 estado=MaquinaEstados.ATACAR;
+                seleccionado=(Unidad) e;
+                timeSinceStartAttack = TimeUtils.nanoTime();
+            } else {
+                mover(bando==Bando.ALIADO ? Direccion.DERECHA : Direccion.IZQUIERDA, delta);
+            }
+
+        } else if (estado==MaquinaEstados.ATACAR) {
+            if (getBando()==Bando.ENEMIGO)
+                return;
+
+            float elapsedTime = Utils.secondsSince(timeSinceStartAttack);
+            boolean terminado = Assets.instance.blueMinionAssets.atacar.isAnimationFinished(elapsedTime);
+
+            if (terminado) {
+                estado=MaquinaEstados.ANDAR;
+                //TODO: Cambiar todo esto
+                seleccionado.aplicarCC(new KnockUp("knock-Up pruebas", CrowdControl.KNOCK_BACK, new Vector2(60,80), 0.5f), this);
+                seleccionado=null;
+            }
         }
 
 
@@ -72,21 +97,25 @@ public class Esbirro extends Unidad {
     }
 
     @Override
-    public void tickUpdate(float tickDelta) {
+    public void onTickUpdate(float tickDelta) {
 
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void onRender(SpriteBatch batch) {
         // TODO: Crear MECANIM
         //TextureRegion region = Assets.instance.blueMinionAssets.;
         // TODO: Hacer esto bien
         float walkTimeSeconds = MathUtils.nanoToSec * (TimeUtils.nanoTime() - 0);
         TextureRegion region;
-        if (getBando()==Bando.ALIADO)
-            region = (TextureRegion) Assets.instance.blueMinionAssets.andar.getKeyFrame(walkTimeSeconds);
-        else
-            region = (TextureRegion) Assets.instance.redMinionAssets.andar.getKeyFrame(walkTimeSeconds);
+        if (getBando()==Bando.ALIADO && estado==MaquinaEstados.ANDAR) {
+            region = Assets.instance.blueMinionAssets.andar.getKeyFrame(walkTimeSeconds);
+        } else if (getBando()==Bando.ALIADO && estado==MaquinaEstados.ATACAR) {
+            region = Assets.instance.blueMinionAssets.atacar.getKeyFrame(Utils.secondsSince(timeSinceStartAttack));
+        } else {
+            region = Assets.instance.redMinionAssets.andar.getKeyFrame(walkTimeSeconds);
+        }
+
 
         //TODO: Incluir OFFSET
         width=region.getRegionWidth();
@@ -113,7 +142,7 @@ public class Esbirro extends Unidad {
     }
 
     @Override
-    public int onDamageTaken(int damage, Entidad destinatario) {
+    public int onBeforeDefend(int damage, Entidad destinatario) {
         return damage;
     }
 
@@ -148,11 +177,12 @@ public class Esbirro extends Unidad {
     @Override
     public Rectangle getCollider() {
         Vector2 pos = getCenter();
+        Vector2 size = getSize();
         final Rectangle rect = new Rectangle(
                 pos.x,
                 pos.y,
-                width,
-                height
+                size.x,
+                size.y
         );
         return rect;
     }
@@ -160,6 +190,11 @@ public class Esbirro extends Unidad {
     @Override
     public Vector2 getCenter() {
         Vector2 pos = getPosition();
-        return new Vector2(pos.x-width, pos.y);
+        return new Vector2(pos.x-width/2, pos.y);
+    }
+
+    @Override
+    public Vector2 getSize() {
+        return new Vector2(22, 28);
     }
 }

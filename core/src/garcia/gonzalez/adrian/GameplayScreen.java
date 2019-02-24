@@ -60,7 +60,7 @@ public class GameplayScreen extends ScreenAdapter {
         // Actualizamos el ViewPort cuando hagamos un resize
         viewport.update(width, height, true);
         // TODO: Programar la HUD
-        //hud.viewport.update(width, height, true);
+        //hud.viewport.onUpdate(width, height, true);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        // TODO: Comparar render con gigagal
+        // TODO: Comparar onRender con gigagal
         level.update(delta);
 
         //TODO: Camara del personaje
@@ -90,8 +90,8 @@ public class GameplayScreen extends ScreenAdapter {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         level.render(batch);
 
-        // TODO: Ajustar hud render
-        //hud.render(batch, level.getGigaGal().getLives(), level.getGigaGal().getAmmo(), level.score);
+        // TODO: Ajustar hud onRender
+        //hud.onRender(batch, level.getGigaGal().getLives(), level.getGigaGal().getAmmo(), level.score);
     }
 
     // TODO: Programar pantalla de fin de nivel
@@ -107,7 +107,7 @@ public class GameplayScreen extends ScreenAdapter {
             }
 
             // Renderizamos el HUD de victorua
-            victoryOverlay.render(batch);
+            victoryOverlay.onRender(batch);
 
             if (Utils.secondsSince(levelEndOverlayStartTime) > Constants.LEVEL_END_DURATION) {
 

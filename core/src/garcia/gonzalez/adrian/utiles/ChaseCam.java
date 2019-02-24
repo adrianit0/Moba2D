@@ -21,6 +21,7 @@ public class ChaseCam {
     public ChaseCam(Camera camera, Entidad target) {
         this.camera = camera;
         this.target = target;
+
     }
 
     // Actualizamos la posición de la cámara respecto a la posición de GigaGal
@@ -31,7 +32,7 @@ public class ChaseCam {
         }
 
         if (following) {
-            Vector2 position = target.getPosition();
+            Vector2 position = target.getCenter();
             camera.position.x = position.x;
             camera.position.y = position.y<50 ? 50 : position.y;
         } else {

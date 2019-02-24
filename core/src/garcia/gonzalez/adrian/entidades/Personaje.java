@@ -10,6 +10,8 @@ import garcia.gonzalez.adrian.enums.Enums.*;
 /**
  * Clase base para los personajes, estan la mayoría de los métodos implementados para
  * evitar forzar implementarlo en los hijos.
+ *
+ * Además, los personajes a diferencia del resto de tipos, podrán ser controlador por el jugador o la IA
  * */
 public abstract class Personaje extends Unidad {
 
@@ -21,11 +23,11 @@ public abstract class Personaje extends Unidad {
     @Override
     public abstract void onCreate();
     @Override
-    public abstract void update(float delta);
+    public abstract void onUpdate(float delta);
     @Override
-    public abstract void tickUpdate(float tickDelta);
+    public abstract void onTickUpdate(float tickDelta);
     @Override
-    public abstract void render(SpriteBatch batch);
+    public abstract void onRender(SpriteBatch batch);
     @Override
     public abstract int onAttack(Entidad objetivo);
 
@@ -52,7 +54,7 @@ public abstract class Personaje extends Unidad {
     }
 
     @Override
-    public int onDamageTaken(int damage, Entidad destinatario) {
+    public int onBeforeDefend(int damage, Entidad destinatario) {
         return damage;
     }
 

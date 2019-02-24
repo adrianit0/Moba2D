@@ -31,7 +31,7 @@ public abstract class CC {
     /**
      * Un CC termina cuando el tiempo actual es mayor o actual al del estado
      * */
-    public boolean hasFinished(long actual) {
+    public boolean hasFinished(Unidad unidad, long actual) {
         return actual>=finCC;
     }
 

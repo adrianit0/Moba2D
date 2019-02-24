@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -59,7 +60,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public class BlueMinionAssets {
         // ANIMACIONES DE LOS MINIONS
-        public final Animation andar;
+        public final Animation<TextureRegion> andar;
+        public final Animation<TextureRegion> atacar;
 
         public BlueMinionAssets(TextureAtlas atlas) {
             // Creamos la animación para el movimiento a la izquierda
@@ -68,12 +70,20 @@ public class Assets implements Disposable, AssetErrorListener {
             walkingLeftFrames.add(atlas.findRegion(Constants.BLUE_MINION_WALK2));
             walkingLeftFrames.add(atlas.findRegion(Constants.BLUE_MINION_WALK3));
             andar = new Animation(Constants.WALK_LOOP_DURATION, walkingLeftFrames, Animation.PlayMode.LOOP);
+
+            Array<AtlasRegion> attacking = new Array<AtlasRegion>();
+            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK1));
+            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK2));
+            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK3));
+            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK4));
+            attacking.add(atlas.findRegion(Constants.BLUE_MINION_ATTACK5));
+            atacar = new Animation(Constants.ATTACK_DURATION, attacking, Animation.PlayMode.NORMAL);
         }
     }
 
     public class RedMinionAssets {
         // ANIMACIONES DE LOS MINIONS
-        public final Animation andar;
+        public final Animation<TextureRegion> andar;
 
         public RedMinionAssets(TextureAtlas atlas) {
             // Creamos la animación para el movimiento a la izquierda

@@ -41,23 +41,23 @@ public abstract class Entidad {
     public abstract void onCreate();
 
     // Método que se actualizará una vez por frame
-    public abstract void update(float delta);
+    public abstract void onUpdate(float delta);
 
     // Para la actualización de bufos/vida/etc, vida, etc. Se actualizará más o menos cada 0.25s
-    public abstract void tickUpdate (float tickDelta);
+    public abstract void onTickUpdate(float tickDelta);
 
     // Método que se utilizará para renderizar
-    public abstract void render (SpriteBatch batch);
-
-    // Método que se utilizará cuando sufra daño
-    // Consejo para evitar bucles infinitos: No realizar un ataque espejo (Pe: Devolver un % de vida a quien le ha hecho el ataque)
-    public abstract int onDamageTaken (int damage, Entidad destinatario);
+    public abstract void onRender(SpriteBatch batch);
 
     // Método que se utilizará cuando se haga daño.
     public abstract int onAttack (Entidad objetivo);
 
     // Método que sucede tras haber atacado.
     public abstract void onAfterAttact (Entidad objetivo);
+
+    // Método que se utilizará cuando sufra daño
+    // Consejo para evitar bucles infinitos: No realizar un ataque espejo (Pe: Devolver un % de vida a quien le ha hecho el ataque)
+    public abstract int onBeforeDefend(int damage, Entidad destinatario);
 
     // Método que sucede tras haber defendido, da como parametro el daño real recibido.
     public abstract void onAfterDefend(int receivedDamage, Entidad destinatario, boolean vivo);
@@ -79,7 +79,15 @@ public abstract class Entidad {
     // Colisionador del personaje
     public abstract Rectangle getCollider ();
     public abstract Vector2 getCenter();
+    public abstract Vector2 getSize();      // Toma el valor real del personaje (Que no es siempre el Widht-Height del Sprite)
 
+
+    /**
+     * Método para el update
+     * */
+    public void update(float delta) {
+        onUpdate(delta);
+    }
 
     /**
      * Esta entidad ataca a la entidad objetivo.
@@ -95,6 +103,7 @@ public abstract class Entidad {
         if (objetivo==null || bando==objetivo.bando) {
             return;
         }
+
         int damage = onAttack(objetivo);
 
         // Si hace 0 o menos daño ni se activa el trigger enemigo
@@ -108,7 +117,7 @@ public abstract class Entidad {
         // Ahora miramos si por ejemplo hemos matado al enemigo, sirve por ejemplo para algunas pasivas
         onAfterAttact(objetivo);
 
-        // Aunque hayas hecho daño, es probable que el enemigo lo haya mitigado
+        // Aunque hayas hecho daño, es probable que el enemigo lo haya mitigado completamente
         if (damage<=0) {
             return;
         }
@@ -147,7 +156,7 @@ public abstract class Entidad {
 
         // Primero miramos como gestiona el personaje el daño.
         // Es probable que tenga una pasiva, habilidad o item que reduzca el daño.
-        dmg = onDamageTaken(dmg, destinatario);
+        dmg = onBeforeDefend(dmg, destinatario);
 
         // Si hace 0 o menos daño entonces eso significa que no le ha inflingido daño.
         if (dmg<=0) {
@@ -185,6 +194,7 @@ public abstract class Entidad {
         if (vida<=0) {
             boolean sigueVido = onDeath();
             // TODO: Programar la parte de si muere y sigue vivo
+
         }
 
         // Activamos el onAfterDefend
@@ -235,7 +245,9 @@ public abstract class Entidad {
         onAfterHeal(cantidad);
     }
 
-    public Vector2 getPosition () { return new Vector2(x,y); }
+    public Vector2 getPosition () {
+        return new Vector2(x,y);
+    }
 
     protected Estadistica getEstadisticas() {
         return estadisticas;

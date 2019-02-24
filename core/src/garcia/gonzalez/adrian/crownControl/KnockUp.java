@@ -1,5 +1,7 @@
 package garcia.gonzalez.adrian.crownControl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.entidades.Unidad;
@@ -20,10 +22,9 @@ public class KnockUp extends CC {
     }
 
     @Override
-    // Los knockUp acaban cuando deja de aplicar fuerza.
-    // La duración es el tiempo en el que tarda en dejar de aplicar dicha fuerza
-    public boolean hasFinished(long actual) {
-        return super.hasFinished(actual);
+    // Los knockUp no terminan con el tiempo, terminan cuando el objetivo toca el suelo.
+    public boolean hasFinished(Unidad unidad, long actual) {
+        return unidad.getEstadoSalto()== Enums.EstadoSalto.EN_SUELO && lerp==1;
     }
 
     @Override
@@ -32,16 +33,22 @@ public class KnockUp extends CC {
     }
 
     @Override
-    public void aplicandoCCUpdate(Unidad unidad, float tickUpdate) {
-        lerp += getDuracion() * tickUpdate;
+    public void aplicandoCCUpdate(Unidad unidad, float deltaUpdate) {
+        // De ser mayor de 1, entonces no sigue
+        if (lerp<1) {
+            lerp += deltaUpdate/getDuracion();
 
-        if (lerp>1)
-            lerp=1;
+            if (lerp>1)
+                lerp=1;
+        }
 
         // Reducimos el efecto del knockBack hasta llegar a 0
-        golpe = inicio.lerp(Vector2.Zero, lerp);
+        golpe = new Vector2(inicio.x, MathUtils.lerp(inicio.y,0, lerp));
+        Gdx.app.log("GOLPE LERP", golpe.toString() + " DURACION: "+lerp); //TODO BORRAR LOG
 
         // TODO: Aplicar el efecto del golpe
+        // Incluimos el golpe del knock-up
+        unidad.aumentarKnockUp(golpe);
     }
 
     @Override

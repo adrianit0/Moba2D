@@ -90,7 +90,7 @@ public class Level {
         escenario.render(batch);
 
         for (Entidad entidad : entidades) {
-            entidad.render(batch);
+            entidad.onRender(batch);
         }
 
 
