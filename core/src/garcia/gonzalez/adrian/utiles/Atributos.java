@@ -6,11 +6,11 @@ import garcia.gonzalez.adrian.enums.Enums.*;
 
 // UNA LISTA DE TODAS LAS ESTADISTICAS DEL JUEGO
 // Cada entidad tendrá sus propias estadísticas
-public class Estadistica {
+public class Atributos {
 
     HashMap<AtribEnum, Stat> estadisticas;
 
-    public Estadistica () {
+    public Atributos() {
         estadisticas = new HashMap<AtribEnum, Stat>();
         AtribEnum[] stats = AtribEnum.values();
 
@@ -20,7 +20,7 @@ public class Estadistica {
     }
 
     // TODO: Seguir con las estadísticas
-    public Estadistica(int saludMax /* .... */) {
+    public Atributos(int saludMax /* .... */) {
         // TODO: HACER
     }
 

@@ -6,6 +6,7 @@ public class Constants {
     // CONFIGURACION INICIAL
     public static final Color BACKGROUND_COLOR = Color.SKY;
     public static final float WORLD_SIZE = 160; // Para la cámara
+    public static final float HUD_VIEWPORT_SIZE = 480;  // Para el HUD
     public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
     public static final float CHASE_CAM_MOVE_SPEED = 128;   // Velocidad de la camara

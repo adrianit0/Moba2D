@@ -32,7 +32,7 @@ public abstract class Unidad extends Entidad {
     private Vector2 velocidad;  // Movimiento total del personaje
     private Vector2 knockUp;    // Movimiento involuntario, provocado por el enemigo
 
-
+    private boolean moving;
 
     // TODO: Pruebas con Colisionadores, eliminar o comentar
     private ShapeRenderer shapeRenderer;
@@ -60,28 +60,35 @@ public abstract class Unidad extends Entidad {
             shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
         }
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        // COLLIDER
         shapeRenderer.setColor(Color.GREEN);
         Rectangle col = getCollider();
         Vector2 centro = getCenter();
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // CENTRO DEL PERSONAJE
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(centro.x-1, centro.y-1, 1, 1);
+        shapeRenderer.circle(centro.x, centro.y,1);
 
         // POSICION DEL PERSONAJE
         shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect(position.x-1, position.y-1, 1, 1);
+        shapeRenderer.circle(position.x, position.y, 1);
+
+        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.rect(0, 0, 1, 200);
         shapeRenderer.end();
         sprite.begin();
         //TODO: Borrar esto
     }
 
     // Cada vez que el personaje se mueva
-    public abstract boolean onMove(Direccion dir);
-    // Cada vez que el personaje esté quiero
-    public abstract void onIdle ();
+    public abstract boolean onMove(Direccion dir, float delta);
+    // Cada vez que el personaje esté quieto
+    public abstract void onIdle (float delta);
 
     // Al empezar el salto
     public abstract boolean onJumpStart (EstadoSalto estado);
@@ -124,7 +131,7 @@ public abstract class Unidad extends Entidad {
 
         // Si está por encima del suelo significa que tiene que caer
         //TODO: Mejorar esto
-        if (getPosition().y>5) {
+        if (getPosition().y>5.01f) {
             estadoSalto = EstadoSalto.SALTANDO;
             movePosition(new Vector2 (0, velocidad.y * delta)); //TODO: Mejorar la gravedad de los objetos
         } else {
@@ -134,9 +141,10 @@ public abstract class Unidad extends Entidad {
         }
 
         //TODO: MEJORAR
-        if (velocidad.x==0) {
-            onIdle();
+        if (!moving) {
+            onIdle(delta);
         }
+        moving=false;
     }
 
     //TODO: Seguir
@@ -148,7 +156,7 @@ public abstract class Unidad extends Entidad {
         // if cc return
 
         // Activamos el onMove()
-        boolean mover = onMove(dir);
+        boolean mover = onMove(dir, delta);
 
         // Es probable que sea el propio personaje quien voluntariamente decida no moverse
         if (!mover) {
@@ -158,17 +166,18 @@ public abstract class Unidad extends Entidad {
         direccion = dir;
 
         // TODO: Seguir
-        float velocidad = getEstadisticas().getAttr(AtribEnum.VELOCIDAD);
+        float velocidad = getAtributos().getAttr(AtribEnum.VELOCIDAD);
 
         velocidad *= delta * direccion.getDir();
 
         movePosition(new Vector2(velocidad, 0));
+        moving=true;
     }
 
     /**
      * Salta el personaje, este método no es heredable, en su lugar utilizar el método onJumpStart()
      * */
-    public final void Saltar () {
+    public final void saltar() {
         //TODO: No deja moverse si está CCeado por Aturdimiento, pesado o KnockUp
         // if cc return
 
@@ -183,7 +192,7 @@ public abstract class Unidad extends Entidad {
 
 
 
-        int potenciaSalto = getEstadisticas().getAttr(AtribEnum.SALTO);
+        int potenciaSalto = getAtributos().getAttr(AtribEnum.SALTO);
 
         // No va a saltar si no tiene la potencia suficiente para ello
         if (potenciaSalto<=0) {
@@ -191,7 +200,10 @@ public abstract class Unidad extends Entidad {
         }
 
         estadoSalto = EstadoSalto.SALTANDO;
-        // TODO: Seguir
+
+        // TODO: SEGUIR
+        velocidad.y = potenciaSalto;
+        Gdx.app.log("SALTO"," HA SALTADO"); //TODO: ELIMINAR log
     }
 
     /**
@@ -213,7 +225,7 @@ public abstract class Unidad extends Entidad {
         // Con 0% no cambia nada, con 50% reduce a la mitad la duración del efecto
         // Con -50% de tenacidad el efecto durará un 50% más.
         if (cc.getTipo().getTipo() == TipoCC.DEBUFF) {
-            float tenacidad = 1-getEstadisticas().getAttr(AtribEnum.TENACIDAD);
+            float tenacidad = 1- getAtributos().getAttr(AtribEnum.TENACIDAD);
 
             cc.efectoTenacidad(tenacidad);
         }

@@ -37,14 +37,14 @@ public class Level {
         entidades = new DelayedRemovalArray<Entidad>();
 
         // Incluimos esbirro de pruebas
-        entidades.add(new Esbirro(Enums.Bando.ALIADO,-180,5, this));
-        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-140,5, this));
-        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-100,5, this));
-        //entidades.add(new Esbirro(Enums.Bando.ALIADO,-60,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ALIADO,-140,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ALIADO,-100,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ALIADO,-60,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
-        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
-        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
-        //entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
 
         //Controlador controller, Bando bando, int x, int y, Level level
         Personaje1 mainCharacter = new Personaje1(new Jugador1(), Enums.Bando.ALIADO, 0,5, this);

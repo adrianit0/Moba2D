@@ -87,8 +87,15 @@ public class GameplayScreen extends ScreenAdapter {
                 Constants.BACKGROUND_COLOR.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // TODO: CAMBIAR DE MODO 1 JUGADOR A 2 JUGADORES
+        //Gdx.gl.glViewport( 0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight() );
+
         batch.setProjectionMatrix(viewport.getCamera().combined);
         level.render(batch);
+
+        // TODO: CONFIGURAR MODO 2 JUGADORES PANTALLA DIVIDIDAD
+        //Gdx.gl.glViewport( Gdx.graphics.getWidth()/2,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight() );
+        //level.render(batch);
 
         // TODO: Ajustar hud onRender
         //hud.onRender(batch, level.getGigaGal().getLives(), level.getGigaGal().getAmmo(), level.score);

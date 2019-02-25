@@ -40,7 +40,7 @@ public abstract class Personaje extends Unidad {
     public abstract int onAttack(Entidad objetivo);
 
     @Override
-    public boolean onMove(Enums.Direccion dir) {
+    public boolean onMove(Enums.Direccion dir, float delta) {
         return true;
     }
 
@@ -55,7 +55,7 @@ public abstract class Personaje extends Unidad {
                 mover(Direccion.IZQUIERDA, delta);
             }
             if (controller.onKeyDown(TeclasJugador.SALTAR)) {
-                // TODO: HACER ESTE INPUT
+                saltar();
             }
             if (controller.onKeyDown(TeclasJugador.AGACHAR)) {
                 // TODO: HACER ESTE INPUT
@@ -162,6 +162,15 @@ public abstract class Personaje extends Unidad {
 
     @Override
     public void onAfterHeal(int saludCurada) {
+
+    }
+
+    //TODO: Si no se va a usar, borrarlo
+    public void onItemBuy(Item item) {
+
+    }
+
+    public void onItemSell(Item item) {
 
     }
 

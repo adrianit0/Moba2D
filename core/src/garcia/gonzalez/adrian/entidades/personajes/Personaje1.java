@@ -1,9 +1,7 @@
 package garcia.gonzalez.adrian.entidades.personajes;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,8 +10,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.Item;
 import garcia.gonzalez.adrian.entidades.Personaje;
-import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
 
@@ -32,9 +30,10 @@ public class Personaje1 extends Personaje {
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller, bando, x, y, level);
 
-        getEstadisticas().setAttr(AtribEnum.VELOCIDAD, 120);
-        getEstadisticas().setAttr(AtribEnum.SALUD, 800);
-        getEstadisticas().setAttr(AtribEnum.ATAQUE, 80);
+        getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
+        getAtributos().setAttr(AtribEnum.SALUD, 800);
+        getAtributos().setAttr(AtribEnum.ATAQUE, 80);
+        getAtributos().setAttr(AtribEnum.SALTO, 80);
 
 
         estado = MaquinaEstados.IDLE;
@@ -56,12 +55,12 @@ public class Personaje1 extends Personaje {
     }
 
     @Override
-    public void onIdle() {
+    public void onIdle(float delta) {
         estado = MaquinaEstados.IDLE;
     }
 
     @Override
-    public boolean onMove (Direccion dir) {
+    public boolean onMove (Direccion dir, float delta) {
         estado = MaquinaEstados.WALKING;
         return true;
     }
@@ -112,6 +111,21 @@ public class Personaje1 extends Personaje {
     }
 
     @Override
+    public void onEntityKilled(Entidad objetivo) {
+
+    }
+
+    @Override
+    public void onLevelUp() {
+
+    }
+
+    @Override
+    public void onSpawn() {
+
+    }
+
+    @Override
     public Rectangle getCollider() {
         Vector2 pos = getCenter();
         Vector2 size = getSize();
@@ -132,6 +146,6 @@ public class Personaje1 extends Personaje {
 
     @Override
     public Vector2 getSize() {
-        return new Vector2(20, 52);
+        return new Vector2(20, 48);
     }
 }

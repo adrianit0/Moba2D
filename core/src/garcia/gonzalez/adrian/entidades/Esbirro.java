@@ -1,6 +1,5 @@
 package garcia.gonzalez.adrian.entidades;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -51,9 +50,9 @@ public class Esbirro extends Unidad {
         height=64;
 
         // Le damos valores por defecto
-        getEstadisticas().setAttr(AtribEnum.VELOCIDAD, 50);
-        getEstadisticas().setAttr(AtribEnum.SALUD, 100);
-        getEstadisticas().setAttr(AtribEnum.ATAQUE, 80);
+        getAtributos().setAttr(AtribEnum.VELOCIDAD, 50);
+        getAtributos().setAttr(AtribEnum.SALUD, 100);
+        getAtributos().setAttr(AtribEnum.ATAQUE, 20);
 
         estado=MaquinaEstados.SPAWN;
 
@@ -63,12 +62,12 @@ public class Esbirro extends Unidad {
     }
 
     @Override
-    public boolean onMove(Direccion dir) {
+    public boolean onMove(Direccion dir, float delta) {
         return true;
     }
 
     @Override
-    public void onIdle() { }
+    public void onIdle(float delta) { }
 
     @Override
     // Los minions por defecto no saltaran por voluntad propia
@@ -224,12 +223,17 @@ public class Esbirro extends Unidad {
 
     @Override
     public int onAttack(Entidad objetivo) {
-        return getEstadisticas().getAttr(AtribEnum.ATAQUE);
+        return getAtributos().getAttr(AtribEnum.ATAQUE);
     }
 
     @Override
     public void onAfterAttact(Entidad objetivo) {
 
+    }
+
+    @Override
+    public void onEntityKilled(Entidad objetivo) {
+        // TODO: Implementar onEntity Killed
     }
 
     @Override
@@ -248,6 +252,16 @@ public class Esbirro extends Unidad {
 
     @Override
     public void onAfterHeal(int saludCurada) {}
+
+    @Override
+    public void onLevelUp() {
+
+    }
+
+    @Override
+    public void onSpawn() {
+
+    }
 
     @Override
     public boolean onDeath() {
