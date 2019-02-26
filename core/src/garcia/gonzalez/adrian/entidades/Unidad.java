@@ -23,13 +23,14 @@ public abstract class Unidad extends Entidad {
     //TODO: Meter los buffos
     private ArrayList<CC> crownControl;
 
-    //TODO: Meter la velocidad
+    //TODO: Meter la gravityForce
 
     //TODO: Meter el estado salto
     private Direccion direccion;
     private EstadoSalto estadoSalto;
 
-    private Vector2 velocidad;  // Movimiento total del personaje
+    private float gravityForce;    // Movimiento total del personaje
+    private float salto;        // Potencia del salto
     private Vector2 knockUp;    // Movimiento involuntario, provocado por el enemigo
 
     private boolean moving;
@@ -44,7 +45,8 @@ public abstract class Unidad extends Entidad {
         estadoSalto=EstadoSalto.EN_SUELO;
         crownControl = new ArrayList();
 
-        velocidad = new Vector2(0,0);
+        gravityForce = 0;
+        salto = 0;
 
         shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
     }
@@ -64,15 +66,16 @@ public abstract class Unidad extends Entidad {
         // COLLIDER
         shapeRenderer.setColor(Color.GREEN);
         Rectangle col = getCollider();
-        Vector2 centro = getCenter();
+        Vector2 offset = getPosition();
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        // CENTRO DEL PERSONAJE
+
+        // OFFSET DEL PERSONAJE
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(centro.x, centro.y,1);
+        shapeRenderer.circle(offset.x, offset.y,1);
 
         // POSICION DEL PERSONAJE
         shapeRenderer.setColor(Color.BLUE);
@@ -97,7 +100,7 @@ public abstract class Unidad extends Entidad {
     // Al ser cceado, le pregunta al personaje si quiere ser afectado por su efecto.
     public abstract boolean onCrownControl (CC cc, Unidad destinatario);
 
-    public EstadoSalto getEstadoSalto() {
+    public final EstadoSalto getEstadoSalto() {
         return estadoSalto;
     }
 
@@ -108,7 +111,7 @@ public abstract class Unidad extends Entidad {
     public void update(float delta) {
         // Volvemos a poner el KnockUp a 0
         knockUp = new Vector2(0,0);
-        velocidad.y -= Constants.GRAVITY;
+        gravityForce -= Constants.GRAVITY;
 
         // Aplicamos todos los CC
         for (int i = 0;i < crownControl.size(); i++) {
@@ -131,13 +134,23 @@ public abstract class Unidad extends Entidad {
 
         // Si está por encima del suelo significa que tiene que caer
         //TODO: Mejorar esto
-        if (getPosition().y>5.01f) {
+
+        if (salto>0) {
             estadoSalto = EstadoSalto.SALTANDO;
-            movePosition(new Vector2 (0, velocidad.y * delta)); //TODO: Mejorar la gravedad de los objetos
-        } else {
-            estadoSalto = estadoSalto.EN_SUELO;
-            getPosition().y = 5;
-            velocidad.y = 0;
+        }
+
+        movePosition(new Vector2 (0, (salto+gravityForce) * delta)); //TODO: Mejorar la gravedad de los objetos
+
+        if (y<5f) {
+            // Si en el anterior frame estaba saltando
+            if (estadoSalto == EstadoSalto.SALTANDO) {
+                onJumpFinish();
+                estadoSalto = EstadoSalto.EN_SUELO;
+                salto = 0;
+            }
+
+            y = 5;
+            gravityForce = 0;
         }
 
         //TODO: MEJORAR
@@ -190,8 +203,6 @@ public abstract class Unidad extends Entidad {
             return;
         }
 
-
-
         int potenciaSalto = getAtributos().getAttr(AtribEnum.SALTO);
 
         // No va a saltar si no tiene la potencia suficiente para ello
@@ -202,8 +213,8 @@ public abstract class Unidad extends Entidad {
         estadoSalto = EstadoSalto.SALTANDO;
 
         // TODO: SEGUIR
-        velocidad.y = potenciaSalto;
-        Gdx.app.log("SALTO"," HA SALTADO"); //TODO: ELIMINAR log
+        gravityForce=0;
+        salto = potenciaSalto;
     }
 
     /**
@@ -237,11 +248,11 @@ public abstract class Unidad extends Entidad {
         cc.aplicarCC(this);
     }
 
-    public void aumentarKnockUp (Vector2 pos) {
+    public final void aumentarKnockUp (Vector2 pos) {
         knockUp.add(pos);
     }
 
-    public Direccion getDireccion() {
+    public final Direccion getDireccion() {
         return direccion;
     }
 }

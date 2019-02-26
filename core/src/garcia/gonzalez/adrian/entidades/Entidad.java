@@ -12,8 +12,8 @@ public abstract class Entidad {
     //TODO: BORRAR
     private Bando bando;
 
-    private float x;
-    private float y;
+    protected float x;
+    protected float y;
 
     private int nivel;
 
@@ -62,7 +62,8 @@ public abstract class Entidad {
     //public abstract void onCollisionExit(Entidad e);
 
     public abstract Rectangle getCollider ();
-    public abstract Vector2 getCenter();
+    //public abstract Vector2 getCenter();
+    public abstract Vector2 getOffset();
     public abstract Vector2 getSize();
 
     // Si una vez muerto, el personaje puede ser eliminado de la lista.
@@ -218,24 +219,30 @@ public abstract class Entidad {
         onAfterHeal(cantidad);
     }
 
-    public Vector2 getPosition () {
+    public final Vector2 getPosition () {
         return new Vector2(x,y);
     }
 
-    protected Atributos getAtributos() {
+    public final Atributos getAtributos() {
         return atributos;
     }
 
-    public Level getGameManager () {
+    public final Level getGameManager () {
         return level;
     }
 
-    public void changePosition (Vector2 newPos) {
+    /**
+    * Teletransporta a un personaje a otra posición instantaneamente
+    * */
+    public final void changePosition (Vector2 newPos) {
         x = newPos.x;
         y = newPos.y;
     }
 
-    public void movePosition(Vector2 relPos) {
+    /**
+     * Mueve relativamente el personaje respecto a la posición en la que está
+     * */
+    public final void movePosition(Vector2 relPos) {
         x+=relPos.x;
         y+=relPos.y;
     }

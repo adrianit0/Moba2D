@@ -136,7 +136,7 @@ public class Level {
     public Entidad getEntidad(Vector2 pos, float distancia, Enums.Bando bando) {
         for(Entidad e : entidades) {
             // TODO incluir
-            if (e.estaVivo() && e.getBando()==bando && pos.dst(e.getCenter()) < distancia) {
+            if (e.estaVivo() && e.getBando()==bando && pos.dst(e.getPosition()) < distancia) {
                 return e;
             }
         }

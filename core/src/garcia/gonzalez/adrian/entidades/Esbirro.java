@@ -105,7 +105,7 @@ public class Esbirro extends Unidad {
                 break;
             case ANDAR:
                 Bando bando = getBando();
-                Entidad e = level.getEntidad(getCenter(), 24, bando.getContrario());
+                Entidad e = level.getEntidad(getPosition(), 24, bando.getContrario());
                 if (e!=null) {
                     estado=MaquinaEstados.ATACAR;
                     seleccionado=(Unidad) e;
@@ -190,13 +190,14 @@ public class Esbirro extends Unidad {
         width=region.getRegionWidth();
         height=region.getRegionHeight();
         Vector2 position = getPosition();
+        Vector2 offset = getOffset();
 
         Color c = batch.getColor();
         batch.setColor(c.r, c.g, c.b, dissapearRatio);//set alpha to 0.3
 
         batch.draw(
                 region.getTexture(),
-                position.x,
+                position.x-offset.x,
                 position.y,
                 0,
                 0,
@@ -270,7 +271,7 @@ public class Esbirro extends Unidad {
 
     @Override
     public Rectangle getCollider() {
-        Vector2 pos = getCenter();
+        Vector2 pos = getPosition();
         Vector2 size = getSize();
         final Rectangle rect = new Rectangle(
                 pos.x-size.x/2,
@@ -282,9 +283,8 @@ public class Esbirro extends Unidad {
     }
 
     @Override
-    public Vector2 getCenter() {
-        Vector2 pos = getPosition();
-        return new Vector2(pos.x+width/2, pos.y);
+    public Vector2 getOffset() {
+        return new Vector2(width/2, 0);
     }
 
     @Override

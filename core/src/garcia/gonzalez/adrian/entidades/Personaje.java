@@ -1,12 +1,11 @@
 package garcia.gonzalez.adrian.entidades;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.crownControl.CC;
+import garcia.gonzalez.adrian.entidades.items.Item;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 
@@ -166,7 +165,7 @@ public abstract class Personaje extends Unidad {
     }
 
     //TODO: Si no se va a usar, borrarlo
-    public void onItemBuy(Item item) {
+    public void onItemBuy(garcia.gonzalez.adrian.entidades.items.Item item) {
 
     }
 

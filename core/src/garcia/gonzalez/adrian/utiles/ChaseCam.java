@@ -32,7 +32,7 @@ public class ChaseCam {
         }
 
         if (following) {
-            Vector2 position = target.getCenter();
+            Vector2 position = target.getPosition();
             camera.position.x = position.x;
             camera.position.y = position.y<50 ? 50 : position.y;
         } else {

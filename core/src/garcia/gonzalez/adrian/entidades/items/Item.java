@@ -1,6 +1,8 @@
-package garcia.gonzalez.adrian.entidades;
+package garcia.gonzalez.adrian.entidades.items;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+
+import garcia.gonzalez.adrian.entidades.Personaje;
 
 public abstract class Item {
 

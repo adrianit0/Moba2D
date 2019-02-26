@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.entidades.Entidad;
-import garcia.gonzalez.adrian.entidades.Item;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
@@ -18,8 +17,10 @@ import garcia.gonzalez.adrian.utiles.Assets;
 public class Personaje1 extends Personaje {
 
     public enum MaquinaEstados {
-        IDLE, WALKING
+        IDLE, WALKING, JUMPING
     };
+
+    private boolean jumping;
 
     private int width;
     private int height;
@@ -33,8 +34,7 @@ public class Personaje1 extends Personaje {
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
         getAtributos().setAttr(AtribEnum.SALUD, 800);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
-        getAtributos().setAttr(AtribEnum.SALTO, 80);
-
+        getAtributos().setAttr(AtribEnum.SALTO, 350);
 
         estado = MaquinaEstados.IDLE;
     }
@@ -56,13 +56,27 @@ public class Personaje1 extends Personaje {
 
     @Override
     public void onIdle(float delta) {
-        estado = MaquinaEstados.IDLE;
+        if (!jumping)
+            estado = MaquinaEstados.IDLE;
     }
 
     @Override
     public boolean onMove (Direccion dir, float delta) {
-        estado = MaquinaEstados.WALKING;
+        if (!jumping)
+            estado = MaquinaEstados.WALKING;
         return true;
+    }
+
+    @Override
+    public boolean onJumpStart(EstadoSalto estadoSalto) {
+        jumping=true;
+        estado=MaquinaEstados.JUMPING;
+        return super.onJumpStart(estadoSalto);
+    }
+
+    @Override
+    public void onJumpFinish() {
+        jumping=false;
     }
 
     @Override
@@ -74,28 +88,31 @@ public class Personaje1 extends Personaje {
                 region = Assets.instance.personaje1.running.getKeyFrame(walkTimeSeconds);
                 break;
 
+            case JUMPING:
+                region = Assets.instance.personaje1.jumping.getKeyFrame(walkTimeSeconds);
+                break;
+
             case IDLE:
             default:
                 region = Assets.instance.personaje1.idle.getKeyFrame(walkTimeSeconds);
                 break;
-
         }
-
 
         width=region.getRegionWidth();
         height=region.getRegionHeight();
         Vector2 position = getPosition();
+        Vector2 offset = getOffset();
 
         batch.draw(
                 region.getTexture(),
-                position.x,
-                position.y,
+                position.x - offset.x,
+                position.y - offset.y,
                 0,
                 0,
-                width*2,
-                height*2,
-                1,
-                1,
+                width,
+                height,
+                2,
+                2,
                 0,
                 region.getRegionX(),
                 region.getRegionY(),
@@ -127,7 +144,7 @@ public class Personaje1 extends Personaje {
 
     @Override
     public Rectangle getCollider() {
-        Vector2 pos = getCenter();
+        Vector2 pos = getPosition();
         Vector2 size = getSize();
         final Rectangle rect = new Rectangle(
                 pos.x-size.x/2,
@@ -139,9 +156,8 @@ public class Personaje1 extends Personaje {
     }
 
     @Override
-    public Vector2 getCenter() {
-        Vector2 pos = getPosition();
-        return new Vector2(pos.x+width, pos.y);
+    public Vector2 getOffset() {
+        return new Vector2(width, 0);
     }
 
     @Override

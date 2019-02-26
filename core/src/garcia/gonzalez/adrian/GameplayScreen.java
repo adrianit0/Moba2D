@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import garcia.gonzalez.adrian.entidades.Esbirro;
+import garcia.gonzalez.adrian.entidades.overlay.MainOverlay;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.ChaseCam;
@@ -33,7 +34,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     //TODO: Hacer el HUD Manager.
     // HUD
-    //private HudManager hud;
+    private MainOverlay hud;
 
     @Override
     public void show() {
@@ -47,7 +48,7 @@ public class GameplayScreen extends ScreenAdapter {
         level = new Level(viewport);//LevelLoader.load("level1", viewport);
         batch = new SpriteBatch();
 
-        //hud = new GigaGalHud();
+        hud = new MainOverlay(level, Constants.HUD_VIEWPORT_SIZE);
 
         //TODO: Programar la chase cam inteligente
         // Inicializamos la cámara que sigue al jugador
@@ -60,7 +61,7 @@ public class GameplayScreen extends ScreenAdapter {
         // Actualizamos el ViewPort cuando hagamos un resize
         viewport.update(width, height, true);
         // TODO: Programar la HUD
-        //hud.viewport.onUpdate(width, height, true);
+        hud.getViewport().update(width, height, true);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class GameplayScreen extends ScreenAdapter {
         //level.render(batch);
 
         // TODO: Ajustar hud onRender
-        //hud.onRender(batch, level.getGigaGal().getLives(), level.getGigaGal().getAmmo(), level.score);
+        hud.render(batch);
     }
 
     // TODO: Programar pantalla de fin de nivel
@@ -113,7 +114,7 @@ public class GameplayScreen extends ScreenAdapter {
                 victoryOverlay.init();
             }
 
-            // Renderizamos el HUD de victorua
+            // Renderizamos el HUD de victoria
             victoryOverlay.onRender(batch);
 
             if (Utils.secondsSince(levelEndOverlayStartTime) > Constants.LEVEL_END_DURATION) {

@@ -33,6 +33,9 @@ public class Assets implements Disposable, AssetErrorListener {
     // Singleton plataforma
     public PlatformAssets platformAssets;
 
+    // Singleton Overlay
+    public OverlayAssets overlayAssets;
+
 
     private AssetManager assetManager;
 
@@ -52,6 +55,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
+
+        overlayAssets = new OverlayAssets();
 
         // Cargamos el singleton de la plataforma
         // TODO: Si no meto plataformas, borrar esto
@@ -75,15 +80,17 @@ public class Assets implements Disposable, AssetErrorListener {
     public class Character_01Assets {
         public final Animation<TextureRegion> idle;
         public final Animation<TextureRegion> running;
-        /*public final Animation<TextureRegion> jumping;
-        public final Animation<TextureRegion> attack01;
+        public final Animation<TextureRegion> jumping;
+        /*public final Animation<TextureRegion> attack01;
         public final Animation<TextureRegion> attack02;
+        public final Animation<TextureRegion> attack03;
         public final Animation<TextureRegion> death;*/
 
         public Character_01Assets (TextureAtlas atlas) {
             //TODO: Cambiar el temporizador
             idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_IDLE, Animation.PlayMode.LOOP);
             running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_WALK, Animation.PlayMode.LOOP);
+            jumping = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION*5, Constants.CHARACTER_01_JUMP, Animation.PlayMode.LOOP);
         }
 
     }
@@ -135,6 +142,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public Texture suelo2;
 
         public EscenarioAssets() {
+            //TODO: Pasar esto a constantes
             troncos1 = new Texture("escenario/troncos_1.png");
             troncos2 = new Texture("escenario/troncos_2.png");
             troncos3 = new Texture("escenario/troncos_3.png");
@@ -148,6 +156,19 @@ public class Assets implements Disposable, AssetErrorListener {
 
             suelo1 = new Texture("escenario/suelo_1.png");
             suelo2 = new Texture("escenario/suelo_2.png");
+        }
+    }
+
+    public class OverlayAssets {
+        public Texture mainHud;
+        public Texture vida;
+        public Texture mana;
+
+        public OverlayAssets () {
+            // TODO: Seguir y meter el contenido en constantes
+            mainHud = new Texture("GUI/interfaz_character.png");
+            vida = new Texture("GUI/vida.png");
+            mana = new Texture("GUI/mana.png");
         }
     }
 }

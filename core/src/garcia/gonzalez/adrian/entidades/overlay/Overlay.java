@@ -1,4 +1,4 @@
-package garcia.gonzalez.adrian.entidades;
+package garcia.gonzalez.adrian.entidades.overlay;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,12 +8,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import garcia.gonzalez.adrian.Level;
 
 public abstract class Overlay {
-    private final Viewport viewport;
+    protected final Viewport viewport;
     private final BitmapFont font;
+
+    private Level level;
 
     public Overlay (Level level, float viewportSize) {
         this.viewport = new ExtendViewport(viewportSize, viewportSize);
         font = new BitmapFont();
+        this.level = level;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     public abstract void onRender (SpriteBatch batch, BitmapFont font);
@@ -26,5 +33,9 @@ public abstract class Overlay {
         onRender(batch, font);
 
         batch.end();
+    }
+
+    public Viewport getViewport() {
+        return viewport;
     }
 }
