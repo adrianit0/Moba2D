@@ -168,7 +168,6 @@ public abstract class Unidad extends Entidad {
         //TODO: No deja moverse si está CCeado por Aturdimiento o KnockUp
         // if cc return
 
-        // Activamos el onMove()
         boolean mover = onMove(dir, delta);
 
         // Es probable que sea el propio personaje quien voluntariamente decida no moverse

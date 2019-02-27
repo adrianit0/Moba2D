@@ -8,6 +8,7 @@ import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.entidades.items.Item;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
+import garcia.gonzalez.adrian.utiles.Habilidad;
 
 /**
  * Clase base para los personajes, estan la mayoría de los métodos implementados para
@@ -19,12 +20,20 @@ public abstract class Personaje extends Unidad {
 
     // Quien controla al personaje, este puede ser un jugador o la IA
     private Controlador controller;
+    private Habilidad[] habilidades;
 
-    public Personaje(Controlador controller, Enums.Bando bando, int x, int y, Level level) {
+    public Personaje(Controlador controller, Habilidad hab1, Habilidad hab2, Habilidad hab3, Enums.Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
 
         this.controller = controller;
+        this.habilidades = new Habilidad[] { hab1, hab2, hab3};
     }
+
+    // MÉTODOS ABSTRACTOS
+    public abstract boolean canCastHability (int hab);
+    public abstract boolean onHabilityDown (int hab);
+    public abstract boolean onHabilityStay (int hab, float delta);
+    public abstract boolean onHabilityUp (int hab);
 
     // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
     @Override
@@ -60,13 +69,13 @@ public abstract class Personaje extends Unidad {
                 // TODO: HACER ESTE INPUT
             }
             if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_1)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityDown(1);
             }
             if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_2)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityDown(2);
             }
             if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_3)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityDown(3);
             }
 
 
@@ -84,13 +93,13 @@ public abstract class Personaje extends Unidad {
                 // TODO: HACER ESTE INPUT
             }
             if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_1)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityStay(1, delta);
             }
             if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_2)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityStay(2, delta);
             }
             if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_3)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityStay(3, delta);
             }
 
             // PRESS UP
@@ -107,19 +116,62 @@ public abstract class Personaje extends Unidad {
                 // TODO: HACER ESTE INPUT
             }
             if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_1)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityUp(1);
             }
             if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_2)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityUp(2);
             }
             if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_3)) {
-                // TODO: HACER ESTE INPUT
+                castHabilityUp(3);
             }
         }
 
         // aplicamos el update del padre
         super.update(delta);
 
+    }
+
+    public void castHabilityDown (int id) {
+        Habilidad hab = habilidades [id-1];
+        if (hab.isCooldown())
+            return;
+
+        // Le preguntamos al personaje si puede/quiere realizar la habilidad
+        boolean canCast = canCastHability(id);
+        if (!canCast) {
+            hab.setUsed(true);
+            return;
+        }
+
+
+        boolean enterInCooldown = onHabilityDown(id);
+        if (enterInCooldown) {
+            hab.setInCooldown( getAtributos().getAttrPorc(AtribEnum.COOLDOWN) );
+            hab.setUsed (true);
+        }
+    }
+
+    public void castHabilityStay (int id, float delta) {
+        Habilidad hab = habilidades [id];
+        if (hab.isUsed())
+            return;
+
+        boolean enterInCooldown = onHabilityStay(id, delta);
+        if (enterInCooldown) {
+            hab.setInCooldown( getAtributos().getAttrPorc(AtribEnum.COOLDOWN) );
+            hab.setUsed (true);
+        }
+    }
+
+    public void castHabilityUp (int id) {
+        Habilidad hab = habilidades [id];
+        if (!hab.isUsed())  {
+            boolean enterInCooldown = onHabilityUp(id);
+            if (enterInCooldown) {
+                hab.setInCooldown( getAtributos().getAttrPorc(AtribEnum.COOLDOWN) );
+            }
+        }
+        hab.setUsed (false);
     }
 
     @Override
@@ -161,6 +213,21 @@ public abstract class Personaje extends Unidad {
 
     @Override
     public void onAfterHeal(int saludCurada) {
+
+    }
+
+    @Override
+    public void onEntityKilled(Entidad objetivo) {
+
+    }
+
+    @Override
+    public void onLevelUp() {
+
+    }
+
+    @Override
+    public void onSpawn() {
 
     }
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums;
 
-public class Jugador1 extends Controlador {
+public class ControladorJugador1 extends Controlador {
 
     @Override
     public boolean onKeyDown(Enums.TeclasJugador tecla) {

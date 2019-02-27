@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import garcia.gonzalez.adrian.controladorPersonaje.Jugador1;
+import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.Personaje;
@@ -47,7 +47,7 @@ public class Level {
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        Personaje1 mainCharacter = new Personaje1(new Jugador1(), Enums.Bando.ALIADO, 0,5, this);
+        Personaje1 mainCharacter = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, 0,5, this);
         entidades.add(mainCharacter);
         this.personaje = mainCharacter;
     }

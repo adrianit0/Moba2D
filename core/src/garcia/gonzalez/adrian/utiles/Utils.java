@@ -65,4 +65,8 @@ public class Utils {
     public static float secondsSince(long timeNanos) {
         return MathUtils.nanoToSec * (TimeUtils.nanoTime() - timeNanos);
     }
+
+    public static long secondsToNano (double seconds) {
+        return Math.round(seconds*1000000000);
+    }
 }

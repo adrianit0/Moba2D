@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades.personajes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,6 +14,7 @@ import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
+import garcia.gonzalez.adrian.utiles.Habilidad;
 
 public class Personaje1 extends Personaje {
 
@@ -22,6 +24,7 @@ public class Personaje1 extends Personaje {
 
     private boolean jumping;
 
+    // TODO: Mejorar el Width y height
     private int width;
     private int height;
 
@@ -29,7 +32,12 @@ public class Personaje1 extends Personaje {
 
 
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
-        super(controller, bando, x, y, level);
+        super(controller,
+                new Habilidad(1),
+                new Habilidad(4),
+                new Habilidad(12),
+                bando, x, y, level);
+
 
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
         getAtributos().setAttr(AtribEnum.SALUD, 800);
@@ -55,6 +63,29 @@ public class Personaje1 extends Personaje {
     }
 
     @Override
+    public boolean canCastHability(int hab) {
+        return true;
+    }
+
+    @Override
+    public boolean onHabilityDown(int hab) {
+        Gdx.app.log("HAB "+hab, "Habilidad pulsada");
+        return false;
+    }
+
+    @Override
+    public boolean onHabilityStay(int hab, float delta) {
+        Gdx.app.log("HAB "+hab, "Habilidad pulsando");
+        return false;
+    }
+
+    @Override
+    public boolean onHabilityUp(int hab) {
+        Gdx.app.log("HAB "+hab, "Habilidad soltado");
+        return false;
+    }
+
+    @Override
     public void onIdle(float delta) {
         if (!jumping)
             estado = MaquinaEstados.IDLE;
@@ -71,7 +102,7 @@ public class Personaje1 extends Personaje {
     public boolean onJumpStart(EstadoSalto estadoSalto) {
         jumping=true;
         estado=MaquinaEstados.JUMPING;
-        return super.onJumpStart(estadoSalto);
+        return true;
     }
 
     @Override
@@ -125,21 +156,6 @@ public class Personaje1 extends Personaje {
     @Override
     public int onAttack(Entidad objetivo) {
         return 0;
-    }
-
-    @Override
-    public void onEntityKilled(Entidad objetivo) {
-
-    }
-
-    @Override
-    public void onLevelUp() {
-
-    }
-
-    @Override
-    public void onSpawn() {
-
     }
 
     @Override
