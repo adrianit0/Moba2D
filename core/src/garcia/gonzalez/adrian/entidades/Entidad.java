@@ -78,7 +78,7 @@ public abstract class Entidad {
     public void render (SpriteBatch sprite) {
         onRender(sprite);
     }
-    public final void tickUpdate(float tickDelta) {
+    public void tickUpdate(float tickDelta) {
         onTickUpdate(tickDelta);
     }
 

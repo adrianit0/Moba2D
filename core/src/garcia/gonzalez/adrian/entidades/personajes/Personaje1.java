@@ -38,11 +38,11 @@ public class Personaje1 extends Personaje {
                 new Habilidad(12),
                 bando, x, y, level);
 
-
-        getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
         getAtributos().setAttr(AtribEnum.SALUD, 800);
+        getAtributos().setAttr(AtribEnum.REG_SALUD, 100);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
         getAtributos().setAttr(AtribEnum.SALTO, 350);
+        getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
 
         estado = MaquinaEstados.IDLE;
     }
@@ -102,7 +102,7 @@ public class Personaje1 extends Personaje {
     public boolean onJumpStart(EstadoSalto estadoSalto) {
         jumping=true;
         estado=MaquinaEstados.JUMPING;
-        return true;
+        return super.onJumpStart(estadoSalto);
     }
 
     @Override

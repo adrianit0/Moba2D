@@ -35,6 +35,10 @@ public abstract class Personaje extends Unidad {
     public abstract boolean onHabilityStay (int hab, float delta);
     public abstract boolean onHabilityUp (int hab);
 
+    // TODO: Implementar QUEUE de habilidad
+    // public void startQueueHability ();
+    // public ... getQueueHability ();
+
     // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
     @Override
     public abstract void onCreate();
@@ -152,7 +156,7 @@ public abstract class Personaje extends Unidad {
     }
 
     public void castHabilityStay (int id, float delta) {
-        Habilidad hab = habilidades [id];
+        Habilidad hab = habilidades [id-1];
         if (hab.isUsed())
             return;
 
@@ -164,7 +168,7 @@ public abstract class Personaje extends Unidad {
     }
 
     public void castHabilityUp (int id) {
-        Habilidad hab = habilidades [id];
+        Habilidad hab = habilidades [id-1];
         if (!hab.isUsed())  {
             boolean enterInCooldown = onHabilityUp(id);
             if (enterInCooldown) {

@@ -142,4 +142,14 @@ public class Level {
         }
         return null;
     }
+
+    public Entidad getEntidad(Vector2 pos, float distancia, Enums.Direccion dir) {
+        for(Entidad e : entidades) {
+            // TODO incluir
+            if (e.estaVivo() && pos.dst(e.getPosition()) < distancia) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

@@ -1,6 +1,5 @@
 package garcia.gonzalez.adrian.entidades;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -25,19 +24,19 @@ public abstract class Unidad extends Entidad {
 
     //TODO: Meter la gravityForce
 
-    //TODO: Meter el estado salto
+    //TODO: Meter el estado jumpForce
     private Direccion direccion;
     private EstadoSalto estadoSalto;
 
-    private float gravityForce;    // Movimiento total del personaje
-    private float salto;        // Potencia del salto
-    private Vector2 knockUp;    // Movimiento involuntario, provocado por el enemigo
+    // Distintas fuerzas aplicadas sobre una unidad
+    private float gravityForce;
+    private float jumpForce;
+    private Vector2 knockUpForce;
 
     private boolean moving;
 
     // TODO: Pruebas con Colisionadores, eliminar o comentar
     private ShapeRenderer shapeRenderer;
-    static private boolean projectionMatrixSet;
 
     public Unidad(Bando bando, int x, int y, Level level) {
         super(bando, x, y, level);
@@ -46,7 +45,7 @@ public abstract class Unidad extends Entidad {
         crownControl = new ArrayList();
 
         gravityForce = 0;
-        salto = 0;
+        jumpForce = 0;
 
         shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
     }
@@ -58,9 +57,7 @@ public abstract class Unidad extends Entidad {
 
         //TODO: Probando las colisiones
         sprite.end();
-        if(!projectionMatrixSet){
-            shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
-        }
+        shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         // COLLIDER
@@ -93,7 +90,7 @@ public abstract class Unidad extends Entidad {
     // Cada vez que el personaje esté quieto
     public abstract void onIdle (float delta);
 
-    // Al empezar el salto
+    // Al empezar el jumpForce
     public abstract boolean onJumpStart (EstadoSalto estado);
     // Al caer al suelo
     public abstract void onJumpFinish();
@@ -110,7 +107,7 @@ public abstract class Unidad extends Entidad {
      * */
     public void update(float delta) {
         // Volvemos a poner el KnockUp a 0
-        knockUp = new Vector2(0,0);
+        knockUpForce = new Vector2(0,0);
         gravityForce -= Constants.GRAVITY;
 
         // Aplicamos todos los CC
@@ -119,6 +116,7 @@ public abstract class Unidad extends Entidad {
 
             c.aplicandoCCUpdate(this, delta);
             if (c.hasFinished(this,System.currentTimeMillis())) {
+                c.terminarCC(this);
                 crownControl.remove(c);
                 i--;
             }
@@ -128,25 +126,25 @@ public abstract class Unidad extends Entidad {
         super.update(delta);
 
         // Si el knock no es igual a 0
-        if (!knockUp.equals(Vector2.Zero)) {
-            movePosition(new Vector2(knockUp.x*delta, knockUp.y*delta));
+        if (!knockUpForce.equals(Vector2.Zero)) {
+            movePosition(new Vector2(knockUpForce.x*delta, knockUpForce.y*delta));
         }
 
         // Si está por encima del suelo significa que tiene que caer
         //TODO: Mejorar esto
 
-        if (salto>0) {
+        if (jumpForce >0) {
             estadoSalto = EstadoSalto.SALTANDO;
         }
 
-        movePosition(new Vector2 (0, (salto+gravityForce) * delta)); //TODO: Mejorar la gravedad de los objetos
+        movePosition(new Vector2 (0, (jumpForce +gravityForce) * delta)); //TODO: Mejorar la gravedad de los objetos
 
         if (y<5f) {
             // Si en el anterior frame estaba saltando
             if (estadoSalto == EstadoSalto.SALTANDO) {
                 onJumpFinish();
                 estadoSalto = EstadoSalto.EN_SUELO;
-                salto = 0;
+                jumpForce = 0;
             }
 
             y = 5;
@@ -158,6 +156,17 @@ public abstract class Unidad extends Entidad {
             onIdle(delta);
         }
         moving=false;
+    }
+
+    @Override
+    public final void tickUpdate(float tickDelta) {
+
+
+        for (CC c : crownControl) {
+            c.aplicandoCCTick(this, tickDelta);
+        }
+
+        super.tickUpdate(tickDelta);
     }
 
     //TODO: Seguir
@@ -213,7 +222,7 @@ public abstract class Unidad extends Entidad {
 
         // TODO: SEGUIR
         gravityForce=0;
-        salto = potenciaSalto;
+        jumpForce = potenciaSalto;
     }
 
     /**
@@ -248,7 +257,7 @@ public abstract class Unidad extends Entidad {
     }
 
     public final void aumentarKnockUp (Vector2 pos) {
-        knockUp.add(pos);
+        knockUpForce.add(pos);
     }
 
     public final Direccion getDireccion() {

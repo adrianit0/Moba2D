@@ -21,7 +21,7 @@ public class Atributos {
 
     // TODO: Seguir con las estadísticas
     public Atributos(int saludMax /* .... */) {
-        // TODO: HACER
+
     }
 
     //TODO: Eliminar despues de las pruebas

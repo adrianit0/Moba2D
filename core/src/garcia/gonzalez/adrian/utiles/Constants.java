@@ -13,6 +13,8 @@ public class Constants {
     public static final float CHASE_CAM_MOVE_SPEED = 128;   // Velocidad de la camara
     public static final float GRAVITY = 12;                 // Gravedad de todas las unidades
     public static final float TICK_UPDATE = 0.25f;          // Cada cuanto se hará el tick_update
+
+    public static final float TENACITY_LIMIT = 0.99f;
     public static final float COOLDOWN_LIMIT = 0.5f;        // Límite de cooldown.
 
     public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica

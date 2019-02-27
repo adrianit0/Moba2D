@@ -2,6 +2,7 @@ package garcia.gonzalez.adrian.crownControl;
 
 import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.enums.Enums.*;
+import garcia.gonzalez.adrian.utiles.Constants;
 
 /**
  * Clase CC, que es el control sobre el adversario, aquí se incluiran tanto beneficiosos
@@ -49,8 +50,8 @@ public abstract class CC {
 
     /* Lo máximo de tenacidad es 99%*/
     public void efectoTenacidad (float tenacidad) {
-        if (tenacidad>=1)
-            tenacidad=0.99f;
+        if (tenacidad>Constants.TENACITY_LIMIT)
+            tenacidad=Constants.TENACITY_LIMIT;
 
         duracion *= tenacidad;
     }
