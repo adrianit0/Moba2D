@@ -3,9 +3,19 @@ package garcia.gonzalez.adrian.enums;
 public class Enums {
 
     public enum Bando {
-        ALIADO,     // Pesonaje aliado
-        ENEMIGO,    // Personaje enemigo
-        NEUTRAL;    // Personaje neutral o enemigo al mismo tiempo del aliado y enemigo.
+        ALIADO  (1),   // Pesonaje aliado
+        ENEMIGO (-1),  // Personaje enemigo
+        NEUTRAL (0);   // Personaje neutral o enemigo al mismo tiempo del aliado y enemigo.
+
+        int dir;
+
+        Bando (int dir) {
+            this.dir = dir;
+        }
+
+        public int getDir() {
+            return dir;
+        }
 
         /**
          * Para devolver el bando contrario al que es el personaje.

@@ -15,8 +15,8 @@ public class KnockUp extends CC {
     private float lerp;
 
 
-    public KnockUp(String nombreIdentificativo, Enums.CrowdControl tipo, Vector2 golpe, float duracion) {
-        super(nombreIdentificativo, tipo, duracion);
+    public KnockUp(String nombreIdentificativo, Vector2 golpe, float duracion) {
+        super(nombreIdentificativo, Enums.CrowdControl.KNOCK_BACK, duracion);
         this.inicio = golpe;
         this.golpe = golpe;
     }

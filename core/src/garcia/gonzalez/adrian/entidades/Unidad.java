@@ -42,6 +42,7 @@ public abstract class Unidad extends Entidad {
         super(bando, x, y, level);
 
         estadoSalto=EstadoSalto.EN_SUELO;
+        direccion=getBando()==Bando.ALIADO ? Direccion.DERECHA : Direccion.IZQUIERDA;
         crownControl = new ArrayList();
 
         gravityForce = 0;
@@ -52,37 +53,29 @@ public abstract class Unidad extends Entidad {
 
     @Override
     public final void render (SpriteBatch sprite) {
-        // Usamos el hijo
         super.render(sprite);
 
         //TODO: Probando las colisiones
-        sprite.end();
+        sprite.end();       // Dejamos de usar el SpriteBatch
         shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         // COLLIDER
         shapeRenderer.setColor(Color.GREEN);
         Rectangle col = getCollider();
-        Vector2 offset = getPosition();
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        // OFFSET DEL PERSONAJE
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(offset.x, offset.y,1);
-
         // POSICION DEL PERSONAJE
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.circle(position.x, position.y, 1);
 
-        shapeRenderer.setColor(Color.YELLOW);
-        shapeRenderer.rect(0, 0, 1, 200);
         shapeRenderer.end();
-        sprite.begin();
-        //TODO: Borrar esto
+        sprite.begin(); // Volvemos a usar el SpriteBatch
+
     }
 
     // Cada vez que el personaje se mueva
@@ -152,7 +145,7 @@ public abstract class Unidad extends Entidad {
         }
 
         //TODO: MEJORAR
-        if (!moving) {
+        if (!moving && estaVivo()) {
             onIdle(delta);
         }
         moving=false;
@@ -160,8 +153,6 @@ public abstract class Unidad extends Entidad {
 
     @Override
     public final void tickUpdate(float tickDelta) {
-
-
         for (CC c : crownControl) {
             c.aplicandoCCTick(this, tickDelta);
         }
@@ -176,6 +167,9 @@ public abstract class Unidad extends Entidad {
     public final void mover(Direccion dir, float delta) {
         //TODO: No deja moverse si está CCeado por Aturdimiento o KnockUp
         // if cc return
+        if (!estaVivo()) {
+            return;
+        }
 
         boolean mover = onMove(dir, delta);
 
@@ -201,6 +195,8 @@ public abstract class Unidad extends Entidad {
     public final void saltar() {
         //TODO: No deja moverse si está CCeado por Aturdimiento, pesado o KnockUp
         // if cc return
+        if(!estaVivo())
+            return;
 
         // Activamos el onJumpStart, le pasamos si está o no en el suelo.
         // Será el personaje quien gestionará si quiere saltar (Incluso saltar en el aire)

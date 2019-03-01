@@ -33,6 +33,28 @@ public class Constants {
             "character_1-16", "character_1-17", "character_1-18", "character_1-19",
             "character_1-20", "character_1-21", "character_1-22", "character_1-23",
             "character_1-24", "character_1-25", "character_1-26"};
+    public static final String[] CHARACTER_01_ATTACK_01 = {
+            "character_1-43", "character_1-44", "character_1-45", "character_1-46", "character_1-47"};
+    public static final String[] CHARACTER_01_ATTACK_02 = {
+            "character_1-48", "character_1-49", "character_1-50", "character_1-39",
+            "character_1-40", "character_1-41", "character_1-42" };
+    public static final String[] CHARACTER_01_ATTACK_03 = {
+            "character_1-51", "character_1-52", "character_1-53", "character_1-54",
+            "character_1-55", "character_1-56", "character_1-57", "character_1-58",
+            "character_1-59", "character_1-60", "character_1-61", "character_1-62",
+            "character_1-63", "character_1-64", "character_1-65", "character_1-66"};
+    public static final String[] CHARACTER_01_DEATH = {
+            "character_1-67", "character_1-68", "character_1-69", "character_1-70",
+            "character_1-71", "character_1-72", "character_1-73", "character_1-74",
+            "character_1-75", "character_1-76", "character_1-77", "character_1-78",
+            "character_1-79", "character_1-80", "character_1-81", "character_1-82"};
+
+    public static final String[] CHARACTER_01_POWER_BALL_EXPLOSION = {
+            "explosion_energia-00", "explosion_energia-01", "explosion_energia-02",
+            "explosion_energia-03", "explosion_energia-04", "explosion_energia-05",
+            "explosion_energia-06", "explosion_energia-07", "explosion_energia-08",
+            "explosion_energia-09", "explosion_energia-10", "explosion_energia-11"
+    };
 
     // MINIONS
     public static final String[] MINION_SPAWN =  { "minion_%s-05", "minion_%s-06", "minion_%s-07", "minion_%s-08", "minion_%s-09", "minion_%s-10" };

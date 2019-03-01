@@ -1,6 +1,7 @@
 package garcia.gonzalez.adrian.entidades.personajes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,16 +11,37 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
+import garcia.gonzalez.adrian.crownControl.HealOverTime;
+import garcia.gonzalez.adrian.crownControl.KnockUp;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Habilidad;
+import garcia.gonzalez.adrian.utiles.Utils;
 
+/**
+ *
+ * Personaje 1 (Nombre aún por poner)
+ *
+ * Pasiva: Por cada 100 unidades que se mueva genera 1 bola de energía (Max 5). Estas bolas de
+ *      energía al explotar contra un enemigo provoca 30 (+0.40) y
+ *      a los enemigos cercanos 10 (+0.40) de daño.
+ *
+ * Hab1: Dispara infligiendo 50 (+0.80). Además, si aciertas y tienes bolas de energía, lanzas una
+ *      al objetivo.
+ *
+ * Hab2: Se cura así mismo 100 (+1.50) durante los siguientes 5 segundos, genera 2 bolas de energías
+ *      y lanza las que tuviera a los enemigos cercanos si los hubiera.
+ *
+ * Hab3: Lanza 3 ataques consecutivos infligiendo 100 (+1.10) por ataque,
+ *      y por cada objetivo acertado obtienes una bola de poder.
+ *
+ * */
 public class Personaje1 extends Personaje {
 
     public enum MaquinaEstados {
-        IDLE, WALKING, JUMPING
+        IDLE, WALKING, JUMPING, ATTACK_01, ATTACK_02, ATTACK_03, DEATH
     };
 
     private boolean jumping;
@@ -29,22 +51,34 @@ public class Personaje1 extends Personaje {
     private int height;
 
     private MaquinaEstados estado;
+    private boolean animation;
+    private long animationTime;
+    private int animationFrame;
+    private Animation<TextureRegion> actualAnimation;
 
+    // Pasiva
+    private float distFrameAnterior;
+    private float distanciaTotal;
 
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
                 new Habilidad(1),
-                new Habilidad(4),
+                new Habilidad(100),
                 new Habilidad(12),
                 bando, x, y, level);
 
         getAtributos().setAttr(AtribEnum.SALUD, 800);
-        getAtributos().setAttr(AtribEnum.REG_SALUD, 100);
+        getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
         getAtributos().setAttr(AtribEnum.SALTO, 350);
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
 
         estado = MaquinaEstados.IDLE;
+        animation =false;
+        animationTime=0;
+
+        distFrameAnterior=0;
+        distanciaTotal=0;
     }
 
     @Override
@@ -69,39 +103,102 @@ public class Personaje1 extends Personaje {
 
     @Override
     public boolean onHabilityDown(int hab) {
-        Gdx.app.log("HAB "+hab, "Habilidad pulsada");
-        return false;
+        startAnimation(hab);
+        return true;
     }
 
     @Override
     public boolean onHabilityStay(int hab, float delta) {
-        Gdx.app.log("HAB "+hab, "Habilidad pulsando");
+        //Gdx.app.log("HAB "+hab, "Habilidad pulsando");
         return false;
     }
 
     @Override
     public boolean onHabilityUp(int hab) {
-        Gdx.app.log("HAB "+hab, "Habilidad soltado");
+        //Gdx.app.log("HAB "+hab, "Habilidad soltado");
         return false;
+    }
+
+    private void startAnimation (int estado) {
+        switch (estado) {
+            case 1:
+                this.estado=MaquinaEstados.ATTACK_01;
+                actualAnimation = Assets.instance.personaje1.attack01;
+                break;
+            case 2:
+                this.estado=MaquinaEstados.ATTACK_02;
+                actualAnimation = Assets.instance.personaje1.attack02;
+                break;
+            case 3:
+                this.estado=MaquinaEstados.ATTACK_03;
+                actualAnimation = Assets.instance.personaje1.attack03;
+                break;
+            case 4:
+                this.estado = MaquinaEstados.DEATH;
+                actualAnimation = Assets.instance.personaje1.death;
+                break;
+        }
+
+        animation=true;
+        animationTime=TimeUtils.nanoTime();
+    }
+
+    private void finishAnimation () {
+        animationFrame=-1;
+        animation=false;
+    }
+
+    private void onAnimationFrame (int frame) {
+        if (animationFrame==frame)
+            return;
+
+        animationFrame=frame;
+
+        //TODO: Ajustar los frames
+        if (estado==MaquinaEstados.ATTACK_01 && frame==1) {
+            if (getEstadoSalto()==EstadoSalto.SALTANDO) {
+                // TODO: Aplicar solo en el frame en el que se produce el efecto
+                aplicarCC(new KnockUp("recoil_aereo_pers1", new Vector2(20*-getDireccion().getDir(),0), 0.25f), this);
+            }
+        } else if (estado==MaquinaEstados.ATTACK_02 && frame==6) {
+            aplicarCC(new HealOverTime("cura", 100+getAtributos().getAttrPorc(AtribEnum.ATAQUE)*1.5f, 5), this);
+        }
+        //Gdx.app.log("Animacion", "Frame nº"+frame); //TODO: Borrar log
     }
 
     @Override
     public void onIdle(float delta) {
-        if (!jumping)
+        if (!jumping && !animation)
             estado = MaquinaEstados.IDLE;
     }
 
     @Override
     public boolean onMove (Direccion dir, float delta) {
-        if (!jumping)
+        if (!jumping && !animation)
             estado = MaquinaEstados.WALKING;
-        return true;
+
+        if (distFrameAnterior!=0) {
+            float pos = getPosition().x;
+            distanciaTotal += Math.abs(pos-distFrameAnterior);
+            distFrameAnterior = pos;
+
+            if (distanciaTotal>500) {
+                distanciaTotal-=500;    // TODO: Añadirlo a una constante
+                Gdx.app.log("PASIVA", "Ha generado una bola");  // TODO: Borrar log
+                // TODO: Seguir
+            }
+        } else {
+            distFrameAnterior=getPosition().x;
+        }
+
+        return !animation;
     }
 
     @Override
     public boolean onJumpStart(EstadoSalto estadoSalto) {
         jumping=true;
-        estado=MaquinaEstados.JUMPING;
+        if (!animation)
+            estado=MaquinaEstados.JUMPING;
         return super.onJumpStart(estadoSalto);
     }
 
@@ -113,20 +210,33 @@ public class Personaje1 extends Personaje {
     @Override
     public void onRender(SpriteBatch batch) {
         TextureRegion region;
-        float walkTimeSeconds = MathUtils.nanoToSec * (TimeUtils.nanoTime() - 0); // TODO: Mirar que es ese 0 final
+        float animTime = animation ?  MathUtils.nanoToSec * (TimeUtils.nanoTime()-animationTime) : MathUtils.nanoToSec * TimeUtils.nanoTime();
         switch (estado) {
             case WALKING:
-                region = Assets.instance.personaje1.running.getKeyFrame(walkTimeSeconds);
+                region = Assets.instance.personaje1.running.getKeyFrame(animTime);
                 break;
 
             case JUMPING:
-                region = Assets.instance.personaje1.jumping.getKeyFrame(walkTimeSeconds);
+                region = Assets.instance.personaje1.jumping.getKeyFrame(animTime);
+                break;
+
+            case ATTACK_01:
+            case ATTACK_02:
+            case ATTACK_03:
+            case DEATH:
+                region = actualAnimation.getKeyFrame(animTime);
                 break;
 
             case IDLE:
             default:
-                region = Assets.instance.personaje1.idle.getKeyFrame(walkTimeSeconds);
+                region = Assets.instance.personaje1.idle.getKeyFrame(animTime);
                 break;
+        }
+
+        if (animation) {
+            onAnimationFrame(actualAnimation.getKeyFrameIndex(Utils.secondsSince(animationTime)));
+            if (actualAnimation.isAnimationFinished(Utils.secondsSince(animationTime)))
+                finishAnimation();
         }
 
         width=region.getRegionWidth();
@@ -156,6 +266,14 @@ public class Personaje1 extends Personaje {
     @Override
     public int onAttack(Entidad objetivo) {
         return 0;
+    }
+
+    @Override
+    public boolean onDeath() {
+        startAnimation(4);
+
+        Gdx.app.log("Muerto", "Estas muerto");
+        return super.onDeath();
     }
 
     @Override

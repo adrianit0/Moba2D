@@ -13,7 +13,7 @@ import garcia.gonzalez.adrian.utiles.Constants;
  *      - Pesado, Sangrado: Nada
  *      - KnockBack:    Tendrá un Vector2 con la dirección que lo lanza
  *      - AumentoAtrib: Tendrá un enum con el parámetro que aumenta, y la cantidad (FLOAT)
- *      - DoT, HoT:     Tendrá el valor de daño o cura por segundo (Un FLOAT)
+ *      - DamageOverTime, HealOverTime:     Tendrá el valor de daño o cura por segundo (Un FLOAT)
  * */
 public abstract class CC {
     private String nombreIdentificativo;

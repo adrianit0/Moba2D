@@ -91,7 +91,46 @@ public class Atributos {
         if (s==null) // Si el objetivo no tiene vida, entonces será invencible
             return;
 
+        if (nuevaVida>s.max)
+            nuevaVida=Math.round(s.max);
+
         s.actual = nuevaVida;
+    }
+
+    public void curarSalud (float heal) {
+        if (heal<0)
+            return;
+        Stat s = estadisticas.get(AtribEnum.SALUD);
+        if (s==null)
+            return;
+
+        s.actual += heal;
+        if (s.actual>s.max) {
+            s.actual=s.max;
+        }
+    }
+
+    public void quitarSalud (float damage) {
+        if (damage<0)
+            return;
+        Stat s = estadisticas.get(AtribEnum.SALUD);
+        if (s==null)
+            return;
+
+        s.actual -= damage;
+    }
+
+    public void aumentarManaActual (float nuevaCantidad) {
+        if (nuevaCantidad==0)
+            return;
+        Stat s = estadisticas.get(AtribEnum.MANA);
+        if (s==null)
+            return;
+
+        s.actual += nuevaCantidad;
+        if (s.actual>s.max) {
+            s.actual=s.max;
+        }
     }
 
     /**

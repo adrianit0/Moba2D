@@ -52,7 +52,7 @@ public class Esbirro extends Unidad {
         // Le damos valores por defecto
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 50);
         getAtributos().setAttr(AtribEnum.SALUD, 100);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 20);
+        getAtributos().setAttr(AtribEnum.ATAQUE, 80);
 
         estado=MaquinaEstados.SPAWN;
 
@@ -123,7 +123,7 @@ public class Esbirro extends Unidad {
                 // TODO: Cambiar (Los minions haran daño, no lanzaran por los aires al enemigo)
                 if (!attacked && elapsedTime> Constants.MINION_ATTACK_DURATION) {
                     // TODO: Solo aplicar el Knock-Up si ataca a otro minion, no a un personaje
-                    seleccionado.aplicarCC(new KnockUp("knock-Up minion", CrowdControl.KNOCK_BACK, new Vector2(getBando()==Bando.ALIADO ? 20 : -20,150), 0.25f), this);
+                    seleccionado.aplicarCC(new KnockUp("knock-Up minion", new Vector2(getBando()==Bando.ALIADO ? 20 : -20,150), 0.25f), this);
                     this.atacar(seleccionado);
                     attacked=true;
                 }

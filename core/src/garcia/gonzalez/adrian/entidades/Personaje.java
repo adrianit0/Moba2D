@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import garcia.gonzalez.adrian.Level;
@@ -58,7 +59,7 @@ public abstract class Personaje extends Unidad {
 
     @Override
     public final void update(float delta) {
-        if (controller!=null) {
+        if (controller!=null && estaVivo()) {
             // PRESS DOWN
             if (controller.onKeyDown(TeclasJugador.MOVER_DERECHA)) {
                 mover(Direccion.DERECHA, delta);
@@ -137,8 +138,12 @@ public abstract class Personaje extends Unidad {
 
     public void castHabilityDown (int id) {
         Habilidad hab = habilidades [id-1];
-        if (hab.isCooldown())
+        if (hab.isCooldown()) {
+            Gdx.app.log("CD", "Está en CD " +hab.getCooldown()); //TODO: Borrar log
+            hab.setUsed(true);
             return;
+        }
+
 
         // Le preguntamos al personaje si puede/quiere realizar la habilidad
         boolean canCast = canCastHability(id);
@@ -146,7 +151,6 @@ public abstract class Personaje extends Unidad {
             hab.setUsed(true);
             return;
         }
-
 
         boolean enterInCooldown = onHabilityDown(id);
         if (enterInCooldown) {

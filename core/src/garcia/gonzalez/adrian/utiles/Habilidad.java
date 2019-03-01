@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.utiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -19,10 +20,11 @@ public class Habilidad {
 
     public void setCooldown (float segundos) {
         cooldown = Utils.secondsToNano(segundos);
+        Gdx.app.log("CD", "CD: " +cooldown + " SEG: " +segundos);
     }
 
     public boolean isCooldown () {
-        return TimeUtils.nanoTime() > nextUse;
+        return TimeUtils.nanoTime() < nextUse;
     }
 
     /**
@@ -34,7 +36,7 @@ public class Habilidad {
         float actual = nextUse - TimeUtils.nanoTime();
         if (actual>total)
             return 1;
-        return actual/total;
+        return 1-actual/total;
     }
 
     public void setInCooldown (float cd) {
@@ -45,7 +47,7 @@ public class Habilidad {
 
         // Ponemos el tiempo actual y el tiempo que queda en nanosegundos para poderlo lanzar otra vez
         lastUsed = actual;
-        nextUse = actual + Math.round(cooldown * cd);
+        nextUse = actual + Math.round(cooldown * (1-cd));
 
     }
 

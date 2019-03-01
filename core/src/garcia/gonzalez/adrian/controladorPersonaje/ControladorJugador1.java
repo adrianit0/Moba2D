@@ -11,13 +11,13 @@ public class ControladorJugador1 extends Controlador {
     @Override
     public boolean onKeyDown(Enums.TeclasJugador tecla) {
         switch (tecla) {
-            case MOVER_DERECHA:         return Gdx.input.isKeyJustPressed(Input.Keys.D);
-            case MOVER_IZQUIERDA:       return Gdx.input.isKeyJustPressed(Input.Keys.A);
-            case SALTAR:                return Gdx.input.isKeyJustPressed(Input.Keys.W);
-            case AGACHAR:               return Gdx.input.isKeyJustPressed(Input.Keys.S);
-            case BOTON_HABILIDAD_1:     return Gdx.input.isKeyJustPressed(Input.Keys.J);
-            case BOTON_HABILIDAD_2:     return Gdx.input.isKeyJustPressed(Input.Keys.K);
-            case BOTON_HABILIDAD_3:     return Gdx.input.isKeyJustPressed(Input.Keys.L);
+            case MOVER_DERECHA:         return input.isKeyDown(Input.Keys.D);
+            case MOVER_IZQUIERDA:       return input.isKeyDown(Input.Keys.A);
+            case SALTAR:                return input.isKeyDown(Input.Keys.W);
+            case AGACHAR:               return input.isKeyDown(Input.Keys.S);
+            case BOTON_HABILIDAD_1:     return input.isKeyDown(Input.Keys.J);
+            case BOTON_HABILIDAD_2:     return input.isKeyDown(Input.Keys.K);
+            case BOTON_HABILIDAD_3:     return input.isKeyDown(Input.Keys.L);
         }
         return false;
     }
@@ -25,29 +25,28 @@ public class ControladorJugador1 extends Controlador {
     @Override
     public boolean onKeyPressing(Enums.TeclasJugador tecla) {
         switch (tecla) {
-            case MOVER_DERECHA:         return Gdx.input.isKeyPressed(Input.Keys.D);
-            case MOVER_IZQUIERDA:       return Gdx.input.isKeyPressed(Input.Keys.A);
-            case SALTAR:                return Gdx.input.isKeyPressed(Input.Keys.W);
-            case AGACHAR:               return Gdx.input.isKeyPressed(Input.Keys.S);
-            case BOTON_HABILIDAD_1:     return Gdx.input.isKeyPressed(Input.Keys.J);
-            case BOTON_HABILIDAD_2:     return Gdx.input.isKeyPressed(Input.Keys.K);
-            case BOTON_HABILIDAD_3:     return Gdx.input.isKeyPressed(Input.Keys.L);
+            case MOVER_DERECHA:         return input.isKeyPressing(Input.Keys.D);
+            case MOVER_IZQUIERDA:       return input.isKeyPressing(Input.Keys.A);
+            case SALTAR:                return input.isKeyPressing(Input.Keys.W);
+            case AGACHAR:               return input.isKeyPressing(Input.Keys.S);
+            case BOTON_HABILIDAD_1:     return input.isKeyPressing(Input.Keys.J);
+            case BOTON_HABILIDAD_2:     return input.isKeyPressing(Input.Keys.K);
+            case BOTON_HABILIDAD_3:     return input.isKeyPressing(Input.Keys.L);
         }
         return false;
     }
 
     @Override
     public boolean onKeyUp(Enums.TeclasJugador tecla) {
-        //TODO: Buscar implementacion para esto
-        /*switch (tecla) {
-            case MOVER_DERECHA:         return Gdx.input.isk(Input.Keys.RIGHT);
-            case MOVER_IZQUIERDA:       return Gdx.input.isKeyPressed(Input.Keys.LEFT);
-            case SALTAR:                return Gdx.input.isKeyPressed(Input.Keys.UP);
-            case AGACHAR:               return Gdx.input.isKeyPressed(Input.Keys.DOWN);
-            case BOTON_HABILIDAD_1:     return Gdx.input.isKeyPressed(Input.Keys.Q);
-            case BOTON_HABILIDAD_2:     return Gdx.input.isKeyPressed(Input.Keys.W);
-            case BOTON_HABILIDAD_3:     return Gdx.input.isKeyPressed(Input.Keys.E);
-        }*/
+        switch (tecla) {
+            case MOVER_DERECHA:         return input.isKeyUp(Input.Keys.D);
+            case MOVER_IZQUIERDA:       return input.isKeyUp(Input.Keys.A);
+            case SALTAR:                return input.isKeyUp(Input.Keys.W);
+            case AGACHAR:               return input.isKeyUp(Input.Keys.S);
+            case BOTON_HABILIDAD_1:     return input.isKeyUp(Input.Keys.J);
+            case BOTON_HABILIDAD_2:     return input.isKeyUp(Input.Keys.K);
+            case BOTON_HABILIDAD_3:     return input.isKeyUp(Input.Keys.L);
+        }
         return false;
     }
 }

@@ -25,6 +25,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
     // Personajes
     public Character_01Assets personaje1;
+    public Character_01_EffectsAssets efectosPersonaje1;
 
     // Singleton minions
     public MinionAssets blueMinionAssets;
@@ -52,6 +53,7 @@ public class Assets implements Disposable, AssetErrorListener {
         escenarioAssets = new EscenarioAssets();
 
         personaje1 = new Character_01Assets(atlas_characters);
+        efectosPersonaje1 = new Character_01_EffectsAssets(atlas_characters);
 
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
@@ -81,18 +83,32 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Animation<TextureRegion> idle;
         public final Animation<TextureRegion> running;
         public final Animation<TextureRegion> jumping;
-        /*public final Animation<TextureRegion> attack01;
+        public final Animation<TextureRegion> attack01;
         public final Animation<TextureRegion> attack02;
         public final Animation<TextureRegion> attack03;
-        public final Animation<TextureRegion> death;*/
+        public final Animation<TextureRegion> death;
 
         public Character_01Assets (TextureAtlas atlas) {
             //TODO: Cambiar el temporizador
             idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_IDLE, Animation.PlayMode.LOOP);
             running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_WALK, Animation.PlayMode.LOOP);
             jumping = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION*5, Constants.CHARACTER_01_JUMP, Animation.PlayMode.LOOP);
-        }
+            death = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_DEATH, Animation.PlayMode.NORMAL);
 
+            attack01 = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_ATTACK_01, Animation.PlayMode.NORMAL);
+            attack02 = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_ATTACK_02, Animation.PlayMode.NORMAL);
+            attack03 = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_ATTACK_03, Animation.PlayMode.NORMAL);
+        }
+    }
+
+    public class Character_01_EffectsAssets {
+        public final Animation<TextureRegion> explotion;
+        public final TextureRegion bolaEnergia;
+
+        public Character_01_EffectsAssets (TextureAtlas atlas) {
+            explotion = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_POWER_BALL_EXPLOSION, Animation.PlayMode.NORMAL);
+            bolaEnergia = explotion.getKeyFrame(0);
+        }
     }
 
     public class MinionAssets {

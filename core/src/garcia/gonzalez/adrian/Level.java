@@ -1,15 +1,22 @@
 package garcia.gonzalez.adrian;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
+import garcia.gonzalez.adrian.controladorPersonaje.MyInputProcessor;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
+import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Escenario;
@@ -24,22 +31,29 @@ public class Level {
     private Personaje personaje;
 
     private float tickUpdate;
+    private MyInputProcessor input;
 
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
+    private DelayedRemovalArray<Proyectil> proyectiles; // Personajes, aliados, torres, etc
     //TODO: Incluir lista para escenarioAssets, proyectiles, particulas y plataformas
 
     public Level(Viewport viewport) {
         this.viewport = viewport;
 
+        input = new MyInputProcessor();
+        Gdx.input.setInputProcessor(input);
+
         tickUpdate = 0;
 
         escenario = new Escenario(this.viewport);
         entidades = new DelayedRemovalArray<Entidad>();
+        proyectiles = new DelayedRemovalArray<Proyectil>();
 
+        //TODO: Borrar contenido de pruebas
         // Incluimos esbirro de pruebas
-        entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ALIADO,-140,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ALIADO,-100,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-140,5, this));
+        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-100,5, this));
         entidades.add (new Esbirro(Enums.Bando.ALIADO,-60,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
@@ -47,7 +61,7 @@ public class Level {
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        Personaje1 mainCharacter = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, 0,5, this);
+        Personaje1 mainCharacter = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -220,5, this);
         entidades.add(mainCharacter);
         this.personaje = mainCharacter;
     }
@@ -84,6 +98,7 @@ public class Level {
 
     public void update(float delta) {
         tickUpdate+=delta;
+
         // Actualizamos los enemigos
         for (int i = 0; i < entidades.size; i++) {
             Entidad entidad = entidades.get(i);
@@ -92,6 +107,16 @@ public class Level {
             //TODO: Configurar que hacer cuando este muerto
             if (entidad.canBeCleaned()) {
                 entidades.removeIndex(i);
+                i--;
+            }
+        }
+
+        for (int i = 0; i < proyectiles.size; i++) {
+            Proyectil proyectil  = proyectiles.get(i);
+
+            proyectil.update(delta);
+            if (proyectil.hasFinished()) {
+                proyectiles.removeIndex(i);
                 i--;
             }
         }
@@ -106,6 +131,8 @@ public class Level {
         }
 
 
+
+
         /*explosions.begin();
         for (int i = 0; i < explosions.size; i++) {
             if (explosions.get(i).isFinished()) {
@@ -113,6 +140,8 @@ public class Level {
             }
         }
         explosions.end();*/
+
+        input.nextFrame();  // siguiente framea
     }
 
     public void render(SpriteBatch batch) {
@@ -151,5 +180,18 @@ public class Level {
             }
         }
         return null;
+    }
+
+    /**
+     * Devuelve una lista con todas las entidades colisionadas
+     * */
+    public List<Entidad> getCollisionEntities (Rectangle rect) {
+        LinkedList<Entidad> ent = new LinkedList<Entidad>();
+        for (Entidad e :  entidades) {
+            if (e.estaVivo() && rect.overlaps(e.getCollider())) {
+                ent.add(e);
+            }
+        }
+        return ent;
     }
 }

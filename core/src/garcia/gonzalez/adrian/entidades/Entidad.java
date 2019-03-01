@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Atributos;
 
@@ -34,6 +35,7 @@ public abstract class Entidad {
     }
 
     public abstract void onCreate();
+    public abstract void onSpawn();
 
     public abstract void onUpdate(float delta);
     public abstract void onTickUpdate(float tickDelta);
@@ -52,7 +54,6 @@ public abstract class Entidad {
 
     public abstract void onLevelUp();
 
-    public abstract void onSpawn();
     public abstract boolean onDeath ();
 
     // Métodos abstractos de colisión:
@@ -62,7 +63,6 @@ public abstract class Entidad {
     //public abstract void onCollisionExit(Entidad e);
 
     public abstract Rectangle getCollider ();
-    //public abstract Vector2 getCenter();
     public abstract Vector2 getOffset();
     public abstract Vector2 getSize();
 
@@ -78,8 +78,26 @@ public abstract class Entidad {
     public void render (SpriteBatch sprite) {
         onRender(sprite);
     }
+
     public void tickUpdate(float tickDelta) {
+        regeneracionPasiva(tickDelta);
+
         onTickUpdate(tickDelta);
+    }
+
+    private void regeneracionPasiva (float tickDelta) {
+        if (!estaVivo())
+            return;
+
+        final float porcVida = getAtributos().getAttrPorc(AtribEnum.REG_SALUD) * tickDelta;
+        final float porcMana = getAtributos().getAttrPorc(AtribEnum.REG_MANA) * tickDelta;
+
+        atributos.curarSalud(porcVida);
+        atributos.aumentarManaActual(porcMana);
+    }
+
+    public final void generarProyectil (Proyectil p) {
+        //TODO: Añadir proyectil al level
     }
 
     public final void atacar (Entidad objetivo) {
