@@ -66,6 +66,20 @@ public abstract class Unidad extends Entidad {
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
+        // RANGO ATAQUE
+        shapeRenderer.setColor(Color.RED);
+        if (this instanceof Personaje) {
+            Rectangle ataq = null;
+            final float distancia = 150f; //TODO: Pasar a constantes
+            if (getDireccion()==Direccion.DERECHA) {
+                ataq = new Rectangle((col.x+col.width), col.height/4+position.y, distancia, col.height/2);
+            } else{
+                ataq = new Rectangle(col.x-distancia, col.height/4+position.y, distancia, col.height/2);
+            }
+            shapeRenderer.rect(ataq.x, ataq.y, ataq.width, ataq.height);
+        }
+
+
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 

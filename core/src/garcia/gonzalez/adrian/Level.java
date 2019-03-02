@@ -149,10 +149,13 @@ public class Level {
 
         escenario.render(batch);
 
+        for (int i = 0; i < entidades.size; i++) {
+            entidades.get(i).render(batch);
+        }
+        /* TODO: error #iterator() cannot be used nested. BORRAR ESTO
         for (Entidad entidad : entidades) {
             entidad.render(batch);
-        }
-
+        }*/
 
         batch.end();
     }

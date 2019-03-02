@@ -76,6 +76,14 @@ public class Atributos {
     }
 
     /**
+     * Pone un bonus a un atributo
+     * */
+    public void aumentarBonus (AtribEnum stat, float bonus) {
+        Stat s = getOrCreateStat(stat);
+        s.bonus += bonus;
+    }
+
+    /**
      * Devuelve unicamente la salud actual, si VIDA<=0, entonces el personaje está muerto.
      * */
     public int getSaludActual () {

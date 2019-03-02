@@ -47,7 +47,7 @@ public class Habilidad {
 
         // Ponemos el tiempo actual y el tiempo que queda en nanosegundos para poderlo lanzar otra vez
         lastUsed = actual;
-        nextUse = actual + Math.round(cooldown * (1-cd));
+        nextUse = actual + Math.round(cooldown * ((double)(1-cd)));
 
     }
 

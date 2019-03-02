@@ -41,7 +41,7 @@ public abstract class Entidad {
     public abstract void onTickUpdate(float tickDelta);
     public abstract void onRender(SpriteBatch batch);
 
-    public abstract int onAttack (Entidad objetivo);
+    public abstract int onAttack (int damage, Entidad objetivo);
     public abstract void onAfterAttact (Entidad objetivo);
 
     public abstract void onEntityKilled (Entidad objetivo);
@@ -100,12 +100,12 @@ public abstract class Entidad {
         //TODO: Añadir proyectil al level
     }
 
-    public final void atacar (Entidad objetivo) {
+    public final void atacar (int damage, Entidad objetivo) {
         if (objetivo==null || bando==objetivo.bando) {
             return;
         }
 
-        int damage = onAttack(objetivo);
+        damage = onAttack(damage, objetivo);
 
         if (damage<=0)
             return;

@@ -9,14 +9,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import org.w3c.dom.css.Rect;
+
+import java.util.List;
+
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.crownControl.HealOverTime;
 import garcia.gonzalez.adrian.crownControl.KnockUp;
+import garcia.gonzalez.adrian.crownControl.VelocidadCC;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
+import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Habilidad;
 import garcia.gonzalez.adrian.utiles.Utils;
 
@@ -63,7 +69,7 @@ public class Personaje1 extends Personaje {
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
                 new Habilidad(1),
-                new Habilidad(100),
+                new Habilidad(4),
                 new Habilidad(12),
                 bando, x, y, level);
 
@@ -157,13 +163,24 @@ public class Personaje1 extends Personaje {
         //TODO: Ajustar los frames
         if (estado==MaquinaEstados.ATTACK_01 && frame==1) {
             if (getEstadoSalto()==EstadoSalto.SALTANDO) {
-                // TODO: Aplicar solo en el frame en el que se produce el efecto
                 aplicarCC(new KnockUp("recoil_aereo_pers1", new Vector2(20*-getDireccion().getDir(),0), 0.25f), this);
             }
+            Rectangle col = getCollider();
+            final Rectangle rect = new Rectangle(
+                    getDireccion()==Direccion.DERECHA ? col.x+col.width :  col.x - Constants.RANGE_HABILITY_1,
+                    col.height/4+getPosition().y, Constants.RANGE_HABILITY_1,
+                    col.height/2);
+
+
+            List<Entidad> entidades = level.getCollisionEntities(rect);
+            for (Entidad e : entidades) {
+                this.atacar(getHabilityDamage(50, 0.8f), e);
+            }
         } else if (estado==MaquinaEstados.ATTACK_02 && frame==6) {
-            aplicarCC(new HealOverTime("cura", 100+getAtributos().getAttrPorc(AtribEnum.ATAQUE)*1.5f, 5), this);
+            // TODO: Reajustarlo
+            aplicarCC(new HealOverTime("cura", getHabilityDamage(100, 1.5f), 5), this);
+            aplicarCC(new VelocidadCC("velocidad", 0.50f, 5),this);
         }
-        //Gdx.app.log("Animacion", "Frame nº"+frame); //TODO: Borrar log
     }
 
     @Override
@@ -264,15 +281,15 @@ public class Personaje1 extends Personaje {
     }
 
     @Override
-    public int onAttack(Entidad objetivo) {
-        return 0;
+    public int onAttack(int damage, Entidad objetivo) {
+        return damage;
     }
 
     @Override
     public boolean onDeath() {
         startAnimation(4);
 
-        Gdx.app.log("Muerto", "Estas muerto");
+        Gdx.app.log("Muerto", "Estas muerto"); //TODO: Eliminar LOG
         return super.onDeath();
     }
 

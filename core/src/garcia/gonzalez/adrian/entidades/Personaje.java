@@ -50,7 +50,7 @@ public abstract class Personaje extends Unidad {
     @Override
     public abstract void onRender(SpriteBatch batch);
     @Override
-    public abstract int onAttack(Entidad objetivo);
+    public abstract int onAttack(int damage, Entidad objetivo);
 
     @Override
     public boolean onMove(Enums.Direccion dir, float delta) {
@@ -139,7 +139,6 @@ public abstract class Personaje extends Unidad {
     public void castHabilityDown (int id) {
         Habilidad hab = habilidades [id-1];
         if (hab.isCooldown()) {
-            Gdx.app.log("CD", "Está en CD " +hab.getCooldown()); //TODO: Borrar log
             hab.setUsed(true);
             return;
         }
@@ -180,6 +179,11 @@ public abstract class Personaje extends Unidad {
             }
         }
         hab.setUsed (false);
+    }
+
+    // TODO: Cambiar el nombre a otro más acertado
+    public final int getHabilityDamage (float base, float porcentual) {
+        return Math.round(base + getAtributos().getAttrPorc(AtribEnum.ATAQUE) * porcentual);
     }
 
     @Override

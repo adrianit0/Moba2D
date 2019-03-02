@@ -67,6 +67,6 @@ public class Utils {
     }
 
     public static long secondsToNano (double seconds) {
-        return Math.round(seconds*1000000000);
+        return Math.round(seconds/MathUtils.nanoToSec);
     }
 }

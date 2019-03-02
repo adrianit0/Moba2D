@@ -34,7 +34,7 @@ public class ChaseCam {
         if (following) {
             Vector2 position = target.getPosition();
             camera.position.x = position.x;
-            camera.position.y = position.y<50 ? 50 : position.y;
+            camera.position.y = position.y<100 ? 100 : position.y;
         } else {
             // Si pulsamos las teclas A S D W mientras está en modo no following
             // Modificaremos la posición de la cámara
@@ -55,8 +55,9 @@ public class ChaseCam {
 
             }
         }
-        if (camera.position.y-Constants.WORLD_SIZE/2<0)
-            camera.position.y = Constants.WORLD_SIZE/2;
+        // TODO: Mejorar esto (Añadir agua y bajar un poco la copa de los arboles
+        if (camera.position.y-Constants.WORLD_SIZE/5<0)
+            camera.position.y = Constants.WORLD_SIZE/5;
     }
 }
 

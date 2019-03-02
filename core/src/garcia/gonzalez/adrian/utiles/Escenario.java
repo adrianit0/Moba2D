@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.utiles;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -36,10 +37,13 @@ public class Escenario {
             batch.draw(Assets.instance.escenarioAssets.troncos2, posX*0.25f+w*i-oW, posY*0.05f, w, h);
             batch.draw(Assets.instance.escenarioAssets.luz1, posX*0.20f+w*i-oW, posY*0.05f, w, h);
         }
+
+        final Texture suelo2 = Assets.instance.escenarioAssets.suelo2;
         for (int i = -5; i < 6; i++) {
             batch.draw(Assets.instance.escenarioAssets.suelo1, posX * 0 + w * i - oW, 10, w, h);
             batch.draw(Assets.instance.escenarioAssets.troncos1, posX*0+w*i-oW, 0, w, h);
-            batch.draw(Assets.instance.escenarioAssets.suelo2, posX*0f+w*i-oW, 0, w, h);
+            batch.draw(suelo2, posX*0f+w*i-oW, 0, w, h);
+            batch.draw(suelo2, posX*0f+w*i-oW, -256, w, h, 0, 0, suelo2.getWidth(), suelo2.getHeight(),false, true );
         }
         for (int i = -5; i < 6; i++) {
             batch.draw(Assets.instance.escenarioAssets.copa, posX*0+w*i-oW, -posY*0.05f, w, h);

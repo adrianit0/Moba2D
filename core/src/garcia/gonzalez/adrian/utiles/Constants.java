@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 public class Constants {
     // CONFIGURACION INICIAL
     public static final Color BACKGROUND_COLOR = Color.SKY;
-    public static final float WORLD_SIZE = 160; // Para la cámara
+    public static final float WORLD_SIZE = 240; // Para la cámara
     public static final float HUD_VIEWPORT_SIZE = 240;  // Para el HUD
     public static final float HUD_MARGIN = 5;
     public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
-    public static final float CHASE_CAM_MOVE_SPEED = 128;   // Velocidad de la camara
+    public static final float CHASE_CAM_MOVE_SPEED = 512;   // Velocidad de la camara
     public static final float GRAVITY = 12;                 // Gravedad de todas las unidades
     public static final float TICK_UPDATE = 0.25f;          // Cada cuanto se hará el tick_update
 
@@ -20,6 +20,7 @@ public class Constants {
     public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica
 
     // PERSONAJE JUGABLE 01
+    public static final float RANGE_HABILITY_1 = 150f;
     public static final String[] CHARACTER_01_IDLE = {
             "character_1-00", "character_1-01", "character_1-02", "character_1-03",
             "character_1-04", "character_1-05", "character_1-06", "character_1-07",

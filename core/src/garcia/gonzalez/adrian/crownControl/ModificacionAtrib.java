@@ -3,23 +3,25 @@ package garcia.gonzalez.adrian.crownControl;
 import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.enums.Enums;
 
-public class DamageOverTime extends CC {
+public class ModificacionAtrib extends CC {
     private float cantidad;
+    private Enums.AtribEnum atributo;
 
-    public DamageOverTime(String nombreIdentificativo, float cantidad, float duracion) {
-        super(nombreIdentificativo, Enums.CrowdControl.DAMAGE_OVER_TIME, duracion);
+    public ModificacionAtrib(String nombreIdentificativo, Enums.AtribEnum atributo, float cantidad, float duracion) {
+        super(nombreIdentificativo, cantidad>0? Enums.CrowdControl.AUMENTO_ATRIB : Enums.CrowdControl.REDUCION_ATRIB, duracion);
 
         this.cantidad = cantidad;
+        this.atributo = atributo;
     }
 
     @Override
     public void aplicarCC(Unidad unidad) {
-
+        unidad.getAtributos().aumentarBonus(atributo, cantidad);
     }
 
     @Override
     public void aplicandoCCTick(Unidad unidad, float deltaTick) {
-        unidad.getAtributos().quitarSalud(cantidad*deltaTick/getDuracion());
+
     }
 
     @Override
@@ -29,8 +31,6 @@ public class DamageOverTime extends CC {
 
     @Override
     public void terminarCC(Unidad unidad) {
-
+        unidad.getAtributos().aumentarBonus(atributo, -cantidad);
     }
-
-
 }

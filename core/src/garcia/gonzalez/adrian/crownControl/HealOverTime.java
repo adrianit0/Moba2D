@@ -11,7 +11,6 @@ public class HealOverTime extends CC {
 
         this.cantidad = cantidad;
     }
-    // TODO: SEGUIr
 
     @Override
     public void aplicarCC(Unidad unidad) {
