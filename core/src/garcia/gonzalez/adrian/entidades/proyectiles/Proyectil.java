@@ -1,6 +1,8 @@
 package garcia.gonzalez.adrian.entidades.proyectiles;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,6 +11,7 @@ import java.util.List;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.Personaje;
 import sun.awt.image.ImageWatched;
 
 /**
@@ -24,14 +27,29 @@ public abstract class Proyectil {
     private List<Entidad> lastFrameEntities;
     private List<Entidad> thisFrameEntities;
 
+    // TODO: Pruebas con Colisionadores, eliminar o comentar
+    private ShapeRenderer shapeRenderer;
+
     public Proyectil (Entidad creador, Level level, float x, float y){
         this.x = x;
         this.y = y;
         this.creador = creador;
         this.level = level;
+
+        lastFrameEntities = new LinkedList<Entidad>();
+        thisFrameEntities = new LinkedList<Entidad>();
+
+        shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
     }
 
-    public abstract Rectangle getCollider ();
+    protected abstract Rectangle _getCollider ();
+
+    public Rectangle getCollider () {
+        Rectangle rect = _getCollider();
+        rect.x += x;
+        rect.y += y;
+        return rect;
+    }
 
     public abstract void onCollisionEnter (Entidad entidad);
     public abstract void onCollisionStay  (Entidad entidad, float delta);
@@ -62,10 +80,25 @@ public abstract class Proyectil {
         }
 
         onUpdate(delta);
+
+        lastFrameEntities = thisFrameEntities;
     }
 
     public final void render (SpriteBatch batch) {
         onRender(batch);
+
+        //TODO: Probando las colisiones
+        batch.end();       // Dejamos de usar el SpriteBatch
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        // COLLIDER
+        shapeRenderer.setColor(Color.BLUE);
+        Rectangle col = getCollider();
+        shapeRenderer.rect(col.x, col.y, col.width, col.height);
+
+        shapeRenderer.end();
+        batch.begin(); // Volvemos a usar el SpriteBatch
     }
 
     public final void nextframe () {

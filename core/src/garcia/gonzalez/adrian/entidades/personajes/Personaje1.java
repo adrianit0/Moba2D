@@ -15,6 +15,7 @@ import java.util.List;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
+import garcia.gonzalez.adrian.crownControl.DamageOverTime;
 import garcia.gonzalez.adrian.crownControl.HealOverTime;
 import garcia.gonzalez.adrian.crownControl.KnockUp;
 import garcia.gonzalez.adrian.crownControl.VelocidadCC;
@@ -178,7 +179,7 @@ public class Personaje1 extends Personaje {
             }
         } else if (estado==MaquinaEstados.ATTACK_02 && frame==6) {
             // TODO: Reajustarlo
-            aplicarCC(new HealOverTime("cura", getHabilityDamage(100, 1.5f), 5), this);
+            aplicarCC(new DamageOverTime("daño", this, getHabilityDamage(100, 1.5f), 5), this);
             aplicarCC(new VelocidadCC("velocidad", 0.50f, 5),this);
         }
     }

@@ -3,6 +3,7 @@ package garcia.gonzalez.adrian.entidades;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
@@ -239,6 +240,10 @@ public abstract class Entidad {
 
     public final Vector2 getPosition () {
         return new Vector2(x,y);
+    }
+
+    public final Vector3 getPosition3D () {
+        return new Vector3 (x,y,0);
     }
 
     public final Atributos getAtributos() {

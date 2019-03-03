@@ -136,7 +136,7 @@ public abstract class Personaje extends Unidad {
 
     }
 
-    public void castHabilityDown (int id) {
+    public final void castHabilityDown (int id) {
         Habilidad hab = habilidades [id-1];
         if (hab.isCooldown()) {
             hab.setUsed(true);
@@ -158,7 +158,7 @@ public abstract class Personaje extends Unidad {
         }
     }
 
-    public void castHabilityStay (int id, float delta) {
+    public final void castHabilityStay (int id, float delta) {
         Habilidad hab = habilidades [id-1];
         if (hab.isUsed())
             return;
@@ -170,7 +170,7 @@ public abstract class Personaje extends Unidad {
         }
     }
 
-    public void castHabilityUp (int id) {
+    public final void castHabilityUp (int id) {
         Habilidad hab = habilidades [id-1];
         if (!hab.isUsed())  {
             boolean enterInCooldown = onHabilityUp(id);
@@ -182,6 +182,10 @@ public abstract class Personaje extends Unidad {
     }
 
     // TODO: Cambiar el nombre a otro más acertado
+    /**
+     * A partir de un valor base más otro porcentual obtiene el daño para cualquiera de las
+     * habilidades. El funcionamiento
+     * */
     public final int getHabilityDamage (float base, float porcentual) {
         return Math.round(base + getAtributos().getAttrPorc(AtribEnum.ATAQUE) * porcentual);
     }
@@ -243,11 +247,11 @@ public abstract class Personaje extends Unidad {
 
     }
 
-    //TODO: Si no se va a usar, borrarlo
-    public void onItemBuy(garcia.gonzalez.adrian.entidades.items.Item item) {
+    //TODO: Si no se va a usar el item buy, borrarlo
+    public void onItemBuy(Item item) {
 
     }
-
+    //TODO: Si no se va a usar el item sell, borrarlo
     public void onItemSell(Item item) {
 
     }

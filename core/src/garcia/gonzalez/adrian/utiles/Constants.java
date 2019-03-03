@@ -10,7 +10,11 @@ public class Constants {
     public static final float HUD_MARGIN = 5;
     public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
-    public static final float CHASE_CAM_MOVE_SPEED = 512;   // Velocidad de la camara
+    public static final float CHASE_CAM_MOVE_SPEED = 30;   // Velocidad de la camara
+    public static final float CHASE_CAM_MOVE_INCREMENT = 0.15f;
+    public static final float CHASE_CAM_SEPARATION = 50;
+    public static final float CHASE_CAM_MIN_HEIGHT = 50;
+
     public static final float GRAVITY = 12;                 // Gravedad de todas las unidades
     public static final float TICK_UPDATE = 0.25f;          // Cada cuanto se hará el tick_update
 

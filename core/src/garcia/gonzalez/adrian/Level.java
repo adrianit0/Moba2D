@@ -15,7 +15,9 @@ import garcia.gonzalez.adrian.controladorPersonaje.MyInputProcessor;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.Personaje;
+import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
+import garcia.gonzalez.adrian.entidades.proyectiles.BolaEnergia;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -34,7 +36,8 @@ public class Level {
     private MyInputProcessor input;
 
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
-    private DelayedRemovalArray<Proyectil> proyectiles; // Personajes, aliados, torres, etc
+    private DelayedRemovalArray<Proyectil> proyectiles;
+    private DelayedRemovalArray<Particula> particulas;
     //TODO: Incluir lista para escenarioAssets, proyectiles, particulas y plataformas
 
     public Level(Viewport viewport) {
@@ -48,6 +51,7 @@ public class Level {
         escenario = new Escenario(this.viewport);
         entidades = new DelayedRemovalArray<Entidad>();
         proyectiles = new DelayedRemovalArray<Proyectil>();
+        particulas = new DelayedRemovalArray<Particula>();
 
         //TODO: Borrar contenido de pruebas
         // Incluimos esbirro de pruebas
@@ -60,14 +64,22 @@ public class Level {
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
 
+
+
         //Controlador controller, Bando bando, int x, int y, Level level
         Personaje1 mainCharacter = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -220,5, this);
         entidades.add(mainCharacter);
         this.personaje = mainCharacter;
+
+        generarProyecitl(new BolaEnergia(mainCharacter, this, -300, 10));
     }
 
     public Personaje getPersonaje () {
         return personaje;
+    }
+
+    public void generarProyecitl (Proyectil p) {
+        proyectiles.add(p);
     }
 
     private void nivel1() {
@@ -152,6 +164,21 @@ public class Level {
         for (int i = 0; i < entidades.size; i++) {
             entidades.get(i).render(batch);
         }
+
+        for (int i = 0; i < proyectiles.size; i++) {
+            proyectiles.get(i).render(batch);
+        }
+
+        for (int i = 0; i < particulas.size; i++) {
+            Particula p = particulas.get(i);
+            p.render(batch);
+
+            if(p.isFinished()) {
+                particulas.removeIndex(i);
+                i--;
+            }
+        }
+
         /* TODO: error #iterator() cannot be used nested. BORRAR ESTO
         for (Entidad entidad : entidades) {
             entidad.render(batch);

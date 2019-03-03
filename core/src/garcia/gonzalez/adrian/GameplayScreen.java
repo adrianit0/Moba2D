@@ -59,7 +59,8 @@ public class GameplayScreen extends ScreenAdapter {
     public void resize(int width, int height) {
         // TODO: comparar RESIZE con gigaGAL
         // Actualizamos el ViewPort cuando hagamos un resize
-        viewport.update(width, height, true);
+        //TODO: Mirar si está correcto
+        chaseCam.onResize(viewport, width, height);
         // TODO: Programar la HUD
         hud.getViewport().update(width, height, true);
     }

@@ -2,6 +2,7 @@ package garcia.gonzalez.adrian.utiles;
 
 import java.util.HashMap;
 
+import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.enums.Enums.*;
 
 // UNA LISTA DE TODAS LAS ESTADISTICAS DEL JUEGO
@@ -106,7 +107,7 @@ public class Atributos {
     }
 
     public void curarSalud (float heal) {
-        if (heal<0)
+        if (heal<= 0)
             return;
         Stat s = estadisticas.get(AtribEnum.SALUD);
         if (s==null)
@@ -118,14 +119,18 @@ public class Atributos {
         }
     }
 
-    public void quitarSalud (float damage) {
-        if (damage<0)
+    public void quitarSalud (float damage, Entidad destinatario) {
+        if (damage<=0)
             return;
         Stat s = estadisticas.get(AtribEnum.SALUD);
         if (s==null)
             return;
 
         s.actual -= damage;
+        // No se podran matar al personaje con DoT, el último golpe siempre lo deberá dar una entidad
+        // TODO: PODER MATAR UN PERSONAJE CON DOTS, incluido destinatario
+        if (s.actual<=0)
+            s.actual=1;
     }
 
     public void aumentarManaActual (float nuevaCantidad) {
