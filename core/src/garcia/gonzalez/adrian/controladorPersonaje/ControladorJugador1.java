@@ -1,9 +1,7 @@
 package garcia.gonzalez.adrian.controladorPersonaje;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
-import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.enums.Enums;
 
 public class ControladorJugador1 extends Controlador {

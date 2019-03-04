@@ -1,9 +1,8 @@
 package garcia.gonzalez.adrian.controladorPersonaje;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 
-import garcia.gonzalez.adrian.entidades.Personaje;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.TeclasJugador;
 
 /**

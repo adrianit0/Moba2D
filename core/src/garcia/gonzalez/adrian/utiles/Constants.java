@@ -11,14 +11,17 @@ public class Constants {
     public static final float WORLD_SIZE = 240; // Para la cámara
     public static final float HUD_VIEWPORT_SIZE = 240;  // Para el HUD
     public static final float HUD_MARGIN = 5;
+
     public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
+    public static final String TEXTURE_ATLAS_HABILITIES = "images/habilidades.atlas";
+
     public static final float CHASE_CAM_MOVE_SPEED = 30;   // Velocidad de la camara
     public static final float CHASE_CAM_MOVE_INCREMENT = 0.15f;
     public static final float CHASE_CAM_SEPARATION = 50;
     public static final float CHASE_CAM_MIN_HEIGHT = 50;
 
-    public static final Vector2 HUD_CHARACTER_LIFE_SIZE = new Vector2(50, 6);
+    public static final Vector2 HUD_CHARACTER_LIFE_SIZE = new Vector2(50, 8);
     public static final Vector2 HUD_MINION_LIFE_SIZE = new Vector2(30, 4);
     public static final Vector2 HUD_STRUCTURE_LIFE_SIZE = new Vector2(100, 8);
 
@@ -29,6 +32,9 @@ public class Constants {
     public static final float COOLDOWN_LIMIT = 0.5f;        // Límite de cooldown.
 
     public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica
+
+    public static final float TIME_FIRST_MINION_SPAWN = 5;   // Primera vez que spawnean los minions nada más empezar la partida
+    public static final float TIME_MINION_SPAWN = 30;        // Tiempo que tarda en spawnearse los minions
 
     // PERSONAJE JUGABLE 01
     public static final float CHARACTER_01_RANGE_HABILITY_1 = 150f;

@@ -287,10 +287,6 @@ public abstract class Entidad {
         return atributos;
     }
 
-    public final Level getGameManager () {
-        return level;
-    }
-
     /**
     * Teletransporta a un personaje a otra posición instantaneamente
     * */

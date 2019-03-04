@@ -1,6 +1,7 @@
-package garcia.gonzalez.adrian.entidades;
+package garcia.gonzalez.adrian.entidades.estructuras;
 
 import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.enums.Enums.*;
 
 /*

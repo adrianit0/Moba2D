@@ -3,6 +3,9 @@ package garcia.gonzalez.adrian.crownControl;
 import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.enums.Enums;
 
+/**
+* Para los CC sin efectos extras. Pe: Aturdimiento y silencio
+* */
 public class DebuffCC extends CC {
     public DebuffCC(String nombreIdentificativo, Enums.CrowdControl tipo, float duracion) {
         super(nombreIdentificativo, tipo, duracion);

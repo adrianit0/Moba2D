@@ -46,10 +46,12 @@ public class Assets implements Disposable, AssetErrorListener {
         assetManager.setErrorListener(this);
         assetManager.load(Constants.TEXTURE_ATLAS_MINIONS, TextureAtlas.class);
         assetManager.load(Constants.TEXTURE_ATLAS_CHARACTERS, TextureAtlas.class);
+        assetManager.load(Constants.TEXTURE_ATLAS_HABILITIES, TextureAtlas.class);
         assetManager.finishLoading();
 
         TextureAtlas atlas_minions = assetManager.get(Constants.TEXTURE_ATLAS_MINIONS);
         TextureAtlas atlas_characters = assetManager.get(Constants.TEXTURE_ATLAS_CHARACTERS);
+        TextureAtlas atlas_habilidades = assetManager.get(Constants.TEXTURE_ATLAS_HABILITIES);
 
         escenarioAssets = new EscenarioAssets();
 
@@ -61,7 +63,7 @@ public class Assets implements Disposable, AssetErrorListener {
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
 
-        overlayAssets = new OverlayAssets();
+        overlayAssets = new OverlayAssets(atlas_habilidades);
 
         // Cargamos el singleton de la plataforma
         // TODO: Si no meto plataformas, borrar esto
@@ -138,10 +140,20 @@ public class Assets implements Disposable, AssetErrorListener {
     public class StructureAssets {
         public final Texture torreAliada;
         public final Texture torreEnemiga;
+        public final Texture nexoAliado;
+        public final Texture nexoEnemigo;
+        public final Texture tienda;
 
         public StructureAssets () {
+
+            // TODO: Pasar a constante
             torreAliada = new Texture("images/torreAl.png");
             torreEnemiga = new Texture("images/torreEn.png");
+
+            nexoAliado = new Texture("images/nexoAL.png");
+            nexoEnemigo = new Texture("images/nexoEN.png");
+
+            tienda = new Texture("images/tienda.png");
         }
     }
 
@@ -195,11 +207,19 @@ public class Assets implements Disposable, AssetErrorListener {
         public Texture vida;
         public Texture mana;
 
-        public OverlayAssets () {
+        public TextureRegion hab1;
+        public TextureRegion hab2;
+        public TextureRegion hab3;
+
+        public OverlayAssets (TextureAtlas atlas) {
             // TODO: Seguir y meter el contenido en constantes
             mainHud = new Texture("GUI/interfaz_character.png");
             vida = new Texture("GUI/vida.png");
             mana = new Texture("GUI/mana.png");
+
+            hab1 = atlas.findRegion("habilidades-078");
+            hab2 = atlas.findRegion("habilidades-001");
+            hab3 = atlas.findRegion("habilidades-055");
         }
     }
 }

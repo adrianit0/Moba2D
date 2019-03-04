@@ -2,6 +2,7 @@ package garcia.gonzalez.adrian.entidades.overlay;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -23,14 +24,14 @@ public abstract class Overlay {
         return level;
     }
 
-    public abstract void onRender (SpriteBatch batch, BitmapFont font);
+    public abstract void onRender (SpriteBatch batch, BitmapFont font, ShapeRenderer shapeRenderer);
 
-    public void render( SpriteBatch batch) {
+    public void render(SpriteBatch batch , ShapeRenderer shapeRenderer) {
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
 
-        onRender(batch, font);
+        onRender(batch, font, shapeRenderer);
 
         batch.end();
     }

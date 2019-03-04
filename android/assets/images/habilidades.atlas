@@ -1,0 +1,719 @@
+
+habilidades.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+habilidades-000
+  rotate: false
+  xy: 1, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-001
+  rotate: false
+  xy: 1, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-002
+  rotate: false
+  xy: 67, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-003
+  rotate: false
+  xy: 1, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-004
+  rotate: false
+  xy: 67, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-005
+  rotate: false
+  xy: 133, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-006
+  rotate: false
+  xy: 1, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-007
+  rotate: false
+  xy: 67, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-008
+  rotate: false
+  xy: 133, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-009
+  rotate: false
+  xy: 199, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-010
+  rotate: false
+  xy: 1, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-011
+  rotate: false
+  xy: 67, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-012
+  rotate: false
+  xy: 133, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-013
+  rotate: false
+  xy: 199, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-014
+  rotate: false
+  xy: 265, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-015
+  rotate: false
+  xy: 1, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-016
+  rotate: false
+  xy: 67, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-017
+  rotate: false
+  xy: 133, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-018
+  rotate: false
+  xy: 199, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-019
+  rotate: false
+  xy: 265, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-020
+  rotate: false
+  xy: 331, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-021
+  rotate: false
+  xy: 1, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-022
+  rotate: false
+  xy: 67, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-023
+  rotate: false
+  xy: 133, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-024
+  rotate: false
+  xy: 199, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-025
+  rotate: false
+  xy: 265, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-026
+  rotate: false
+  xy: 331, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-027
+  rotate: false
+  xy: 397, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-028
+  rotate: false
+  xy: 67, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-029
+  rotate: false
+  xy: 133, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-030
+  rotate: false
+  xy: 199, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-031
+  rotate: false
+  xy: 265, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-032
+  rotate: false
+  xy: 331, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-033
+  rotate: false
+  xy: 397, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-034
+  rotate: false
+  xy: 463, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-035
+  rotate: false
+  xy: 133, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-036
+  rotate: false
+  xy: 199, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-037
+  rotate: false
+  xy: 265, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-038
+  rotate: false
+  xy: 331, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-039
+  rotate: false
+  xy: 397, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-040
+  rotate: false
+  xy: 463, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-041
+  rotate: false
+  xy: 529, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-042
+  rotate: false
+  xy: 199, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-043
+  rotate: false
+  xy: 265, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-044
+  rotate: false
+  xy: 331, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-045
+  rotate: false
+  xy: 397, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-046
+  rotate: false
+  xy: 463, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-047
+  rotate: false
+  xy: 529, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-048
+  rotate: false
+  xy: 595, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-049
+  rotate: false
+  xy: 265, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-050
+  rotate: false
+  xy: 331, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-051
+  rotate: false
+  xy: 397, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-052
+  rotate: false
+  xy: 463, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-053
+  rotate: false
+  xy: 529, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-054
+  rotate: false
+  xy: 595, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-055
+  rotate: false
+  xy: 661, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-056
+  rotate: false
+  xy: 331, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-057
+  rotate: false
+  xy: 397, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-058
+  rotate: false
+  xy: 463, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-059
+  rotate: false
+  xy: 529, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-060
+  rotate: false
+  xy: 595, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-061
+  rotate: false
+  xy: 661, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-062
+  rotate: false
+  xy: 727, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-063
+  rotate: false
+  xy: 397, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-064
+  rotate: false
+  xy: 463, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-065
+  rotate: false
+  xy: 529, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-066
+  rotate: false
+  xy: 595, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-067
+  rotate: false
+  xy: 661, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-068
+  rotate: false
+  xy: 727, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-069
+  rotate: false
+  xy: 793, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-070
+  rotate: false
+  xy: 463, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-071
+  rotate: false
+  xy: 529, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-072
+  rotate: false
+  xy: 595, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-073
+  rotate: false
+  xy: 661, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-074
+  rotate: false
+  xy: 727, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-075
+  rotate: false
+  xy: 793, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-076
+  rotate: false
+  xy: 859, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-077
+  rotate: false
+  xy: 529, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-078
+  rotate: false
+  xy: 595, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-079
+  rotate: false
+  xy: 661, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-080
+  rotate: false
+  xy: 727, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-081
+  rotate: false
+  xy: 793, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-082
+  rotate: false
+  xy: 859, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-083
+  rotate: false
+  xy: 925, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-084
+  rotate: false
+  xy: 595, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-085
+  rotate: false
+  xy: 661, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-086
+  rotate: false
+  xy: 727, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-087
+  rotate: false
+  xy: 793, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-088
+  rotate: false
+  xy: 859, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-089
+  rotate: false
+  xy: 925, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-090
+  rotate: false
+  xy: 661, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-091
+  rotate: false
+  xy: 727, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-092
+  rotate: false
+  xy: 793, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-093
+  rotate: false
+  xy: 859, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-094
+  rotate: false
+  xy: 925, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-095
+  rotate: false
+  xy: 727, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-096
+  rotate: false
+  xy: 793, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-097
+  rotate: false
+  xy: 859, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-098
+  rotate: false
+  xy: 925, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-099
+  rotate: false
+  xy: 793, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-100
+  rotate: false
+  xy: 859, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+habilidades-101
+  rotate: false
+  xy: 925, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

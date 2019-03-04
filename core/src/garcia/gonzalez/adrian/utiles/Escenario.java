@@ -20,7 +20,7 @@ public class Escenario {
     }
 
     public void render(SpriteBatch batch) {
-        //TODO: Continuar con el escenarioAssets
+
         float posX = view.getCamera().position.x;
         float posY = view.getCamera().position.y-view.getCamera().viewportHeight/2;
 
@@ -45,7 +45,6 @@ public class Escenario {
             batch.draw(Assets.instance.escenarioAssets.troncos1, posX*0+w*i-oW, 0, w, h);
             batch.draw(suelo2, posX*0f+w*i-oW, 0, w, h);
 
-            // TODO: Ver como puedo cambiar esto
             batch.draw(suelo2, posX*0f+w*i-oW, -256, w, h, 0, 0, suelo2.getWidth(), suelo2.getHeight(),false, true );
             batch.draw(suelo2, posX*0f+w*i-oW, -271, w, h, 0, 0, suelo2.getWidth(), suelo2.getHeight(),false, true );
             batch.draw(suelo2, posX*0f+w*i-oW, -286, w, h, 0, 0, suelo2.getWidth(), suelo2.getHeight(),false, true );
@@ -55,5 +54,9 @@ public class Escenario {
         for (int i = -5; i < 6; i++) {
             batch.draw(Assets.instance.escenarioAssets.copa, posX*0+w*i-oW, -posY*0.05f+oH, w, h);
         }
+
+        Texture tienda = Assets.instance.estructuraAssets.tienda;
+        batch.draw(tienda, -1350-tienda.getWidth()/4-20, -5, tienda.getWidth()/2, tienda.getHeight()/2, 0, 0, tienda.getWidth(), tienda.getHeight(), true, false);
+        batch.draw(tienda, 1350-tienda.getWidth()/4+20, -5, tienda.getWidth()/2, tienda.getHeight()/2, 0, 0, tienda.getWidth(), tienda.getHeight(), false, false);
     }
 }

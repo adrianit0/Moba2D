@@ -1,4 +1,4 @@
-package garcia.gonzalez.adrian.entidades;
+package garcia.gonzalez.adrian.entidades.personajes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.crownControl.CC;
+import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.entidades.items.Item;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
@@ -145,6 +147,7 @@ public abstract class Personaje extends Unidad {
             return;
 
         float porc = (float) getAtributos().getSaludActual() / getAtributos().getMaxAttr(AtribEnum.SALUD);
+        float porcMana = (float) getAtributos().getManaActual() / getAtributos().getMaxAttr(AtribEnum.MANA);
         Vector2 pos = getPosition();
         final Vector2 size = Constants.HUD_CHARACTER_LIFE_SIZE;
 
@@ -153,16 +156,20 @@ public abstract class Personaje extends Unidad {
         shapeRenderer.rect(pos.x-size.x/2, getCollider().height+size.y+5+pos.y, size.x, size.y);
         // Vida
         shapeRenderer.setColor(getBando()==Bando.ALIADO ? Color.GREEN : Color.RED);
-        shapeRenderer.rect(pos.x-size.x/2+1, getCollider().height+6+size.y+pos.y, size.x*porc-2, size.y-2);
+        shapeRenderer.rect(pos.x-size.x/2+1, getCollider().height+9+size.y+pos.y, size.x*porc-2, size.y-5);
+
+        // Mana
+        shapeRenderer.setColor(Color.BLUE); // Permitir cambiar mana a otra cosa
+        shapeRenderer.rect(pos.x-size.x/2+1, getCollider().height+7+size.y+pos.y, size.x*porcMana-2, size.y-7);
     }
 
     public final void castHabilityDown (int id) {
         Habilidad hab = habilidades [id-1];
-        if (hab.isCooldown() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP, CrowdControl.SILENCIO)) {
+        int mana = getAtributos().getManaActual();
+        if (hab.isCooldown() || mana<hab.getCoste() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP, CrowdControl.SILENCIO)) {
             hab.setUsed(true);
             return;
         }
-
 
         // Le preguntamos al personaje si puede/quiere realizar la habilidad
         boolean canCast = canCastHability(id);
@@ -170,6 +177,9 @@ public abstract class Personaje extends Unidad {
             hab.setUsed(true);
             return;
         }
+
+        //Consumimos el maná
+        getAtributos().aumentarManaActual(-hab.getCoste());
 
         boolean enterInCooldown = onHabilityDown(id);
         if (enterInCooldown) {
@@ -288,5 +298,9 @@ public abstract class Personaje extends Unidad {
      * */
     public final boolean canBeCleaned() {
         return false;
+    }
+
+    public Habilidad[] getHabilidades() {
+        return habilidades;
     }
 }

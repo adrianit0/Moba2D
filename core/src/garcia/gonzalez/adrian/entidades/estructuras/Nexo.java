@@ -1,4 +1,4 @@
-package garcia.gonzalez.adrian.entidades;
+package garcia.gonzalez.adrian.entidades.estructuras;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,28 +8,23 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Constants;
 
-public class Torre extends Estructura {
+public class Nexo extends Estructura{
 
     private int width;
-    private int height;
-
     private Torre superior;
 
-    public Torre(Enums.Bando bando, int x, int y, Level level, Torre superior) {
+    public Nexo(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 5000);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 40);
-        getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 155);
-        // TODO: ATTACK SPEED = 0.833
-        // TODO: 30% por cada ataque consecutivo, hasta un máximo de 120%
-        // TODO: Hace siempre un 45% del daño a los minions
+        getAtributos().setAttr(AtribEnum.SALUD, 5500);
+        getAtributos().setAttr(AtribEnum.DEFENSA, 0);
+        getAtributos().setAttr(AtribEnum.REG_SALUD, 20);
 
         // Mientras que esta torre no esté destruida no se podrá destruir esta
         this.superior = superior;
@@ -59,15 +54,23 @@ public class Torre extends Estructura {
     public void onRender(SpriteBatch batch) {
         final Vector2 pos = getPosition();
 
-        Texture textura = getBando()== Enums.Bando.ALIADO ? Assets.instance.estructuraAssets.torreAliada : Assets.instance.estructuraAssets.torreEnemiga;
+        Texture textura = getBando()== Enums.Bando.ALIADO ? Assets.instance.estructuraAssets.nexoAliado : Assets.instance.estructuraAssets.nexoEnemigo;
 
         width=textura.getWidth();
-        height=textura.getWidth();
-        Vector2 position = getPosition();
         Vector2 offset = getOffset();
 
-        batch.draw(textura, pos.x-offset.x, pos.y-offset.y,textura.getWidth()/2,textura.getHeight()/2);
-
+        batch.draw(
+                textura,
+                pos.x-offset.x,
+                pos.y-offset.y,
+                textura.getWidth()/2,
+                textura.getHeight()/2,
+                0,
+                0,
+                textura.getWidth(),
+                textura.getHeight(),
+                getBando()==Bando.ENEMIGO,
+                false);
     }
 
     @Override
@@ -80,23 +83,14 @@ public class Torre extends Estructura {
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
-        // POSICION DEL CRISTAL (Donde se lanza las habilidades)
-        shapeRenderer.setColor(Color.PINK);
-        shapeRenderer.rect(col.x-2, col.y+col.height+12, 17, 24);
-
-        // ZONA DE RIESGO
-        final Rectangle dangerous = new Rectangle(col.x+col.width, 0, 150, col.height*1.5f);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(dangerous.x, dangerous.y, dangerous.width, dangerous.height);
-
-        // POSICION DEL PERSONAJE
+        // POSICION DEL CENTRO
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.circle(position.x, position.y, 1);
     }
 
     @Override
     public final void onHudRender(SpriteBatch batch, ShapeRenderer shapeRenderer) {
-        if (!estaVivo())
+        if (!estaVivo() || superior!=null&&superior.estaVivo())
             return;
 
         float porc = (float) getAtributos().getSaludActual() / getAtributos().getMaxAttr(AtribEnum.SALUD);
@@ -123,7 +117,6 @@ public class Torre extends Estructura {
 
     @Override
     public void onEntityKilled(Entidad objetivo) {
-
     }
 
     @Override
@@ -175,7 +168,7 @@ public class Torre extends Estructura {
 
     @Override
     public Vector2 getSize() {
-        return new Vector2(25, 100);
+        return new Vector2(25, 60);
     }
 
     @Override

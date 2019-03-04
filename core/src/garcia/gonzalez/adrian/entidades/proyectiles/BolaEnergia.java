@@ -48,7 +48,6 @@ public class BolaEnergia extends Proyectil {
         if (!activado || getCreador().getBando()==entidad.getBando())
             return;
 
-        Gdx.app.log("Tipo", entidad.getTipoEntidad()+"");
         if (entidad.getTipoEntidad().esUnidad()) {
             Unidad u = (Unidad) entidad;
             float lanzamiento = (getPosition().x>entidad.getPosition().x) ? -300 : 300; //TODO: Hacer constante
@@ -57,8 +56,7 @@ public class BolaEnergia extends Proyectil {
         finalizado=true;
         entidad.recibirAtaque(getLevel().getHabilityDamage(getCreador(), 30, 0.4f), getCreador()); //Le hacemos daño
         entidad.generarParticula(new Particula(getPosition(), Assets.instance.efectosPersonaje1.explotion, _getOffset(), 0.5f));
-        //TODO: Añadir daño por salpicadura 10 (+0.40)
-        List<Entidad> entidades = getLevel().getEntidades(getPosition(), 30);
+        List<Entidad> entidades = getLevel().getEntidades(getPosition(), 50);
         for (int i =0 ; i < entidades.size(); i++) {
             entidades.get(i).recibirAtaque(getLevel().getHabilityDamage(getCreador(),10, 0.4f), getCreador());
         }

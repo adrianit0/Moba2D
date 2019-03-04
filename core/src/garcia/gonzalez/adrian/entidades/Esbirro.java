@@ -240,11 +240,18 @@ public class Esbirro extends Unidad {
 
     @Override
     public int onBeforeDefend(int damage, Entidad destinatario) {
+
+        // Los minions siempre sufriran un 45% de su vida máxima si el ataque viene de una torre
+        if (destinatario.getTipoEntidad()==TipoEntidad.TORRE) {
+            return Math.round(getAtributos().getMaxAttr(AtribEnum.SALUD) * 0.45f);
+        }
         return damage;
     }
 
     @Override
     public int onAttack(int damage, Entidad objetivo) {
+        if (objetivo.getTipoEntidad()==TipoEntidad.ESBIRRO)
+            return damage*5; // Contra otro esbirro su ataque valdrá por 5.
         return damage;
     }
 

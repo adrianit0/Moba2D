@@ -8,17 +8,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
-import garcia.gonzalez.adrian.crownControl.DamageOverTime;
 import garcia.gonzalez.adrian.crownControl.HealOverTime;
 import garcia.gonzalez.adrian.crownControl.KnockUp;
-import garcia.gonzalez.adrian.crownControl.VelocidadCC;
 import garcia.gonzalez.adrian.entidades.Entidad;
-import garcia.gonzalez.adrian.entidades.Personaje;
 import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.proyectiles.BolaEnergia;
 import garcia.gonzalez.adrian.enums.Enums.*;
@@ -68,7 +64,7 @@ public class Personaje1 extends Personaje {
     private float distFrameAnterior;
     private float distanciaTotal;
     private BolaEnergia[] bolasPasiva;
-    private final Vector2[] ballPosition = {
+    private final Vector2[] ballPosition = { // TODO: Pasar a constantes
             new Vector2(-30,25),
             new Vector2(15, 40),
             new Vector2(-15, 40),
@@ -78,14 +74,16 @@ public class Personaje1 extends Personaje {
 
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
-                new Habilidad(1),
-                new Habilidad(4),
-                new Habilidad(12),
+                new Habilidad(1, 20, Assets.instance.overlayAssets.hab1),
+                new Habilidad(4, 50, Assets.instance.overlayAssets.hab2),
+                new Habilidad(12, 100, Assets.instance.overlayAssets.hab3),
                 bando, x, y, level);
 
         getAtributos().setAttr(AtribEnum.SALUD, 800);
+        getAtributos().setAttr(AtribEnum.MANA, 400);
         getAtributos().setAttr(AtribEnum.DEFENSA, 25);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
+        getAtributos().setAttr(AtribEnum.REG_MANA, 5);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
         getAtributos().setAttr(AtribEnum.SALTO, 350);
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
@@ -132,7 +130,7 @@ public class Personaje1 extends Personaje {
 
     private BolaEnergia nextBall () {
         BolaEnergia bola = null;
-        for (int i = 0; i < bolasPasiva.length && bola==null; i++){
+        for (int i = bolasPasiva.length-1; i >= 0 && bola==null; i--){
             if(bolasPasiva[i]!=null) {
                 bola = bolasPasiva[i];
                 bolasPasiva[i]=null;

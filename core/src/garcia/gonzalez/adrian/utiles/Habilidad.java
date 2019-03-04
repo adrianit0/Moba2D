@@ -4,7 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
 
+/**
+ * Es la clase donde va almacenado la información de las habilidades de los personajes.
+ * Aquí van cosas como el coste de mana que tiene utilizar la habilidad
+ * */
 public class Habilidad {
+
+    private int coste;
+    private TextureRegion textureRegion;
 
     private long lastUsed;  // Última vez que ha sido utilizado la habilidad
     private long nextUse;   // Próxima vez que puede utilizar la habilidad
@@ -13,14 +20,22 @@ public class Habilidad {
     private boolean isUsed; // Ha sido utilizada ya. Se activa en DOWN y se activa en UP
 
 
-    public Habilidad (float segundos) {
+    public Habilidad (float segundos, int coste, TextureRegion textureRegion) {
         nextUse = lastUsed = TimeUtils.nanoTime();
+        this.coste = coste;
+        this.textureRegion= textureRegion;
         setCooldown(segundos);
     }
 
     public void setCooldown (float segundos) {
         cooldown = Utils.secondsToNano(segundos);
-        Gdx.app.log("CD", "CD: " +cooldown + " SEG: " +segundos);
+    }
+
+    public void reducirCooldown (float segundos) {
+        if (TimeUtils.nanoTime()>nextUse)
+            return;
+
+        nextUse -= Utils.secondsToNano(segundos);
     }
 
     public boolean isCooldown () {
@@ -59,5 +74,11 @@ public class Habilidad {
         isUsed = s;
     }
 
-    // TODO: Incluir el renderer
+    public int getCoste() {
+        return coste;
+    }
+
+    public TextureRegion getTextureRegion() {
+        return textureRegion;
+    }
 }

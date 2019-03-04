@@ -257,9 +257,13 @@ public abstract class Unidad extends Entidad {
         cc.aplicarCC(this);
     }
 
+    /**
+     * Se queda con la fuerza de knockback más grande que tenga
+     * */
     public final void aumentarKnockUp (Vector2 pos) {
-        // TODO: Quedarse con el mayor de ambos golpes (Con abs)
-        knockUpForce.add(pos);
+        knockUpForce.set(
+                Math.abs(pos.x)> Math.abs(knockUpForce.x) ? pos.x : knockUpForce.x,
+                Math.abs(pos.y)> Math.abs(knockUpForce.y) ? pos.y : knockUpForce.y);
     }
 
     public final Direccion getDireccion() {

@@ -2,8 +2,10 @@ package garcia.gonzalez.adrian;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -13,6 +15,7 @@ import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.ChaseCam;
 import garcia.gonzalez.adrian.utiles.Constants;
+import garcia.gonzalez.adrian.utiles.GrayScaleView;
 
 public class GameplayScreen extends ScreenAdapter {
 
@@ -22,12 +25,14 @@ public class GameplayScreen extends ScreenAdapter {
     private Level level;
     // Para los Sprites
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
     // El ViewPort
     private ExtendViewport viewport;
 
     // TODO: Hacer el chaseCam
     // Para seguir la cámara
     private ChaseCam chaseCam;
+    private GrayScaleView grayScaleView;
 
     // Tiempo de partida
     private long timeSinceGameStarted;
@@ -47,12 +52,16 @@ public class GameplayScreen extends ScreenAdapter {
         // Creamos el nivel a partir del archivo JSON
         level = new Level(viewport);//LevelLoader.load("level1", viewport);
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         hud = new MainOverlay(level, Constants.HUD_VIEWPORT_SIZE);
 
         //TODO: Programar la chase cam inteligente
         // Inicializamos la cámara que sigue al jugador
         chaseCam = new ChaseCam(viewport.getCamera(), level.getPersonaje());
+        grayScaleView = new GrayScaleView(batch);
+
+        grayScaleView.setGrayscaleTime(true);
     }
 
     @Override
@@ -70,10 +79,15 @@ public class GameplayScreen extends ScreenAdapter {
         // Al cerrar el juego, cerramos tambien los assets y el SpriteBatch
         Assets.instance.dispose();
         batch.dispose();
+        grayScaleView.dispose();
     }
 
     @Override
     public void render(float delta) {
+
+
+        grayScaleView.update(delta);
+
         // TODO: Comparar onRender con gigagal
         level.update(delta);
 
@@ -82,7 +96,7 @@ public class GameplayScreen extends ScreenAdapter {
         chaseCam.update(delta);
 
         viewport.apply();
-        Gdx.gl.glClearColor(
+        Gdx.gl.glClearColor( // TODO: Cambiar el color a gris en caso de morir
                 Constants.BACKGROUND_COLOR.r,
                 Constants.BACKGROUND_COLOR.g,
                 Constants.BACKGROUND_COLOR.b,
@@ -93,14 +107,15 @@ public class GameplayScreen extends ScreenAdapter {
         //Gdx.gl.glViewport( 0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight() );
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        level.render(batch);
+        level.render(batch, shapeRenderer);
 
         // TODO: CONFIGURAR MODO 2 JUGADORES PANTALLA DIVIDIDAD
         //Gdx.gl.glViewport( Gdx.graphics.getWidth()/2,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight() );
         //level.render(batch);
 
         // TODO: Ajustar hud onRender
-        hud.render(batch);
+        grayScaleView.setGrayscale(false);
+        hud.render(batch, shapeRenderer);
     }
 
     // TODO: Programar pantalla de fin de nivel

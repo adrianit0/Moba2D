@@ -1,7 +1,6 @@
 package garcia.gonzalez.adrian;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,11 +15,11 @@ import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
 import garcia.gonzalez.adrian.controladorPersonaje.MyInputProcessor;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
-import garcia.gonzalez.adrian.entidades.Personaje;
-import garcia.gonzalez.adrian.entidades.Torre;
+import garcia.gonzalez.adrian.entidades.estructuras.Nexo;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje;
+import garcia.gonzalez.adrian.entidades.estructuras.Torre;
 import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
-import garcia.gonzalez.adrian.entidades.proyectiles.BolaEnergia;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -36,6 +35,7 @@ public class Level {
     private Personaje personaje;
 
     private float tickUpdate;
+    private float minionSpawn;
     private MyInputProcessor input;
 
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
@@ -43,8 +43,6 @@ public class Level {
     private DelayedRemovalArray<Particula> particulas;
     //TODO: Incluir lista para escenarioAssets,  plataformas
 
-    // TODO: Pruebas con Colisionadores, eliminar o comentar
-    private ShapeRenderer shapeRenderer;
 
     public Level(Viewport viewport) {
         this.viewport = viewport;
@@ -52,9 +50,8 @@ public class Level {
         input = new MyInputProcessor();
         Gdx.input.setInputProcessor(input);
 
-        shapeRenderer = new ShapeRenderer();
-
         tickUpdate = 0;
+        minionSpawn = Constants.TIME_MINION_SPAWN-Constants.TIME_FIRST_MINION_SPAWN;
 
         escenario = new Escenario(this.viewport);
         entidades = new DelayedRemovalArray<Entidad>();
@@ -63,43 +60,33 @@ public class Level {
 
         Torre t1 = new Torre(Enums.Bando.ALIADO, -750, 8, this, null);
         Torre t2 = new Torre(Enums.Bando.ALIADO, -1050, 8, this, t1);
-        Torre t3 = new Torre(Enums.Bando.ALIADO, -1200, 8, this, t2);
-        Torre t4 = new Torre(Enums.Bando.ALIADO, -1350, 8, this, t3);
+        Nexo t3 = new Nexo(Enums.Bando.ALIADO, -1200, 8, this, t2);
+        Torre t4 = new Torre(Enums.Bando.ALIADO, -1350, 8, this, null);
 
         Torre te1 = new Torre(Enums.Bando.ENEMIGO, 750, 8, this, null);
         Torre te2 = new Torre(Enums.Bando.ENEMIGO, 1050, 8, this, te1);
-        Torre te3 = new Torre(Enums.Bando.ENEMIGO, 1200, 8, this, te2);
-        Torre te4 = new Torre(Enums.Bando.ENEMIGO, 1350, 8, this, te3);
+        Nexo te3 = new Nexo(Enums.Bando.ENEMIGO, 1200, 8, this, te2);
+        Torre te4 = new Torre(Enums.Bando.ENEMIGO, 1350, 8, this, null);
 
         entidades.add (t1);
         entidades.add (t2);
         entidades.add (t3); // TODO: Sustituir por nexo
-        entidades.add (t4); // TODO: Sustituir por tienda
+        //entidades.add (t4); // TODO: Sustituir por tienda
 
         entidades.add (te1);
         entidades.add (te2);
         entidades.add (te3); // TODO: Sustituir por nexo
-        entidades.add (te4); // TODO: Sustituir por tienda
+        //entidades.add (te4); // TODO: Sustituir por tienda
 
 
         //TODO: Borrar contenido de pruebas
-        // Incluimos esbirro de pruebas
-        entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
-        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-140,5, this));
-        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-100,5, this));
-        /*entidades.add (new Esbirro(Enums.Bando.ALIADO,-60,5, this));*/
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ENEMIGO,180,5, this));
-
 
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ENEMIGO, -220,5, this);
+        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
         entidades.add(personaje);
 
-        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 220, 5, this));
+        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 1300, 5, this));
     }
 
     public Personaje getPersonaje () {
@@ -114,34 +101,23 @@ public class Level {
         particulas.add(p);
     }
 
-    private void nivel1() {
-        //TODO: Modificar o eliminar esto
-        /*
-        // Inicializamos las variables
-        gigaGal = new GigaGal(new Vector2(15, 40), this);
-
-        platforms = new Array<Platform>();
-        enemies = new DelayedRemovalArray<Enemy>();
-        bullets = new DelayedRemovalArray<Bullet>();
-        explosions = new DelayedRemovalArray<Explosion>();
-        powerups = new DelayedRemovalArray<Powerup>();
-
-        // Añadimos las plataformas
-        platforms.add(new Platform(15, 100, 30, 20));
-        Platform enemyPlatform = new Platform(75, 90, 100, 65);
-        enemies.add(new Enemy(enemyPlatform));
-        platforms.add(enemyPlatform);
-        platforms.add(new Platform(35, 55, 50, 20));
-        platforms.add(new Platform(10, 20, 20, 9));
-        platforms.add(new Platform(-50, 20, 20, 9));
-        platforms.add(new Platform(-150, 20, 20, 9));
-        //platforms.add(new Platform(-100, 0, 600, 10));
-
-        powerups.add(new Powerup(new Vector2(20, 110)));*/
-    }
-
     public void update(float delta) {
         tickUpdate+=delta;
+        minionSpawn+=delta;
+
+        if (minionSpawn>Constants.TIME_MINION_SPAWN) {
+            minionSpawn-=Constants.TIME_MINION_SPAWN;
+
+            // Nacen los minions
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1120,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1160,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1200,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1240,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1120,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1160,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1200,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1240,5, this));
+        }
 
         // Actualizamos los enemigos
         for (int i = 0; i < entidades.size; i++) {
@@ -188,7 +164,7 @@ public class Level {
         input.nextFrame();  // siguiente framea
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         batch.begin();
 
         escenario.render(batch);
