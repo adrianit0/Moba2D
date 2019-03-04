@@ -31,6 +31,18 @@ public class Enums {
         }
     };
 
+    public enum TipoEntidad {
+        PERSONAJE, ESBIRRO, TORRE, NEXO;
+
+        public boolean esUnidad () {
+            return this==PERSONAJE || this==ESBIRRO;
+        }
+
+        public boolean esEstructura () {
+            return this==TORRE || this==NEXO;
+        }
+    }
+
     /**
      * Atributos del personaje.
      * */
@@ -89,7 +101,8 @@ public class Enums {
         DAMAGE_OVER_TIME (TipoCC.DEBUFF),// Daño por segundo
         AUMENTO_ATRIB (TipoCC.BUFF),     // Aumento temporal de un atributo (Pe: Ataque)
         REDUCION_ATRIB (TipoCC.DEBUFF),  // Reducción temporal de un atributo (Pe: Ataque)
-        KNOCK_BACK (TipoCC.DEBUFF),      // Movimiento forzado del objetivo (Normalmente hacia arriba).
+        KNOCK_UP(TipoCC.DEBUFF),         // Movimiento forzado del objetivo (Normalmente hacia arriba).
+        RECOIL(TipoCC.DEBUFF),           // Movimiento forzado del objetivo, pero no te bloquea el movimiento
         ATURDIMIENTO (TipoCC.DEBUFF),    // Negación temporal del personaje
         PESADO (TipoCC.DEBUFF),          // Anulación al salto temporal del personaje
         ACELERACION (TipoCC.BUFF),       // Aceleración temporal, se contrarresta con ralentizacion

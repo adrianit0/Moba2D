@@ -6,7 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.enums.Enums;
 
-public class KnockUp extends CC {
+/**
+ * Es igual que el Knock-Up pero no supone una denegación del control, podrá seguir movimiendose.
+ * */
+public class Recoil extends CC{
 
     // El lanzamiento a los aires
     private Vector2 inicio;
@@ -14,8 +17,8 @@ public class KnockUp extends CC {
     private float lerp;
 
 
-    public KnockUp(String nombreIdentificativo, Vector2 golpe, float duracion) {
-        super(nombreIdentificativo, Enums.CrowdControl.KNOCK_UP, duracion);
+    public Recoil(String nombreIdentificativo, Vector2 golpe, float duracion) {
+        super(nombreIdentificativo, Enums.CrowdControl.RECOIL, duracion);
         this.inicio = golpe;
         this.golpe = golpe;
     }

@@ -1,11 +1,13 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import garcia.gonzalez.adrian.Level;
+import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Atributos;
@@ -13,6 +15,7 @@ import garcia.gonzalez.adrian.utiles.Atributos;
 public abstract class Entidad {
     //TODO: BORRAR
     private Bando bando;
+    private TipoEntidad tipoEntidad;
 
     protected float x;
     protected float y;
@@ -23,16 +26,21 @@ public abstract class Entidad {
 
     private Atributos atributos; // Todos los atributos del personaje
 
-    public Entidad(Bando bando, int x, int y, Level level) {
+    public Entidad(Bando bando, int x, int y, TipoEntidad tipoEntidad, Level level) {
         this.x=x;
         this.y=y;
         atributos = new Atributos();
         this.bando = bando;
         this.level = level;
+        this.tipoEntidad=tipoEntidad;
     }
 
     public Bando getBando() {
         return bando;
+    }
+
+    public TipoEntidad getTipoEntidad() {
+        return tipoEntidad;
     }
 
     public abstract void onCreate();
@@ -41,6 +49,15 @@ public abstract class Entidad {
     public abstract void onUpdate(float delta);
     public abstract void onTickUpdate(float tickDelta);
     public abstract void onRender(SpriteBatch batch);
+
+    public abstract void onHudRender (SpriteBatch batch, ShapeRenderer shapeRenderer);
+
+    /**
+     * Un debug especial para saber entre otras cosas donde estan lo colisionadores
+     * */
+    public void onDebugRender (ShapeRenderer shapeRenderer) {
+        //TODO: Borrar o desactivar
+    }
 
     public abstract int onAttack (int damage, Entidad objetivo);
     public abstract void onAfterAttact (Entidad objetivo);
@@ -66,6 +83,12 @@ public abstract class Entidad {
     public abstract Rectangle getCollider ();
     public abstract Vector2 getOffset();
     public abstract Vector2 getSize();
+
+    // Coge el centro del collider
+    public final Vector2 getCenter() {
+        Rectangle rect = getCollider();
+        return new Vector2(rect.x+rect.width/2, rect.y+rect.height/2);
+    }
 
     // Si una vez muerto, el personaje puede ser eliminado de la lista.
     // Es probable que despues de muerto siga apareciendo para mostrar la animación de muerte.
@@ -97,27 +120,35 @@ public abstract class Entidad {
         atributos.aumentarManaActual(porcMana);
     }
 
-    public final void generarProyectil (Proyectil p) {
-        //TODO: Añadir proyectil al level
+    public final Proyectil generarProyectil (Proyectil p) {
+        level.generarProyecitl(p);
+        return p;
     }
 
-    public final void atacar (int damage, Entidad objetivo) {
-        if (objetivo==null || bando==objetivo.bando) {
+    public final Particula generarParticula (Particula p) {
+        level.generarParticula(p);
+        return p;
+    }
+
+    public final void recibirAtaque (int damage, Entidad destinanatario) {
+        if (destinanatario==null || bando==destinanatario.bando) {
             return;
         }
 
-        damage = onAttack(damage, objetivo);
+        damage = destinanatario.onAttack(damage, this);
 
         if (damage<=0)
             return;
 
-        damage = objetivo.defender(damage, this, atributos.getAttr(AtribEnum.PENETRACION));
+        damage = defender(damage, destinanatario, destinanatario.atributos.getAttr(AtribEnum.PENETRACION));
 
-        onAfterAttact(objetivo);
+        destinanatario.onAfterAttact(this);
 
-        if (damage<=0)
-            return;
+        if (damage>0)
+            destinanatario.succionHechizo(damage);
+    }
 
+    public final void succionHechizo (float damage) {
         // A partir de aquí va la succión de hechizos
         float succion = atributos.getAttr(AtribEnum.SUCCION);
         if (succion==0)
@@ -127,7 +158,6 @@ public abstract class Entidad {
 
         if (cantidad>0)
             curarPersonaje(cantidad, this);
-
     }
 
     /**
@@ -215,6 +245,13 @@ public abstract class Entidad {
             return;
         }
 
+        /**
+         * // TODO: Hacer
+        if (hasCrowdControl(CrowdControl.SANGRADO)) {
+            cantidad/=2;    // Si el objetivo está sangrando se curará la mitad
+        }
+         */
+
         // Cogemos la salud del objetivo
         int vida = atributos.getSaludActual();
         int vidaMax = atributos.getMaxAttr(AtribEnum.SALUD);
@@ -268,6 +305,11 @@ public abstract class Entidad {
     public final void movePosition(Vector2 relPos) {
         x+=relPos.x;
         y+=relPos.y;
+
+        if (x<-1350)
+            x=-1350;
+        else if (x>1350)
+            x=1350;
     }
 
     /**

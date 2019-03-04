@@ -1,6 +1,9 @@
 package garcia.gonzalez.adrian.utiles;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+
+import java.awt.Rectangle;
 
 public class Constants {
     // CONFIGURACION INICIAL
@@ -15,6 +18,10 @@ public class Constants {
     public static final float CHASE_CAM_SEPARATION = 50;
     public static final float CHASE_CAM_MIN_HEIGHT = 50;
 
+    public static final Vector2 HUD_CHARACTER_LIFE_SIZE = new Vector2(50, 6);
+    public static final Vector2 HUD_MINION_LIFE_SIZE = new Vector2(30, 4);
+    public static final Vector2 HUD_STRUCTURE_LIFE_SIZE = new Vector2(100, 8);
+
     public static final float GRAVITY = 12;                 // Gravedad de todas las unidades
     public static final float TICK_UPDATE = 0.25f;          // Cada cuanto se hará el tick_update
 
@@ -24,7 +31,9 @@ public class Constants {
     public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica
 
     // PERSONAJE JUGABLE 01
-    public static final float RANGE_HABILITY_1 = 150f;
+    public static final float CHARACTER_01_RANGE_HABILITY_1 = 150f;
+    public static final float CHARACTER_01_PASSIVE_MAX_DISTANCE = 300; //TODO: Cambiar
+    public static final int CHARACTER_01_MAX_BALLS = 5;
     public static final String[] CHARACTER_01_IDLE = {
             "character_1-00", "character_1-01", "character_1-02", "character_1-03",
             "character_1-04", "character_1-05", "character_1-06", "character_1-07",
@@ -59,6 +68,11 @@ public class Constants {
             "explosion_energia-03", "explosion_energia-04", "explosion_energia-05",
             "explosion_energia-06", "explosion_energia-07", "explosion_energia-08",
             "explosion_energia-09", "explosion_energia-10", "explosion_energia-11"
+    };
+    public static final String[] CHARACTER_01_HIT = {
+            "explosion_3-00", "explosion_3-01", "explosion_3-02", "explosion_3-03",
+            "explosion_3-04", "explosion_3-05", "explosion_3-06", "explosion_3-07",
+            "explosion_3-08", "explosion_3-09"
     };
 
     // MINIONS

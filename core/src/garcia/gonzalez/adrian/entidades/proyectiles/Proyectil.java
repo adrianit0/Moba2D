@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.Entidad;
-import garcia.gonzalez.adrian.entidades.Personaje;
-import sun.awt.image.ImageWatched;
 
 /**
  * Una clase proyectil, deberá ser implementado por algún hijo.
@@ -27,9 +26,6 @@ public abstract class Proyectil {
     private List<Entidad> lastFrameEntities;
     private List<Entidad> thisFrameEntities;
 
-    // TODO: Pruebas con Colisionadores, eliminar o comentar
-    private ShapeRenderer shapeRenderer;
-
     public Proyectil (Entidad creador, Level level, float x, float y){
         this.x = x;
         this.y = y;
@@ -38,11 +34,10 @@ public abstract class Proyectil {
 
         lastFrameEntities = new LinkedList<Entidad>();
         thisFrameEntities = new LinkedList<Entidad>();
-
-        shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
     }
 
     protected abstract Rectangle _getCollider ();
+    protected abstract Vector2 _getOffset();
 
     public Rectangle getCollider () {
         Rectangle rect = _getCollider();
@@ -86,19 +81,17 @@ public abstract class Proyectil {
 
     public final void render (SpriteBatch batch) {
         onRender(batch);
+    }
 
-        //TODO: Probando las colisiones
-        batch.end();       // Dejamos de usar el SpriteBatch
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
+    public final void debugRender (ShapeRenderer shapeRenderer) {
         // COLLIDER
-        shapeRenderer.setColor(Color.BLUE);
+        shapeRenderer.setColor(Color.RED);
         Rectangle col = getCollider();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
-        shapeRenderer.end();
-        batch.begin(); // Volvemos a usar el SpriteBatch
+        // PUNTO INICIAL
+        shapeRenderer.setColor(Color.BLUE);
+        shapeRenderer.circle(x, y, 1);
     }
 
     public final void nextframe () {
@@ -115,11 +108,20 @@ public abstract class Proyectil {
         y = position.y;
     }
 
+    public void setPosition (Vector3 position) {
+        x = position.x;
+        y = position.y;
+    }
+
     public Vector2 getPosition() {
         return new Vector2(x,y);
     }
 
     public Entidad getCreador() {
         return creador;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }

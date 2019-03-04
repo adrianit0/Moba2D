@@ -1,7 +1,10 @@
 package garcia.gonzalez.adrian.entidades;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
@@ -9,6 +12,7 @@ import garcia.gonzalez.adrian.crownControl.CC;
 import garcia.gonzalez.adrian.entidades.items.Item;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
+import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Habilidad;
 
 /**
@@ -24,7 +28,7 @@ public abstract class Personaje extends Unidad {
     private Habilidad[] habilidades;
 
     public Personaje(Controlador controller, Habilidad hab1, Habilidad hab2, Habilidad hab3, Enums.Bando bando, int x, int y, Level level) {
-        super(bando, x, y, level);
+        super(bando, x, y, TipoEntidad.PERSONAJE, level);
 
         this.controller = controller;
         this.habilidades = new Habilidad[] { hab1, hab2, hab3};
@@ -133,12 +137,28 @@ public abstract class Personaje extends Unidad {
 
         // aplicamos el update del padre
         super.update(delta);
+    }
 
+    @Override
+    public final void onHudRender(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        if (!estaVivo())
+            return;
+
+        float porc = (float) getAtributos().getSaludActual() / getAtributos().getMaxAttr(AtribEnum.SALUD);
+        Vector2 pos = getPosition();
+        final Vector2 size = Constants.HUD_CHARACTER_LIFE_SIZE;
+
+        // Cuadrado negro de atras
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(pos.x-size.x/2, getCollider().height+size.y+5+pos.y, size.x, size.y);
+        // Vida
+        shapeRenderer.setColor(getBando()==Bando.ALIADO ? Color.GREEN : Color.RED);
+        shapeRenderer.rect(pos.x-size.x/2+1, getCollider().height+6+size.y+pos.y, size.x*porc-2, size.y-2);
     }
 
     public final void castHabilityDown (int id) {
         Habilidad hab = habilidades [id-1];
-        if (hab.isCooldown()) {
+        if (hab.isCooldown() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP, CrowdControl.SILENCIO)) {
             hab.setUsed(true);
             return;
         }
@@ -189,6 +209,7 @@ public abstract class Personaje extends Unidad {
     public final int getHabilityDamage (float base, float porcentual) {
         return Math.round(base + getAtributos().getAttrPorc(AtribEnum.ATAQUE) * porcentual);
     }
+
 
     @Override
     // Por defecto, para todos los personajes solo podran saltar estando en el suelo

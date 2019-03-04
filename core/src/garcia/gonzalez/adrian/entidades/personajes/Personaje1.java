@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import org.w3c.dom.css.Rect;
-
-import java.util.List;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
@@ -21,6 +19,8 @@ import garcia.gonzalez.adrian.crownControl.KnockUp;
 import garcia.gonzalez.adrian.crownControl.VelocidadCC;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Personaje;
+import garcia.gonzalez.adrian.entidades.particulas.Particula;
+import garcia.gonzalez.adrian.entidades.proyectiles.BolaEnergia;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -31,18 +31,18 @@ import garcia.gonzalez.adrian.utiles.Utils;
  *
  * Personaje 1 (Nombre aún por poner)
  *
- * Pasiva: Por cada 100 unidades que se mueva genera 1 bola de energía (Max 5). Estas bolas de
+ * Pasiva: Por cada 300 unidades que se mueva genera 1 bola de energía (Max 5). Estas bolas de
  *      energía al explotar contra un enemigo provoca 30 (+0.40) y
  *      a los enemigos cercanos 10 (+0.40) de daño.
  *
  * Hab1: Dispara infligiendo 50 (+0.80). Además, si aciertas y tienes bolas de energía, lanzas una
  *      al objetivo.
  *
- * Hab2: Se cura así mismo 100 (+1.50) durante los siguientes 5 segundos, genera 2 bolas de energías
+ * Hab2: Se cura así mismo 50 (+1.50) durante los siguientes 5 segundos, genera 2 bolas de energías
  *      y lanza las que tuviera a los enemigos cercanos si los hubiera.
  *
- * Hab3: Lanza 3 ataques consecutivos infligiendo 100 (+1.10) por ataque,
- *      y por cada objetivo acertado obtienes una bola de poder.
+ * Hab3: Lanza 4 ataques consecutivos infligiendo 100 (+1.10) por ataque,
+ *      y por cada objetivo acertado obtienes una bola de poder y lanzas otra.
  *
  * */
 public class Personaje1 extends Personaje {
@@ -57,6 +57,7 @@ public class Personaje1 extends Personaje {
     private int width;
     private int height;
 
+    // Animaciones
     private MaquinaEstados estado;
     private boolean animation;
     private long animationTime;
@@ -66,6 +67,14 @@ public class Personaje1 extends Personaje {
     // Pasiva
     private float distFrameAnterior;
     private float distanciaTotal;
+    private BolaEnergia[] bolasPasiva;
+    private final Vector2[] ballPosition = {
+            new Vector2(-30,25),
+            new Vector2(15, 40),
+            new Vector2(-15, 40),
+            new Vector2(30, 25),
+            new Vector2(0, 50)
+    };
 
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
@@ -75,6 +84,7 @@ public class Personaje1 extends Personaje {
                 bando, x, y, level);
 
         getAtributos().setAttr(AtribEnum.SALUD, 800);
+        getAtributos().setAttr(AtribEnum.DEFENSA, 25);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
         getAtributos().setAttr(AtribEnum.SALTO, 350);
@@ -86,6 +96,58 @@ public class Personaje1 extends Personaje {
 
         distFrameAnterior=0;
         distanciaTotal=0;
+        bolasPasiva = new BolaEnergia[Constants.CHARACTER_01_MAX_BALLS];
+    }
+
+    private void addBall () {
+        if (isBallFull())
+            return;
+
+        Vector2 pos = getCenter();
+        BolaEnergia bola = (BolaEnergia) generarProyectil(new BolaEnergia(this, level, pos.x, pos.y));
+
+        for (int i = 0; i < bolasPasiva.length; i++){
+            if(bolasPasiva[i]==null) {
+                bolasPasiva[i]=bola;
+                return;
+            }
+        }
+    }
+
+    private boolean isBallFull () {
+        for (BolaEnergia bola : bolasPasiva) {
+            if (bola==null)
+                return false;
+        }
+        return true;
+    }
+
+    private boolean hasBall () {
+        for (BolaEnergia bola : bolasPasiva) {
+            if (bola!=null)
+                return true;
+        }
+        return false;
+    }
+
+    private BolaEnergia nextBall () {
+        BolaEnergia bola = null;
+        for (int i = 0; i < bolasPasiva.length && bola==null; i++){
+            if(bolasPasiva[i]!=null) {
+                bola = bolasPasiva[i];
+                bolasPasiva[i]=null;
+            }
+        }
+        return bola;
+    }
+
+    public void throwBall (Entidad objetivo) {
+        if (!hasBall())
+            return;
+
+        BolaEnergia bola = nextBall();
+
+        bola.soltar(objetivo.getCenter());
     }
 
     @Override
@@ -95,7 +157,15 @@ public class Personaje1 extends Personaje {
 
     @Override
     public void onUpdate(float delta) {
+        for (int i = 0; i < bolasPasiva.length; i++) {
+            BolaEnergia bola = bolasPasiva[i];
+            if(bola==null)
+                continue;
 
+            Vector2 posFinal = new Vector2(ballPosition[i].x + getPosition().x, ballPosition[i].y + getPosition().y + (float)Math.sin(TimeUtils.nanoTime()/100000000)*0.5f);
+            float distancia = posFinal.dst(bola.getPosition());
+            bola.setPosition(Utils.moveTowards(bola.getPosition(), posFinal, distancia/10));
+        }
     }
 
     @Override
@@ -105,7 +175,7 @@ public class Personaje1 extends Personaje {
 
     @Override
     public boolean canCastHability(int hab) {
-        return true;
+        return !animation;
     }
 
     @Override
@@ -168,19 +238,45 @@ public class Personaje1 extends Personaje {
             }
             Rectangle col = getCollider();
             final Rectangle rect = new Rectangle(
-                    getDireccion()==Direccion.DERECHA ? col.x+col.width :  col.x - Constants.RANGE_HABILITY_1,
-                    col.height/4+getPosition().y, Constants.RANGE_HABILITY_1,
+                    getDireccion()==Direccion.DERECHA ? col.x+col.width :  col.x - Constants.CHARACTER_01_RANGE_HABILITY_1,
+                    col.height/4+getPosition().y, Constants.CHARACTER_01_RANGE_HABILITY_1,
                     col.height/2);
 
 
-            List<Entidad> entidades = level.getCollisionEntities(rect);
-            for (Entidad e : entidades) {
-                this.atacar(getHabilityDamage(50, 0.8f), e);
+            Entidad entity = level.getNearestEntity(this, rect);
+            if (entity!=null) {
+                entity.recibirAtaque(getHabilityDamage(50, 0.8f), this);
+                generarParticula(new Particula(entity.getCenter(), Assets.instance.efectosPersonaje1.hit, new Vector2(32,32)));
+                throwBall(entity);
             }
+
         } else if (estado==MaquinaEstados.ATTACK_02 && frame==6) {
             // TODO: Reajustarlo
-            aplicarCC(new DamageOverTime("daño", this, getHabilityDamage(100, 1.5f), 5), this);
-            aplicarCC(new VelocidadCC("velocidad", 0.50f, 5),this);
+            aplicarCC(new HealOverTime("cura", getHabilityDamage(50, 1.5f), 5), this);
+            Entidad entidad = level.getEntidad(getPosition(), 200, getBando().getContrario());
+
+            if (entidad!=null) {
+                while (hasBall())
+                    throwBall(entidad);
+            }
+
+            addBall();
+            addBall();
+        } else if (estado==MaquinaEstados.ATTACK_03 && (frame==3 || frame==6 || frame==9 || frame==12)) {
+            Rectangle col = getCollider();
+            final Rectangle rect = new Rectangle(
+                    getDireccion()==Direccion.DERECHA ? col.x+col.width :  col.x - Constants.CHARACTER_01_RANGE_HABILITY_1,
+                    col.height/4+getPosition().y, Constants.CHARACTER_01_RANGE_HABILITY_1,
+                    col.height/2);
+
+
+            Entidad entity = level.getNearestEntity(this, rect);
+            if (entity!=null) {
+                entity.recibirAtaque(getHabilityDamage(100, 1.5f), this);
+                generarParticula(new Particula(entity.getCenter(), Assets.instance.efectosPersonaje1.hit, new Vector2(32,32)));
+                addBall();
+                throwBall(entity);
+            }
         }
     }
 
@@ -200,13 +296,16 @@ public class Personaje1 extends Personaje {
             distanciaTotal += Math.abs(pos-distFrameAnterior);
             distFrameAnterior = pos;
 
-            if (distanciaTotal>500) {
-                distanciaTotal-=500;    // TODO: Añadirlo a una constante
-                Gdx.app.log("PASIVA", "Ha generado una bola");  // TODO: Borrar log
-                // TODO: Seguir
+            if (distanciaTotal>Constants.CHARACTER_01_PASSIVE_MAX_DISTANCE) {
+                distanciaTotal-=Constants.CHARACTER_01_PASSIVE_MAX_DISTANCE;
+                addBall(); // Añade una bola de energía por su pasiva
             }
         } else {
             distFrameAnterior=getPosition().x;
+        }
+
+        if (estado == MaquinaEstados.ATTACK_03) {
+            setDireccion(dir);
         }
 
         return !animation;
@@ -279,6 +378,24 @@ public class Personaje1 extends Personaje {
                 height,
                 getDireccion()==Direccion.IZQUIERDA,
                 false);
+    }
+
+    @Override
+    public void onDebugRender(ShapeRenderer shapeRenderer) {
+        super.onDebugRender(shapeRenderer);
+
+        Rectangle col = getCollider();
+        Vector2 position = getPosition();
+
+        Rectangle ataq = null;
+        final float distancia = 150f; //TODO: Pasar a constantes
+        if (getDireccion()==Direccion.DERECHA) {
+            ataq = new Rectangle((col.x+col.width), col.height/4+position.y, distancia, col.height/2);
+        } else{
+            ataq = new Rectangle(col.x-distancia, col.height/4+position.y, distancia, col.height/2);
+        }
+        shapeRenderer.rect(ataq.x, ataq.y, ataq.width, ataq.height);
+
     }
 
     @Override

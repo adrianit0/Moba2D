@@ -3,6 +3,7 @@ package garcia.gonzalez.adrian.entidades;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +35,7 @@ public class Esbirro extends Unidad {
     private long timeSinceMinionStartDissapear;
     private float dissapearRatio=1f;
 
-    private Unidad seleccionado;
+    private Entidad seleccionado;
 
     private boolean attacked;
 
@@ -44,7 +45,7 @@ public class Esbirro extends Unidad {
     private MaquinaEstados estado;
 
     public Esbirro(Bando bando, int x, int y, Level level) {
-        super(bando, x, y, level);
+        super(bando, x, y, TipoEntidad.ESBIRRO, level);
 
         width=64;
         height=64;
@@ -110,7 +111,7 @@ public class Esbirro extends Unidad {
                 Entidad e = level.getEntidad(getPosition(), 24, bando.getContrario());
                 if (e!=null) {
                     estado=MaquinaEstados.ATACAR;
-                    seleccionado=(Unidad) e;
+                    seleccionado= e;
                     timeSinceStartAttack = TimeUtils.nanoTime();
                     attacked=false;
                 } else {
@@ -125,8 +126,9 @@ public class Esbirro extends Unidad {
                 // TODO: Cambiar (Los minions haran daño, no lanzaran por los aires al enemigo)
                 if (!attacked && elapsedTime> Constants.MINION_ATTACK_DURATION) {
                     // TODO: Solo aplicar el Knock-Up si ataca a otro minion, no a un personaje
-                    seleccionado.aplicarCC(new KnockUp("knock-Up minion", new Vector2(getBando()==Bando.ALIADO ? 20 : -20,150), 0.25f), this);
-                    this.atacar(getAtributos().getAttr(AtribEnum.ATAQUE), seleccionado);
+                    if (seleccionado.getTipoEntidad()==TipoEntidad.ESBIRRO)
+                        ((Unidad)seleccionado).aplicarCC(new KnockUp("knock-Up minion", new Vector2(getBando()==Bando.ALIADO ? 20 : -20,150), 0.25f), this);
+                    seleccionado.recibirAtaque(getAtributos().getAttr(AtribEnum.ATAQUE), this);
                     attacked=true;
                 }
 
@@ -217,6 +219,23 @@ public class Esbirro extends Unidad {
 
         // Devolvemos en color
         batch.setColor(c.r, c.g, c.b, 1f);//set alpha to 0.3
+    }
+
+    @Override
+    public void onHudRender(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        if (!estaVivo())
+            return;
+
+        float porc = (float) getAtributos().getSaludActual() / getAtributos().getMaxAttr(AtribEnum.SALUD);
+        Vector2 pos = getPosition();
+        final Vector2 size = Constants.HUD_MINION_LIFE_SIZE;
+
+        // Cuadrado negro de atras
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(pos.x-size.x/2, getCollider().height+size.y+5, size.x, size.y);
+        // Vida
+        shapeRenderer.setColor(getBando()==Bando.ALIADO ? Color.GREEN : Color.RED);
+        shapeRenderer.rect(pos.x-size.x/2+1, getCollider().height+6+size.y, size.x*porc-2, size.y-2);
     }
 
     @Override

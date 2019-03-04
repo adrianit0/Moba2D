@@ -32,6 +32,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public MinionAssets redMinionAssets;
 
     // Singleton plataforma
+    public StructureAssets estructuraAssets;
     public PlatformAssets platformAssets;
 
     // Singleton Overlay
@@ -54,6 +55,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         personaje1 = new Character_01Assets(atlas_characters);
         efectosPersonaje1 = new Character_01_EffectsAssets(atlas_characters);
+
+        estructuraAssets = new StructureAssets();
 
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
@@ -104,10 +107,12 @@ public class Assets implements Disposable, AssetErrorListener {
     public class Character_01_EffectsAssets {
         public final Animation<TextureRegion> explotion;
         public final TextureRegion bolaEnergia;
+        public final Animation<TextureRegion> hit;
 
         public Character_01_EffectsAssets (TextureAtlas atlas) {
             explotion = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_POWER_BALL_EXPLOSION, Animation.PlayMode.NORMAL);
             bolaEnergia = explotion.getKeyFrame(0);
+            hit = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION/5, Constants.CHARACTER_01_HIT, Animation.PlayMode.NORMAL);
         }
     }
 
@@ -127,6 +132,16 @@ public class Assets implements Disposable, AssetErrorListener {
             andar = Utils.createAnimationMinions(atlas, Constants.MINION_WALK_DURATION, Constants.MINION_WALK, Animation.PlayMode.LOOP, _bando);
             atacar = Utils.createAnimationMinions(atlas, Constants.MINION_ATTACK_DURATION, Constants.MINION_ATTACK, Animation.PlayMode.NORMAL, _bando);
             muerte = Utils.createAnimationMinions(atlas, Constants.MINION_DEATH_DURATION, Constants.MINION_DEAD, Animation.PlayMode.NORMAL, _bando);
+        }
+    }
+
+    public class StructureAssets {
+        public final Texture torreAliada;
+        public final Texture torreEnemiga;
+
+        public StructureAssets () {
+            torreAliada = new Texture("images/torreAl.png");
+            torreEnemiga = new Texture("images/torreEn.png");
         }
     }
 

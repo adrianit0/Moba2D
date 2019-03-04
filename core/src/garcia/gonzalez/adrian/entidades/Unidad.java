@@ -20,7 +20,7 @@ import garcia.gonzalez.adrian.utiles.Constants;
 public abstract class Unidad extends Entidad {
 
     //TODO: Meter los buffos
-    private ArrayList<CC> crownControl;
+    private ArrayList<CC> crowdControl;
 
     //TODO: Meter la gravityForce
 
@@ -35,30 +35,28 @@ public abstract class Unidad extends Entidad {
 
     private boolean moving;
 
-    // TODO: Pruebas con Colisionadores, eliminar o comentar
-    private ShapeRenderer shapeRenderer;
 
-    public Unidad(Bando bando, int x, int y, Level level) {
-        super(bando, x, y, level);
+
+    public Unidad(Bando bando, int x, int y, TipoEntidad tipoEntidad, Level level) {
+        super(bando, x, y, tipoEntidad, level);
 
         estadoSalto=EstadoSalto.EN_SUELO;
         direccion=getBando()==Bando.ALIADO ? Direccion.DERECHA : Direccion.IZQUIERDA;
-        crownControl = new ArrayList();
+        crowdControl = new ArrayList();
 
         gravityForce = 0;
         jumpForce = 0;
 
-        shapeRenderer = new ShapeRenderer(); // TODO: BORRAR
     }
 
     @Override
     public final void render (SpriteBatch sprite) {
         super.render(sprite);
+    }
 
-        //TODO: Probando las colisiones
-        sprite.end();       // Dejamos de usar el SpriteBatch
-        shapeRenderer.setProjectionMatrix(sprite.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+    @Override
+    public void onDebugRender(ShapeRenderer shapeRenderer) {
+        super.onDebugRender(shapeRenderer);
 
         // COLLIDER
         shapeRenderer.setColor(Color.GREEN);
@@ -66,30 +64,9 @@ public abstract class Unidad extends Entidad {
         Vector2 position = getPosition();
         shapeRenderer.rect(col.x, col.y, col.width, col.height);
 
-        // RANGO ATAQUE
-        shapeRenderer.setColor(Color.RED);
-        if (this instanceof Personaje) {
-            Rectangle ataq = null;
-            final float distancia = 150f; //TODO: Pasar a constantes
-            if (getDireccion()==Direccion.DERECHA) {
-                ataq = new Rectangle((col.x+col.width), col.height/4+position.y, distancia, col.height/2);
-            } else{
-                ataq = new Rectangle(col.x-distancia, col.height/4+position.y, distancia, col.height/2);
-            }
-            shapeRenderer.rect(ataq.x, ataq.y, ataq.width, ataq.height);
-        }
-
-
-        shapeRenderer.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
         // POSICION DEL PERSONAJE
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.circle(position.x, position.y, 1);
-
-        shapeRenderer.end();
-        sprite.begin(); // Volvemos a usar el SpriteBatch
-
     }
 
     // Cada vez que el personaje se mueva
@@ -118,13 +95,13 @@ public abstract class Unidad extends Entidad {
         gravityForce -= Constants.GRAVITY;
 
         // Aplicamos todos los CC
-        for (int i = 0;i < crownControl.size(); i++) {
-            CC c = crownControl.get(i);
+        for (int i = 0; i < crowdControl.size(); i++) {
+            CC c = crowdControl.get(i);
 
             c.aplicandoCCUpdate(this, delta);
             if (c.hasFinished(this,System.currentTimeMillis())) {
                 c.terminarCC(this);
-                crownControl.remove(c);
+                crowdControl.remove(c);
                 i--;
             }
         }
@@ -167,11 +144,28 @@ public abstract class Unidad extends Entidad {
 
     @Override
     public final void tickUpdate(float tickDelta) {
-        for (CC c : crownControl) {
+        for (CC c : crowdControl) {
             c.aplicandoCCTick(this, tickDelta);
         }
 
         super.tickUpdate(tickDelta);
+    }
+
+    public final void resetJump () {
+        // TODO: Ver la viabilidad de esto
+        gravityForce = 0;
+        jumpForce = 0;
+    }
+
+    public final boolean hasCrowdControl(CrowdControl... cc) {
+        // TODO: Mover hacia abajo
+        for (CC c : crowdControl) {
+            for (CrowdControl t : cc) {
+                if (c.getTipo()==t)
+                    return true;
+            }
+        }
+        return false;
     }
 
     //TODO: Seguir
@@ -179,11 +173,9 @@ public abstract class Unidad extends Entidad {
      * Mueve el personaje, este método no es heredable, usar en su lugar el método onMove().
      * */
     public final void mover(Direccion dir, float delta) {
-        //TODO: No deja moverse si está CCeado por Aturdimiento o KnockUp
-        // if cc return
-        if (!estaVivo()) {
+        //TODO: Preguntar al personaje si quiere utilizar la habilidad estando con CC
+        if (!estaVivo() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP))
             return;
-        }
 
         boolean mover = onMove(dir, delta);
 
@@ -207,9 +199,8 @@ public abstract class Unidad extends Entidad {
      * Salta el personaje, este método no es heredable, en su lugar utilizar el método onJumpStart()
      * */
     public final void saltar() {
-        //TODO: No deja moverse si está CCeado por Aturdimiento, pesado o KnockUp
-        // if cc return
-        if(!estaVivo())
+        //TODO: Preguntar al personaje si quiere utilizar la habilidad estando con CC
+        if (!estaVivo() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP, CrowdControl.PESADO))
             return;
 
         // Activamos el onJumpStart, le pasamos si está o no en el suelo.
@@ -260,17 +251,22 @@ public abstract class Unidad extends Entidad {
         }
 
         // Añadimos el efecto a la unidad
-        crownControl.add(cc);
+        crowdControl.add(cc);
 
         // Aplicamos el primer efecto del CC, si procede.
         cc.aplicarCC(this);
     }
 
     public final void aumentarKnockUp (Vector2 pos) {
+        // TODO: Quedarse con el mayor de ambos golpes (Con abs)
         knockUpForce.add(pos);
     }
 
     public final Direccion getDireccion() {
         return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 }

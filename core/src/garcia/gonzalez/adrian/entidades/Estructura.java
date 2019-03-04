@@ -8,8 +8,8 @@ import garcia.gonzalez.adrian.enums.Enums.*;
 * */
 public abstract class Estructura extends Entidad {
     //TODO: Seguir
-    public Estructura(Bando bando, int x, int y, Level level) {
-        super(bando, x, y, level);
+    public Estructura(Bando bando, int x, int y, TipoEntidad tipoEntidad, Level level) {
+        super(bando, x, y, tipoEntidad, level);
     }
 
 

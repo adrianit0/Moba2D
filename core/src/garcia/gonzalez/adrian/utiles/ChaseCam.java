@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.sql.Time;
 
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.enums.Enums;
 
 public class ChaseCam {
 
@@ -27,7 +28,7 @@ public class ChaseCam {
         this.target = target;
 
         velocidad = Constants.CHASE_CAM_MOVE_SPEED;
-        separacion = Constants.CHASE_CAM_SEPARATION;
+        separacion = target.getBando()== Enums.Bando.ALIADO ? Constants.CHASE_CAM_SEPARATION : -Constants.CHASE_CAM_SEPARATION;
         incrementoVelocidad = Constants.CHASE_CAM_MOVE_INCREMENT;
 
         following=true;
@@ -80,23 +81,12 @@ public class ChaseCam {
             Vector3 _persPosition = new Vector3(posicionPersonaje.x + separacion, posicionPersonaje.y, posicionPersonaje.z);
             // Calculamos el trozo de distancia que recorrerá desde la posición actual hasta la
             // posición de destino
-            Vector3 dst = moveTowards(camera.position, _persPosition, step);
+            Vector3 dst = Utils.moveTowards(camera.position, _persPosition, step);
+            dst.y = dst.y < Constants.CHASE_CAM_MIN_HEIGHT ? Constants.CHASE_CAM_MIN_HEIGHT : dst.y;
             // Añadimos esa distancia
             camera.position.set(dst);
         }
     }
 
-    private Vector3 moveTowards (Vector3 current, Vector3 target, float maxDistanceDelta) {
-        Vector3 a = target.cpy().sub(current);
-        float magnitude = a.len();
-        if (magnitude <= maxDistanceDelta || magnitude == 0f)
-            return target;
 
-
-        float y = current.y + a.y / magnitude * maxDistanceDelta;
-        return new Vector3(
-                current.x + a.x / magnitude * maxDistanceDelta,
-                y < Constants.CHASE_CAM_MIN_HEIGHT ? Constants.CHASE_CAM_MIN_HEIGHT : y,
-                current.z);
-    }
 }

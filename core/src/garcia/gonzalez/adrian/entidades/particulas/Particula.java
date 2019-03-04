@@ -13,6 +13,7 @@ public class Particula {
     private final Vector2 position;
     private final long startTime;
     private Vector2 offset;
+    private float scale;
 
     private Animation animacion;
     //TODO: Hacer solo abstracto si algún efecto necesita efectos adicionales.
@@ -21,6 +22,16 @@ public class Particula {
         this.position = position;
         this.animacion = animacion;
         startTime = TimeUtils.nanoTime();
+        this.offset = offset;
+        this.scale=1;
+    }
+
+    public Particula(Vector2 position, Animation animacion, Vector2 offset, float scale) {
+        this.position = position;
+        this.animacion = animacion;
+        startTime = TimeUtils.nanoTime();
+        this.offset = offset;
+        this.scale = scale;
     }
 
     public void render(SpriteBatch batch) {
@@ -29,7 +40,8 @@ public class Particula {
                 batch,
                 (TextureRegion) animacion.getKeyFrame(Utils.secondsSince(startTime)),
                 position,
-                offset
+                offset,
+                scale
         );
     }
 

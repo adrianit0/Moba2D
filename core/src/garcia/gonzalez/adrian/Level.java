@@ -1,7 +1,9 @@
 package garcia.gonzalez.adrian;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
@@ -15,6 +17,7 @@ import garcia.gonzalez.adrian.controladorPersonaje.MyInputProcessor;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.Personaje;
+import garcia.gonzalez.adrian.entidades.Torre;
 import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
 import garcia.gonzalez.adrian.entidades.proyectiles.BolaEnergia;
@@ -38,13 +41,18 @@ public class Level {
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
     private DelayedRemovalArray<Proyectil> proyectiles;
     private DelayedRemovalArray<Particula> particulas;
-    //TODO: Incluir lista para escenarioAssets, proyectiles, particulas y plataformas
+    //TODO: Incluir lista para escenarioAssets,  plataformas
+
+    // TODO: Pruebas con Colisionadores, eliminar o comentar
+    private ShapeRenderer shapeRenderer;
 
     public Level(Viewport viewport) {
         this.viewport = viewport;
 
         input = new MyInputProcessor();
         Gdx.input.setInputProcessor(input);
+
+        shapeRenderer = new ShapeRenderer();
 
         tickUpdate = 0;
 
@@ -53,12 +61,33 @@ public class Level {
         proyectiles = new DelayedRemovalArray<Proyectil>();
         particulas = new DelayedRemovalArray<Particula>();
 
+        Torre t1 = new Torre(Enums.Bando.ALIADO, -750, 8, this, null);
+        Torre t2 = new Torre(Enums.Bando.ALIADO, -1050, 8, this, t1);
+        Torre t3 = new Torre(Enums.Bando.ALIADO, -1200, 8, this, t2);
+        Torre t4 = new Torre(Enums.Bando.ALIADO, -1350, 8, this, t3);
+
+        Torre te1 = new Torre(Enums.Bando.ENEMIGO, 750, 8, this, null);
+        Torre te2 = new Torre(Enums.Bando.ENEMIGO, 1050, 8, this, te1);
+        Torre te3 = new Torre(Enums.Bando.ENEMIGO, 1200, 8, this, te2);
+        Torre te4 = new Torre(Enums.Bando.ENEMIGO, 1350, 8, this, te3);
+
+        entidades.add (t1);
+        entidades.add (t2);
+        entidades.add (t3); // TODO: Sustituir por nexo
+        entidades.add (t4); // TODO: Sustituir por tienda
+
+        entidades.add (te1);
+        entidades.add (te2);
+        entidades.add (te3); // TODO: Sustituir por nexo
+        entidades.add (te4); // TODO: Sustituir por tienda
+
+
         //TODO: Borrar contenido de pruebas
         // Incluimos esbirro de pruebas
-        //entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
+        entidades.add (new Esbirro(Enums.Bando.ALIADO,-180,5, this));
         //entidades.add (new Esbirro(Enums.Bando.ALIADO,-140,5, this));
         //entidades.add (new Esbirro(Enums.Bando.ALIADO,-100,5, this));
-        entidades.add (new Esbirro(Enums.Bando.ALIADO,-60,5, this));
+        /*entidades.add (new Esbirro(Enums.Bando.ALIADO,-60,5, this));*/
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,60,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,100,5, this));
         entidades.add (new Esbirro(Enums.Bando.ENEMIGO,140,5, this));
@@ -67,11 +96,10 @@ public class Level {
 
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        Personaje1 mainCharacter = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -220,5, this);
-        entidades.add(mainCharacter);
-        this.personaje = mainCharacter;
+        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ENEMIGO, -220,5, this);
+        entidades.add(personaje);
 
-        generarProyecitl(new BolaEnergia(mainCharacter, this, -300, 10));
+        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 220, 5, this));
     }
 
     public Personaje getPersonaje () {
@@ -80,6 +108,10 @@ public class Level {
 
     public void generarProyecitl (Proyectil p) {
         proyectiles.add(p);
+    }
+
+    public void generarParticula (Particula p) {
+        particulas.add(p);
     }
 
     private void nivel1() {
@@ -179,12 +211,34 @@ public class Level {
             }
         }
 
-        /* TODO: error #iterator() cannot be used nested. BORRAR ESTO
-        for (Entidad entidad : entidades) {
-            entidad.render(batch);
-        }*/
-
         batch.end();
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        // TODO: Para mostrar la vida de los personajes
+        // TODO: Excepto la del personaje principal
+        for (Entidad entidad : entidades) {
+            entidad.onHudRender(batch, shapeRenderer);
+        }
+
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for (Entidad e : entidades) {
+            e.onDebugRender(shapeRenderer);
+        }
+        for (Proyectil p : proyectiles) {
+            //p.debugRender(shapeRenderer);
+        }
+
+        shapeRenderer.end();
+    }
+
+    // TODO: Cambiar el nombre a otro más acertado
+    /**
+     * A partir de un valor base más otro porcentual obtiene el daño para cualquiera de las
+     * habilidades. El funcionamiento
+     * */
+    public final int getHabilityDamage (Entidad entidad, float base, float porcentual) {
+        return Math.round(base + entidad.getAtributos().getAttrPorc(Enums.AtribEnum.ATAQUE) * porcentual);
     }
 
 
@@ -212,6 +266,17 @@ public class Level {
         return null;
     }
 
+    public List<Entidad> getEntidades (Vector2 pos, float distancia) {
+        LinkedList<Entidad> ent = new LinkedList<Entidad>();
+        for(Entidad e : entidades) {
+            // TODO incluir
+            if (e.estaVivo() && pos.dst(e.getPosition()) < distancia) {
+                ent.add(e);
+            }
+        }
+        return ent;
+    }
+
     /**
      * Devuelve una lista con todas las entidades colisionadas
      * */
@@ -223,5 +288,22 @@ public class Level {
             }
         }
         return ent;
+    }
+
+    public Entidad getNearestEntity (Entidad origen, Rectangle rect) {
+        Entidad entity = null;
+
+        for (Entidad e : entidades) {
+            if (!e.estaVivo() || !rect.overlaps(e.getCollider()) || e.getBando()==origen.getBando())
+                continue;
+
+            if (entity==null) {
+                entity=e;
+            } else if (entity.getPosition().dst(origen.getPosition())>e.getPosition().dst(origen.getPosition())) {
+                entity=e;
+            }
+        }
+
+        return entity;
     }
 }
