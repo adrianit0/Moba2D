@@ -261,6 +261,21 @@ public abstract class Unidad extends Entidad {
     }
 
     /**
+     * Elimina todos los CC que tengan el mismo nombre
+     * */
+    public final void eliminarCC (String nombreDescriptivo) {
+        for (int i = 0; i < crowdControl.size(); i++) {
+            CC cc = crowdControl.get(i);
+
+            if (cc.getNombreIdentificativo().equals(nombreDescriptivo)) {
+                cc.terminarCC(this);
+                crowdControl.remove(i);
+                i--;
+            }
+        }
+    }
+
+    /**
      * Se queda con la fuerza de knockback más grande que tenga
      * */
     public final void aumentarKnockUp (Vector2 pos) {

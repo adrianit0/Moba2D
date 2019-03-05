@@ -215,8 +215,8 @@ public abstract class Entidad {
         // Si este golpe ha matado este objetivo.
         // Es probable que el objetivo pueda seguir vivo si así funciona su personaje.
         if (vida<=0) {
-            boolean sigueVido = onDeath();
-            // TODO: Programar la parte de si muere y sigue vivo
+            onDeath();
+            destinatario.onEntityKilled(this);
 
             if (this==level.getPersonaje()) {
                 level.setGrayscale(true);

@@ -12,10 +12,10 @@ import garcia.gonzalez.adrian.enums.Enums.TeclasJugador;
 public abstract class Controlador {
 
     private Personaje personaje;
-    protected MyInputProcessor input;
+    protected InputProcessorBase input;
 
     public Controlador (){
-        input = (MyInputProcessor) Gdx.input.getInputProcessor();
+        input = (InputProcessorBase) Gdx.input.getInputProcessor();
     }
 
     public void setPersonaje (Personaje personaje) {

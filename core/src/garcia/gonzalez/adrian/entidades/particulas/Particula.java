@@ -18,7 +18,6 @@ public class Particula {
     private float alpha;
 
     private Animation animacion;
-    //TODO: Hacer solo abstracto si algún efecto necesita efectos adicionales.
 
     public Particula(Vector2 position, Animation animacion, Vector2 offset) {
         this.position = position;

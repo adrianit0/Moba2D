@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades.overlay;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,9 +16,9 @@ import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Habilidad;
 
-public class MainOverlay extends Overlay {
+public class DesktopOverlay extends Overlay {
 
-    public MainOverlay(Level level, float viewportSize) {
+    public DesktopOverlay(Level level, float viewportSize) {
         super(level, viewportSize);
     }
 
@@ -52,28 +53,51 @@ public class MainOverlay extends Overlay {
 
         //TODO: Seguir y borrar esto
         Personaje personaje = getLevel().getPersonaje();
-        float actual = personaje.getAtributos().getSaludActual();
-        float total = personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
 
-        float porc = actual/total;
+        float porcVida = (float)  personaje.getAtributos().getSaludActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
+        if (porcVida<0)
+            porcVida=0;
+
+        float porcMana = (float) personaje.getAtributos().getManaActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.MANA);
+        if (porcMana<0)
+            porcMana=0;
 
         Texture vida = Assets.instance.overlayAssets.vida;
+        Texture t_mana = Assets.instance.overlayAssets.mana;
 
         batch.draw(
                 vida,
-                Constants.HUD_MARGIN,
-                viewport.getWorldHeight()-t.getHeight()-Constants.HUD_MARGIN*2,
+                Constants.HUD_MARGIN + 31,
+                viewport.getWorldHeight()-vida.getHeight()-Constants.HUD_MARGIN*2-2,
                 0,
                 0,
-                vida.getWidth()*porc,
+                vida.getWidth()*porcVida,
                 vida.getHeight(),
                 1,
                 1,
                 0,
                 0,
                 0,
-                Math.round(vida.getWidth()*porc),
+                Math.round(vida.getWidth()*porcVida),
                 vida.getHeight(),
+                false,
+                false);
+
+        batch.draw(
+                t_mana,
+                Constants.HUD_MARGIN + 31,
+                viewport.getWorldHeight()-t_mana.getHeight()-vida.getHeight()-Constants.HUD_MARGIN*2-3,
+                0,
+                0,
+                t_mana.getWidth()*porcMana,
+                t_mana.getHeight(),
+                1,
+                1,
+                0,
+                0,
+                0,
+                Math.round(t_mana.getWidth()*porcMana),
+                t_mana.getHeight(),
                 false,
                 false);
 

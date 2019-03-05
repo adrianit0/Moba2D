@@ -12,7 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
-import garcia.gonzalez.adrian.controladorPersonaje.MyInputProcessor;
+import garcia.gonzalez.adrian.controladorPersonaje.InputProcessorAndroid;
+import garcia.gonzalez.adrian.controladorPersonaje.InputProcessorBase;
+import garcia.gonzalez.adrian.controladorPersonaje.InputProcessorDesktop;
 import garcia.gonzalez.adrian.entidades.Entidad;
 import garcia.gonzalez.adrian.entidades.Esbirro;
 import garcia.gonzalez.adrian.entidades.estructuras.Nexo;
@@ -38,7 +40,7 @@ public class Level {
 
     private float tickUpdate;
     private float minionSpawn;
-    private MyInputProcessor input;
+    private InputProcessorBase input;
 
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
     private DelayedRemovalArray<Proyectil> proyectiles;
@@ -50,7 +52,8 @@ public class Level {
         this.viewport = viewport;
         this.gameplay = gameplay;
 
-        input = new MyInputProcessor();
+        // TODO: Incluir tambien la versión ANDROID
+        input = gameplay.isPhoneDevice() ? new InputProcessorAndroid() : new InputProcessorDesktop();
         Gdx.input.setInputProcessor(input);
 
         tickUpdate = 0;
@@ -90,6 +93,10 @@ public class Level {
         entidades.add(personaje);
 
         entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 1300, 5, this));
+    }
+
+    public InputProcessorBase getInput() {
+        return input;
     }
 
     public void setGrayscale (boolean state) {
@@ -203,7 +210,7 @@ public class Level {
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (Entidad e : entidades) {
-            e.onDebugRender(shapeRenderer);
+            //e.onDebugRender(shapeRenderer);
         }
         for (Proyectil p : proyectiles) {
             //p.debugRender(shapeRenderer);
@@ -222,13 +229,11 @@ public class Level {
     }
 
 
-    // TODO: Cambiar y mejorar
     /**
      * Coge todas las entidades dentro de un posición en un rango
      * */
     public Entidad getEntidad(Vector2 pos, float distancia, Enums.Bando bando) {
         for(Entidad e : entidades) {
-            // TODO incluir
             if (e.estaVivo() && e.getBando()==bando && pos.dst(e.getPosition()) < distancia) {
                 return e;
             }
@@ -238,7 +243,6 @@ public class Level {
 
     public Entidad getEntidad(Vector2 pos, float distancia, Enums.Direccion dir) {
         for(Entidad e : entidades) {
-            // TODO incluir
             if (e.estaVivo() && pos.dst(e.getPosition()) < distancia) {
                 return e;
             }
@@ -249,7 +253,6 @@ public class Level {
     public List<Entidad> getEntidades (Vector2 pos, float distancia) {
         LinkedList<Entidad> ent = new LinkedList<Entidad>();
         for(Entidad e : entidades) {
-            // TODO incluir
             if (e.estaVivo() && pos.dst(e.getPosition()) < distancia) {
                 ent.add(e);
             }

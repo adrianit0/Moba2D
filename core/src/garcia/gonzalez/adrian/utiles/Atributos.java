@@ -1,5 +1,7 @@
 package garcia.gonzalez.adrian.utiles;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.HashMap;
 
 import garcia.gonzalez.adrian.entidades.Entidad;

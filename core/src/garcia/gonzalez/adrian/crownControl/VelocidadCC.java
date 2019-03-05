@@ -15,7 +15,7 @@ public class VelocidadCC extends CC {
 
     @Override
     public void aplicarCC(Unidad unidad) {
-        cantidad = unidad.getAtributos().getAttrPorc(Enums.AtribEnum.VELOCIDAD)*(1+porcentaje);
+        cantidad = unidad.getAtributos().getAttrPorc(Enums.AtribEnum.VELOCIDAD)*porcentaje;
         unidad.getAtributos().aumentarBonus(Enums.AtribEnum.VELOCIDAD, cantidad);
     }
 

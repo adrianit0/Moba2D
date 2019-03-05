@@ -2,16 +2,14 @@ package garcia.gonzalez.adrian;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-import garcia.gonzalez.adrian.entidades.Esbirro;
-import garcia.gonzalez.adrian.entidades.overlay.MainOverlay;
-import garcia.gonzalez.adrian.enums.Enums;
+import garcia.gonzalez.adrian.entidades.overlay.AndroidOverlay;
+import garcia.gonzalez.adrian.entidades.overlay.DesktopOverlay;
+import garcia.gonzalez.adrian.entidades.overlay.Overlay;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.ChaseCam;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -39,7 +37,7 @@ public class GameplayScreen extends ScreenAdapter {
 
     //TODO: Hacer el HUD Manager.
     // HUD
-    private MainOverlay hud;
+    private Overlay hud;
 
     @Override
     public void show() {
@@ -49,15 +47,21 @@ public class GameplayScreen extends ScreenAdapter {
         // Creamos el ViewPort
         viewport = new ExtendViewport(Constants.WORLD_SIZE, Constants.WORLD_SIZE);
 
-        // Creamos el nivel a partir del archivo JSON
-        level = new Level(viewport, this);//LevelLoader.load("level1", viewport);
+        level = new Level(viewport, this);
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        hud = new MainOverlay(level, Constants.HUD_VIEWPORT_SIZE);
+
+        // TODO: Poner que si está en Android utilice el AndroidOverlay, si no el DesktopOverlay
+        hud = isPhoneDevice() ? new AndroidOverlay(level, Constants.HUD_VIEWPORT_SIZE) : new DesktopOverlay(level, Constants.HUD_VIEWPORT_SIZE);
         chaseCam = new ChaseCam(viewport.getCamera(), level.getPersonaje());
         grayScaleView = new GrayScaleView(batch);
 
-        //grayScaleView.setGrayscaleTime(true);
+        level.getInput().setViewport(hud.getViewport());
+    }
+
+    public boolean isPhoneDevice () {
+        // TODO: Cambiar a según el servicio
+        return true;
     }
 
     public GrayScaleView getGrayScaleView() {
@@ -84,8 +88,6 @@ public class GameplayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-
-
         grayScaleView.update(delta);
 
         // TODO: Comparar onRender con gigagal
@@ -114,7 +116,6 @@ public class GameplayScreen extends ScreenAdapter {
         //level.render(batch);
 
         // TODO: Ajustar hud onRender
-        grayScaleView.setGrayscale(false);
         hud.render(batch, shapeRenderer);
     }
 
@@ -159,6 +160,4 @@ public class GameplayScreen extends ScreenAdapter {
     public void levelComplete() {
         startNewLevel();
     }
-
-
 }

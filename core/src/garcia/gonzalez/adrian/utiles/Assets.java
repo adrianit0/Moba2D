@@ -229,23 +229,31 @@ public class Assets implements Disposable, AssetErrorListener {
     }
 
     public class OverlayAssets {
-        public Texture mainHud;
-        public Texture vida;
-        public Texture mana;
+        public final Texture mainHud;
+        public final Texture vida;
+        public final Texture mana;
 
-        public TextureRegion character01_hab01;
-        public TextureRegion character01_hab02;
-        public TextureRegion character01_hab03;
+        public final Texture derecha;
+        public final Texture izquierda;
+        public final Texture salto;
 
-        public TextureRegion character02_hab01;
-        public TextureRegion character02_hab02;
-        public TextureRegion character02_hab03;
+        public final TextureRegion character01_hab01;
+        public final TextureRegion character01_hab02;
+        public final TextureRegion character01_hab03;
+
+        public final TextureRegion character02_hab01;
+        public final TextureRegion character02_hab02;
+        public final TextureRegion character02_hab03;
 
         public OverlayAssets (TextureAtlas atlas) {
             // TODO: Seguir y meter el contenido en constantes
             mainHud = new Texture("GUI/interfaz_character.png");
             vida = new Texture("GUI/vida.png");
             mana = new Texture("GUI/mana.png");
+
+            derecha = new Texture("GUI/derecha.png");
+            izquierda = new Texture("GUI/izquierda.png");
+            salto = new Texture("GUI/salto.png");
 
             character01_hab01 = atlas.findRegion("habilidades-078");
             character01_hab02 = atlas.findRegion("habilidades-001");

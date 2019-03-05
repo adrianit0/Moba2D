@@ -1,20 +1,29 @@
 package garcia.gonzalez.adrian.controladorPersonaje;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
-public class MyInputProcessor implements InputProcessor{
+public abstract class InputProcessorBase implements InputProcessor {
 
     private LinkedList<Integer> lastTeclas;   // Teclas pulsadas en el último frame
     private LinkedList<Integer> teclas;       // Teclas pulsadas en este frame
 
 
-    public MyInputProcessor () {
+    public InputProcessorBase() {
         teclas = new LinkedList<Integer>();
         lastTeclas = new LinkedList<Integer>();
+    }
+
+    public abstract void setViewport (Viewport view);
+
+    public LinkedList<Integer> getLastTeclas() {
+        return lastTeclas;
+    }
+
+    public LinkedList<Integer> getTeclas() {
+        return teclas;
     }
 
     public void nextFrame () {
@@ -37,18 +46,14 @@ public class MyInputProcessor implements InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
-        teclas.add(keycode);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        teclas.remove(new Integer(keycode));
         return true;
     }
 
-
-    // TODO: Pensar en implementación para dispositivos ANDROID
     @Override
     public boolean keyTyped(char character) {
         return true;

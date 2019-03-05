@@ -145,7 +145,8 @@ public class Nexo extends Estructura{
 
     @Override
     public boolean onDeath() {
-        return false;
+        //TODO: Cuando un nexo es destruido se acaba la partida
+        return true;
     }
 
     @Override
@@ -163,7 +164,7 @@ public class Nexo extends Estructura{
 
     @Override
     public Vector2 getOffset() {
-        return new Vector2(width/4, 0); //TODO: Incluir width
+        return new Vector2(width/4, 0);
     }
 
     @Override

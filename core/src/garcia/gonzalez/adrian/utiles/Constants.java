@@ -11,6 +11,7 @@ public class Constants {
     public static final float WORLD_SIZE = 240; // Para la cámara
     public static final float HUD_VIEWPORT_SIZE = 240;  // Para el HUD
     public static final float HUD_MARGIN = 5;
+    public static final Vector2 TAM_BOTONES = new Vector2(32,32);
 
     public static final String TEXTURE_ATLAS_MINIONS = "images/minions.atlas";
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
@@ -133,7 +134,8 @@ public class Constants {
             "character_02-125", "character_02-126", "character_02-127"
     };
     public static final float CHARACTER_02_HAB_DURATION = 0.1f;
-
+    public static final Vector2 CHARACTER_02_HAB1_RANGE = new Vector2(80, 80);
+    public static final Vector2 CHARACTER_02_HAB3_RANGE = new Vector2(100, 50);
 
 
     // MINIONS

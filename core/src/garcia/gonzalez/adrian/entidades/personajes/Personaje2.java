@@ -1,6 +1,7 @@
 package garcia.gonzalez.adrian.entidades.personajes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,10 +11,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.util.List;
+
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
+import garcia.gonzalez.adrian.crownControl.CC;
+import garcia.gonzalez.adrian.crownControl.DebuffCC;
+import garcia.gonzalez.adrian.crownControl.KnockUp;
+import garcia.gonzalez.adrian.crownControl.Recoil;
+import garcia.gonzalez.adrian.crownControl.VelocidadCC;
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.utiles.Assets;
+import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Habilidad;
 import garcia.gonzalez.adrian.utiles.Utils;
 import garcia.gonzalez.adrian.enums.Enums.*;
@@ -22,8 +32,7 @@ import garcia.gonzalez.adrian.enums.Enums.*;
  *
  * Personaje 2: ProjectDAM
  *
- * Pasiva: Se cura un 1% de su vida máxima por cada unidad que derrote.
- *      Este valor aumenta un 1% por cada 1% de vida que le falte a Project DAM
+ * Pasiva: Se cura un 3% de su vida máxima por cada unidad que mate (Un 15% si mata a otro personaje).
  *
  * Hab1: Prepara un ataque y arremete hacia delante con bastante potencia,
  *      inflingiendo 50 (+0.60) hasta 200 (+1.0) según lo que hayas cargado.
@@ -59,7 +68,7 @@ public class Personaje2 extends Personaje {
         super(controller,
                 new Habilidad(2, 20, Assets.instance.overlayAssets.character02_hab01),
                 new Habilidad(1, 30, Assets.instance.overlayAssets.character02_hab02),
-                new Habilidad(10, 120, Assets.instance.overlayAssets.character02_hab03),
+                new Habilidad(1, 120, Assets.instance.overlayAssets.character02_hab03),
                 bando, x, y, level);
 
         getAtributos().setAttr(AtribEnum.SALUD, 850);
@@ -83,10 +92,15 @@ public class Personaje2 extends Personaje {
 
     @Override
     public void onUpdate(float delta) {
+        if (animation) {
+            animationTime+=delta;
+        }
         if (estado==MaquinaEstados.ATTACK_02) {
             final Vector2 distancia = new Vector2(500*delta*getDireccion().getDir(), 0);    // TODO: Convertir velocidad en constante
             resetJump();
             movePosition(distancia);
+        } else if (estado==MaquinaEstados.ATTACK_01 && animationFrame<7) {
+            resetJump();
         }
     }
 
@@ -103,7 +117,10 @@ public class Personaje2 extends Personaje {
     @Override
     public boolean onHabilityDown(int hab) {
         startAnimation(hab);
+
         if (hab==1) {
+            // El personaje podrá moverse mientras carga, pero lo hará lentamente
+            aplicarCC(new VelocidadCC("ralentizacionEfecto", -0.5f, 5f), this);
             return false;
         }
 
@@ -122,7 +139,40 @@ public class Personaje2 extends Personaje {
     @Override
     public boolean onHabilityUp(int hab) {
         if (hab==1) {
-            float fuerzaTotal = (float) animationFrame/7; //TODO: Hace esto
+            // Eliminamos el efecto
+            eliminarCC("ralentizacionEfecto");
+            float fuerzaTotal = (float) animationFrame/7;
+            animationTime = actualAnimation.getFrameDuration()*7;
+
+            // Se mueve rapidamente hacia delante de la potencia del golpe
+            aplicarCC(new Recoil("recoilHab1",
+                    new Vector2(getDireccion().getDir()*(50+500*fuerzaTotal), 0),
+                    0.25f), this);
+
+            final Rectangle col = getCollider();
+            final Vector2 rangoAtaque = Constants.CHARACTER_02_HAB1_RANGE;
+
+            Rectangle areaDamage = new Rectangle(
+                    getDireccion()==Direccion.DERECHA ? col.x+col.width/2 : col.x+col.width/2-rangoAtaque.x,
+                    col.y, rangoAtaque.x, rangoAtaque.y
+            );
+
+            List<Entidad> enemigos = level.getCollisionEntities(areaDamage, getBando().getContrario());
+            // Calcula el daño que recibiran los enemigos, dependerá de cuanto has cargado el golpe
+            int damage = getHabilityDamage(MathUtils.lerp(50, 200, fuerzaTotal), MathUtils.lerp(0.6f, 1.0f, fuerzaTotal));
+            float potenciaGolpe = MathUtils.lerp(0, 800, fuerzaTotal);
+            // Aplicamos el daño dentro del rango de ataque
+            for (Entidad entidad : enemigos) {
+                entidad.recibirAtaque(damage, this);
+                if (entidad.getTipoEntidad().esUnidad()) {
+                    ((Unidad)entidad).aplicarCC(new KnockUp(
+                            "Golpe KnockBack",
+                            new Vector2(potenciaGolpe*getDireccion().getDir(),
+                                    -potenciaGolpe),
+                            0.5f),
+                            this);
+                }
+            }
 
             return true;
         }
@@ -150,12 +200,13 @@ public class Personaje2 extends Personaje {
         }
 
         animation=true;
-        animationTime=TimeUtils.nanoTime()*MathUtils.nanoToSec;
+        animationTime=0;
     }
 
     private void finishAnimation () {
         animationFrame=-1;
         animation=false;
+        animationTime=0;
     }
 
     private void onAnimationFrame (int frame) {
@@ -164,10 +215,33 @@ public class Personaje2 extends Personaje {
 
         animationFrame=frame;
 
-        if (estado==MaquinaEstados.ATTACK_01 && frame==1) {
+        if (estado==MaquinaEstados.ATTACK_03 && frame==13) {
+            Rectangle col = getCollider();
+            Vector2 rangoAtaque = Constants.CHARACTER_02_HAB3_RANGE;
 
-        } else if (estado==MaquinaEstados.ATTACK_03 && (frame==3 || frame==6 || frame==9 || frame==12)) {
+            Rectangle areaEfecto = new Rectangle(
+                    col.x+col.width/2-rangoAtaque.x/2, col.y,
+                    rangoAtaque.x, rangoAtaque.y);
 
+            List<Entidad> enemigos = level.getCollisionEntities(areaEfecto, getBando().getContrario());
+            int damage = getHabilityDamage(150, 1.0f);
+            float potenciaGolpe = 800;
+            // Aplicamos el daño dentro del rango de ataque
+            for (Entidad entidad : enemigos) {
+                if (entidad.getTipoEntidad()==TipoEntidad.TORRE) {
+                    entidad.recibirAtaque(damage*2, this);
+                } else {
+                    entidad.recibirAtaque(damage, this);
+                }
+
+                if (entidad.getTipoEntidad().esUnidad()) {
+                    ((Unidad)entidad).aplicarCC(new KnockUp(
+                                    "Golpe KnockBack",
+                                    new Vector2(entidad.getPosition().x>getPosition().x ? potenciaGolpe : -potenciaGolpe,0),
+                                    0.5f),
+                            this);
+                }
+            }
         }
     }
 
@@ -177,6 +251,13 @@ public class Personaje2 extends Personaje {
             return 0;
 
         return super.onBeforeDefend(damage, destinatario);
+    }
+
+    @Override
+    public boolean onCrownControl(CC cc, Unidad destinatario) {
+        if (estado==MaquinaEstados.ATTACK_02 && cc.getTipo()==CrowdControl.KNOCK_UP)
+            return false;
+        return super.onCrownControl(cc, destinatario);
     }
 
     @Override
@@ -190,7 +271,7 @@ public class Personaje2 extends Personaje {
         if (!jumping && !animation)
             estado = MaquinaEstados.WALKING;
 
-        return !animation;
+        return !animation || estado==MaquinaEstados.ATTACK_01;
     }
 
     @Override
@@ -215,7 +296,7 @@ public class Personaje2 extends Personaje {
     @Override
     public void onRender(SpriteBatch batch) {
         TextureRegion region;
-        float animTime = animation ?  MathUtils.nanoToSec*TimeUtils.nanoTime()-animationTime : MathUtils.nanoToSec * TimeUtils.nanoTime();
+        float animTime = animation ?  animationTime : MathUtils.nanoToSec * TimeUtils.nanoTime();
         switch (estado) {
             case WALKING:
                 region = Assets.instance.personaje2.running.getKeyFrame(animTime);
@@ -239,8 +320,8 @@ public class Personaje2 extends Personaje {
         }
 
         if (animation) {
-            onAnimationFrame(actualAnimation.getKeyFrameIndex(Utils.secondsSince(animationTime)));
-            if (actualAnimation.isAnimationFinished(Utils.secondsSince(animationTime))) {
+            onAnimationFrame(actualAnimation.getKeyFrameIndex(animationTime));
+            if (actualAnimation.isAnimationFinished(animationTime)) {
                 if (estado==MaquinaEstados.ATTACK_02 && getEstadoSalto()==EstadoSalto.EN_SUELO) {
                     setDireccion(getDireccion().getContrario());
                 }
@@ -277,12 +358,37 @@ public class Personaje2 extends Personaje {
     public void onDebugRender(ShapeRenderer shapeRenderer) {
         super.onDebugRender(shapeRenderer);
 
+        final Rectangle col = getCollider();
+        final Vector2 rangoAtaque = Constants.CHARACTER_02_HAB1_RANGE;
+        final Vector2 rangoAtaque2 = Constants.CHARACTER_02_HAB3_RANGE;
 
+        shapeRenderer.setColor(Color.RED);
+        /*shapeRenderer.rect(
+                getDireccion()==Direccion.DERECHA ? col.x+col.width/2 : col.x+col.width/2-rangoAtaque.x,
+                col.y, rangoAtaque.x, rangoAtaque.y
+        );*/
+
+        shapeRenderer.rect(
+                col.x+col.width/2-rangoAtaque2.x/2, col.y,
+                rangoAtaque2.x, rangoAtaque2.y
+        );
     }
 
     @Override
     public int onAttack(int damage, Entidad objetivo) {
         return damage;
+    }
+
+    @Override
+    public void onEntityKilled(Entidad objetivo) {
+        super.onEntityKilled(objetivo);
+
+        if (objetivo.getTipoEntidad()==TipoEntidad.PERSONAJE) {
+            curarPersonaje(Math.round(getAtributos().getMaxAttr(AtribEnum.SALUD)*0.15f), this);
+        } else {
+            curarPersonaje(Math.round(getAtributos().getMaxAttr(AtribEnum.SALUD)*0.03f), this);
+        }
+
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Torre extends Estructura {
     public Torre(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 5000);
+        getAtributos().setAttr(AtribEnum.SALUD, 1000);
         getAtributos().setAttr(AtribEnum.DEFENSA, 40);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
         getAtributos().setAttr(AtribEnum.ATAQUE, 155);
@@ -72,13 +72,23 @@ public class Torre extends Estructura {
             List<Entidad> encontrados = level.getCollisionEntities(dangerous , getBando().getContrario());
 
             if (encontrados.size()>0) {
+                Entidad entidad = null;
+                for (Entidad e : encontrados) {
+                    if (e.getTipoEntidad()==TipoEntidad.ESBIRRO) {
+                        entidad = e;
+                        break;
+                    }
+                }
+                if (entidad==null)
+                    entidad = encontrados.get(0);
+
                 recarga=0;
-                Gdx.app.log("torre", "Cañon lanzado"); //TODO: Lanzar
+
                 final Rectangle coll = getCollider();
                 final Vector2 posicionLanzamiento = new Vector2(
                         getBando()==Bando.ALIADO ? coll.x + 6 : coll.x + 18, col.y+col.height+24
                 );
-                generarProyectil(new BolaTorre(this, encontrados.get(0), level, posicionLanzamiento));
+                generarProyectil(new BolaTorre(this, entidad, level, posicionLanzamiento));
             }
         }
     }
