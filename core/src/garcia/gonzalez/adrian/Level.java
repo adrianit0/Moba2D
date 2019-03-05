@@ -20,6 +20,7 @@ import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.entidades.estructuras.Torre;
 import garcia.gonzalez.adrian.entidades.particulas.Particula;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje2;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.utiles.Constants;
@@ -28,6 +29,7 @@ import garcia.gonzalez.adrian.utiles.Escenario;
 public class Level {
 
     private Viewport viewport;
+    private  GameplayScreen gameplay;
 
     //TODO: Seguir con el escenarioAssets
     private Escenario escenario;
@@ -44,8 +46,9 @@ public class Level {
     //TODO: Incluir lista para escenarioAssets,  plataformas
 
 
-    public Level(Viewport viewport) {
+    public Level(Viewport viewport, GameplayScreen gameplay) {
         this.viewport = viewport;
+        this.gameplay = gameplay;
 
         input = new MyInputProcessor();
         Gdx.input.setInputProcessor(input);
@@ -83,10 +86,14 @@ public class Level {
 
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
+        personaje = new Personaje2(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
         entidades.add(personaje);
 
         entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 1300, 5, this));
+    }
+
+    public void setGrayscale (boolean state) {
+        gameplay.getGrayScaleView().setGrayscaleTime(state);
     }
 
     public Personaje getPersonaje () {
@@ -143,15 +150,12 @@ public class Level {
 
         // Activamos el tick_update, cuando proceda
         if (tickUpdate> Constants.TICK_UPDATE) {
-            for (Entidad e : entidades) {
-                e.tickUpdate(tickUpdate);
+            for (int i = 0; i < entidades.size; i++) {
+                entidades.get(i).tickUpdate(tickUpdate);
             }
             // Se reinicia a 0
             tickUpdate=0;
         }
-
-
-
 
         /*explosions.begin();
         for (int i = 0; i < explosions.size; i++) {
@@ -260,6 +264,16 @@ public class Level {
         LinkedList<Entidad> ent = new LinkedList<Entidad>();
         for (Entidad e :  entidades) {
             if (e.estaVivo() && rect.overlaps(e.getCollider())) {
+                ent.add(e);
+            }
+        }
+        return ent;
+    }
+
+    public List<Entidad> getCollisionEntities (Rectangle rect, Enums.Bando bando) {
+        LinkedList<Entidad> ent = new LinkedList<Entidad>();
+        for (Entidad e :  entidades) {
+            if (e.estaVivo() && e.getBando()==bando && rect.overlaps(e.getCollider())) {
                 ent.add(e);
             }
         }

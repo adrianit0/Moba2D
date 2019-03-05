@@ -76,7 +76,7 @@ public abstract class Unidad extends Entidad {
 
     // Al empezar el jumpForce
     public abstract boolean onJumpStart (EstadoSalto estado);
-    // Al caer al suelo
+    public abstract void onJumpStay ();
     public abstract void onJumpFinish();
     // Al ser cceado, le pregunta al personaje si quiere ser afectado por su efecto.
     public abstract boolean onCrownControl (CC cc, Unidad destinatario);
@@ -133,10 +133,13 @@ public abstract class Unidad extends Entidad {
 
             y = 5;
             gravityForce = 0;
+        } else {
+            if (estadoSalto==EstadoSalto.SALTANDO)
+                onJumpStay();
         }
 
         //TODO: MEJORAR
-        if (!moving && estaVivo()) {
+        if (estaVivo() && !moving) {
             onIdle(delta);
         }
         moving=false;

@@ -1,5 +1,6 @@
 package garcia.gonzalez.adrian.entidades.estructuras;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,8 +8,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.proyectiles.BolaTorre;
 import garcia.gonzalez.adrian.enums.Enums;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Assets;
@@ -21,6 +25,11 @@ public class Torre extends Estructura {
 
     private Torre superior;
 
+    private float recarga;
+
+    private final float tiempoRecarga = 1.20f; //TODO: Hacer constante
+    private final Vector2 rangoAtaque = new Vector2(350, 150); //TODO: Convertir en constante
+
     public Torre(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
 
@@ -28,12 +37,11 @@ public class Torre extends Estructura {
         getAtributos().setAttr(AtribEnum.DEFENSA, 40);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
         getAtributos().setAttr(AtribEnum.ATAQUE, 155);
-        // TODO: ATTACK SPEED = 0.833
-        // TODO: 30% por cada ataque consecutivo, hasta un máximo de 120%
-        // TODO: Hace siempre un 45% del daño a los minions
 
         // Mientras que esta torre no esté destruida no se podrá destruir esta
         this.superior = superior;
+
+        recarga=0;
     }
 
     @Override
@@ -53,7 +61,26 @@ public class Torre extends Estructura {
 
     @Override
     public void onTickUpdate(float tickDelta) {
+        recarga+=tickDelta;
 
+        if (recarga > tiempoRecarga) {
+            final Rectangle col = getCollider();
+            final Rectangle dangerous = new Rectangle(
+                    col.x+col.width/2-rangoAtaque.x/2,
+                    0,
+                    rangoAtaque.x, rangoAtaque.y);
+            List<Entidad> encontrados = level.getCollisionEntities(dangerous , getBando().getContrario());
+
+            if (encontrados.size()>0) {
+                recarga=0;
+                Gdx.app.log("torre", "Cañon lanzado"); //TODO: Lanzar
+                final Rectangle coll = getCollider();
+                final Vector2 posicionLanzamiento = new Vector2(
+                        getBando()==Bando.ALIADO ? coll.x + 6 : coll.x + 18, col.y+col.height+24
+                );
+                generarProyectil(new BolaTorre(this, encontrados.get(0), level, posicionLanzamiento));
+            }
+        }
     }
 
     @Override
@@ -99,8 +126,6 @@ public class Torre extends Estructura {
                 17, 24);    //TODO Convertir en constante su punto medio
 
         // ZONA DE RIESGO
-        final Vector2 rangoAtaque = new Vector2(350, 150); //TODO: Convertir en constante
-
 
         final Rectangle dangerous = new Rectangle(
                 col.x+col.width/2-rangoAtaque.x/2,
@@ -174,6 +199,7 @@ public class Torre extends Estructura {
 
     @Override
     public boolean onDeath() {
+        // TODO: Destruir
         return false;
     }
 
@@ -192,7 +218,7 @@ public class Torre extends Estructura {
 
     @Override
     public Vector2 getOffset() {
-        return new Vector2(width/4, 0); //TODO: Incluir width
+        return new Vector2(width/4, 0);
     }
 
     @Override

@@ -80,6 +80,61 @@ public class Constants {
             "explosion_3-04", "explosion_3-05", "explosion_3-06", "explosion_3-07",
             "explosion_3-08", "explosion_3-09"
     };
+    public static final String[] TOWER_CANNON_EXPLOSION = {
+            "frame0000", "frame0001", "frame0002", "frame0003", "frame0004", "frame0005", "frame0006",
+            "frame0007", "frame0008", "frame0009", "frame0010", "frame0011", "frame0012", "frame0013",
+            "frame0014", "frame0015", "frame0016", "frame0017", "frame0018", "frame0019", "frame0020",
+            "frame0021", "frame0022", "frame0023", "frame0024", "frame0025", "frame0026", "frame0027",
+            "frame0028", "frame0029", "frame0030", "frame0031", "frame0032", "frame0033", "frame0034",
+            "frame0035", "frame0036", "frame0037", "frame0038", "frame0039", "frame0040", "frame0041",
+            "frame0042", "frame0043", "frame0044", "frame0045", "frame0046", "frame0047", "frame0048",
+            "frame0049", "frame0050", "frame0051", "frame0052", "frame0053", "frame0054", "frame0055",
+            "frame0056", "frame0057", "frame0058", "frame0059", "frame0060", "frame0061", "frame0062",
+            "frame0063", "frame0064", "frame0065", "frame0066", "frame0067", "frame0068", "frame0069",
+            "frame0070", "frame0071", "frame0072", "frame0073", "frame0074", "frame0075", "frame0076",
+            "frame0077", "frame0078", "frame0079", "frame0080", "frame0081"
+    };
+
+    // PERSONAJE JUGABLE 02
+    public static final String[] CHARACTER_02_IDLE = {
+            "character_02-000", "character_02-001", "character_02-002", "character_02-003",
+            "character_02-004", "character_02-005", "character_02-006", "character_02-007",
+            "character_02-008", "character_02-009", "character_02-010"};
+    public static final String[] CHARACTER_02_WALK = {
+            "character_02-011", "character_02-012", "character_02-013", "character_02-014",
+            "character_02-015", "character_02-016", "character_02-017"};
+    public static final String[] CHARACTER_02_JUMP = {
+            "character_02-021", "character_02-022", "character_02-023", "character_02-024",
+            "character_02-025", "character_02-026"};
+    public static final String[] CHARACTER_02_ATTACK_01 = {
+            "character_02-030", "character_02-031", "character_02-032", "character_02-033",
+            "character_02-034", "character_02-035", "character_02-036", "character_02-037",
+            "character_02-038", "character_02-039", "character_02-040", "character_02-041",
+            "character_02-042", "character_02-043", "character_02-044"};
+    public static final String[] CHARACTER_02_ATTACK_02 = {
+            "character_02-141", "character_02-142", "character_02-159", "character_02-195", "character_02-194"};
+    public static final String[] CHARACTER_02_ATTACK_03 = {
+            "character_02-070", "character_02-071", "character_02-072", "character_02-073",
+            "character_02-074", "character_02-075", "character_02-076", "character_02-077",
+            "character_02-078", "character_02-079", "character_02-080", "character_02-081",
+            "character_02-082", "character_02-083", "character_02-084", "character_02-085",
+            "character_02-086", "character_02-087", "character_02-088", "character_02-089",
+            "character_02-090", "character_02-091", "character_02-092", "character_02-093",
+            "character_02-094"
+    };
+    public static final String[] CHARACTER_02_DEATH = {
+            "character_02-097", "character_02-098", "character_02-099", "character_02-100",
+            "character_02-101", "character_02-102", "character_02-103", "character_02-104",
+            "character_02-105", "character_02-106", "character_02-107", "character_02-108",
+            "character_02-109", "character_02-110", "character_02-111", "character_02-112",
+            "character_02-113", "character_02-114", "character_02-115", "character_02-116",
+            "character_02-117", "character_02-118", "character_02-119", "character_02-120",
+            "character_02-121", "character_02-122", "character_02-123", "character_02-124",
+            "character_02-125", "character_02-126", "character_02-127"
+    };
+    public static final float CHARACTER_02_HAB_DURATION = 0.1f;
+
+
 
     // MINIONS
     public static final String[] MINION_SPAWN =  { "minion_%s-05", "minion_%s-06", "minion_%s-07", "minion_%s-08", "minion_%s-09", "minion_%s-10" };

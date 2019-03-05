@@ -74,9 +74,9 @@ public class Personaje1 extends Personaje {
 
     public Personaje1(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
-                new Habilidad(1, 20, Assets.instance.overlayAssets.hab1),
-                new Habilidad(4, 50, Assets.instance.overlayAssets.hab2),
-                new Habilidad(12, 100, Assets.instance.overlayAssets.hab3),
+                new Habilidad(1, 20, Assets.instance.overlayAssets.character01_hab01),
+                new Habilidad(4, 50, Assets.instance.overlayAssets.character01_hab02),
+                new Habilidad(12, 100, Assets.instance.overlayAssets.character01_hab03),
                 bando, x, y, level);
 
         getAtributos().setAttr(AtribEnum.SALUD, 800);

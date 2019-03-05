@@ -93,8 +93,6 @@ public class GrayScaleView {
         shader.begin();
         shader.setUniformf("grayscale", grayscale);
         shader.end();
-
-        Gdx.app.log("Grayscale", grayscale+"");
     }
 
     public void setGrayscaleTime (boolean setGrayscale) {

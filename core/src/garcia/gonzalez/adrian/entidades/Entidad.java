@@ -218,6 +218,9 @@ public abstract class Entidad {
             boolean sigueVido = onDeath();
             // TODO: Programar la parte de si muere y sigue vivo
 
+            if (this==level.getPersonaje()) {
+                level.setGrayscale(true);
+            }
         }
 
         // Activamos el onAfterDefend

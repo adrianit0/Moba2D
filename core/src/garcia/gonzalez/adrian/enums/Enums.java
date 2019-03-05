@@ -76,6 +76,10 @@ public class Enums {
         public int getDir(){
             return dir;
         }
+
+        public Direccion getContrario () {
+            return this==DERECHA ? IZQUIERDA : DERECHA;
+        }
     };
 
     public enum EstadoSalto {

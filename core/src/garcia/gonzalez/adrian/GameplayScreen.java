@@ -50,18 +50,18 @@ public class GameplayScreen extends ScreenAdapter {
         viewport = new ExtendViewport(Constants.WORLD_SIZE, Constants.WORLD_SIZE);
 
         // Creamos el nivel a partir del archivo JSON
-        level = new Level(viewport);//LevelLoader.load("level1", viewport);
+        level = new Level(viewport, this);//LevelLoader.load("level1", viewport);
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
         hud = new MainOverlay(level, Constants.HUD_VIEWPORT_SIZE);
-
-        //TODO: Programar la chase cam inteligente
-        // Inicializamos la cámara que sigue al jugador
         chaseCam = new ChaseCam(viewport.getCamera(), level.getPersonaje());
         grayScaleView = new GrayScaleView(batch);
 
-        grayScaleView.setGrayscaleTime(true);
+        //grayScaleView.setGrayscaleTime(true);
+    }
+
+    public GrayScaleView getGrayScaleView() {
+        return grayScaleView;
     }
 
     @Override

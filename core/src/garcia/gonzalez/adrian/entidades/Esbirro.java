@@ -79,6 +79,9 @@ public class Esbirro extends Unidad {
     }
 
     @Override
+    public void onJumpStay() { }
+
+    @Override
     public void onJumpFinish() {}
 
     @Override

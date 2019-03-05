@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import garcia.gonzalez.adrian.enums.Enums;
 
 public class Assets implements Disposable, AssetErrorListener {
@@ -26,6 +24,7 @@ public class Assets implements Disposable, AssetErrorListener {
     // Personajes
     public Character_01Assets personaje1;
     public Character_01_EffectsAssets efectosPersonaje1;
+    public Character_02Assets personaje2;
 
     // Singleton minions
     public MinionAssets blueMinionAssets;
@@ -57,8 +56,9 @@ public class Assets implements Disposable, AssetErrorListener {
 
         personaje1 = new Character_01Assets(atlas_characters);
         efectosPersonaje1 = new Character_01_EffectsAssets(atlas_characters);
+        personaje2 = new Character_02Assets(atlas_characters);
 
-        estructuraAssets = new StructureAssets();
+        estructuraAssets = new StructureAssets(atlas_characters);
 
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
@@ -118,6 +118,28 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
+    public class Character_02Assets {
+        public final Animation<TextureRegion> idle;
+        public final Animation<TextureRegion> running;
+        public final Animation<TextureRegion> jumping;
+        public final Animation<TextureRegion> attack01;
+        public final Animation<TextureRegion> attack02;
+        public final Animation<TextureRegion> attack03;
+        public final Animation<TextureRegion> death;
+
+        public Character_02Assets (TextureAtlas atlas) {
+            //TODO: Cambiar el temporizador
+            idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_IDLE, Animation.PlayMode.LOOP);
+            running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_WALK, Animation.PlayMode.LOOP);
+            jumping = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_JUMP, Animation.PlayMode.LOOP);
+            death = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_DEATH, Animation.PlayMode.NORMAL);
+
+            attack01 = Utils.createAnimation(atlas, Constants.CHARACTER_02_HAB_DURATION, Constants.CHARACTER_02_ATTACK_01, Animation.PlayMode.NORMAL);
+            attack02 = Utils.createAnimation(atlas, Constants.CHARACTER_02_HAB_DURATION, Constants.CHARACTER_02_ATTACK_02, Animation.PlayMode.LOOP);
+            attack03 = Utils.createAnimation(atlas, Constants.CHARACTER_02_HAB_DURATION, Constants.CHARACTER_02_ATTACK_03, Animation.PlayMode.NORMAL);
+        }
+    }
+
     public class MinionAssets {
         // ANIMACIONES DE LOS MINIONS
         public final Animation<TextureRegion> spawn;
@@ -144,7 +166,9 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Texture nexoEnemigo;
         public final Texture tienda;
 
-        public StructureAssets () {
+        public final Animation<TextureRegion> explosion;
+
+        public StructureAssets (TextureAtlas atlas) {
 
             // TODO: Pasar a constante
             torreAliada = new Texture("images/torreAl.png");
@@ -154,6 +178,8 @@ public class Assets implements Disposable, AssetErrorListener {
             nexoEnemigo = new Texture("images/nexoEN.png");
 
             tienda = new Texture("images/tienda.png");
+
+            explosion = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION/3, Constants.TOWER_CANNON_EXPLOSION, Animation.PlayMode.NORMAL);
         }
     }
 
@@ -207,9 +233,13 @@ public class Assets implements Disposable, AssetErrorListener {
         public Texture vida;
         public Texture mana;
 
-        public TextureRegion hab1;
-        public TextureRegion hab2;
-        public TextureRegion hab3;
+        public TextureRegion character01_hab01;
+        public TextureRegion character01_hab02;
+        public TextureRegion character01_hab03;
+
+        public TextureRegion character02_hab01;
+        public TextureRegion character02_hab02;
+        public TextureRegion character02_hab03;
 
         public OverlayAssets (TextureAtlas atlas) {
             // TODO: Seguir y meter el contenido en constantes
@@ -217,9 +247,13 @@ public class Assets implements Disposable, AssetErrorListener {
             vida = new Texture("GUI/vida.png");
             mana = new Texture("GUI/mana.png");
 
-            hab1 = atlas.findRegion("habilidades-078");
-            hab2 = atlas.findRegion("habilidades-001");
-            hab3 = atlas.findRegion("habilidades-055");
+            character01_hab01 = atlas.findRegion("habilidades-078");
+            character01_hab02 = atlas.findRegion("habilidades-001");
+            character01_hab03 = atlas.findRegion("habilidades-055");
+
+            character02_hab01 = atlas.findRegion("habilidades-062");
+            character02_hab02 = atlas.findRegion("habilidades-087");
+            character02_hab03 = atlas.findRegion("habilidades-046");
         }
     }
 }

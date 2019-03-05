@@ -88,7 +88,7 @@ public class MainOverlay extends Overlay {
             TextureRegion textura = h.getTextureRegion();
             // De no existir la textura le ponemos una cualquiera
             if (textura==null) {
-                textura = Assets.instance.overlayAssets.hab1;
+                textura = Assets.instance.overlayAssets.character01_hab01;
             }
 
             int inverso = habilidades.length-1-i;

@@ -229,6 +229,11 @@ public abstract class Personaje extends Unidad {
     }
 
     @Override
+    public void onJumpStay() {
+
+    }
+
+    @Override
     public void onJumpFinish() {
 
     }
