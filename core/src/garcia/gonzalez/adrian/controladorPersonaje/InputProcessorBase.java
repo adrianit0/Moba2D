@@ -17,6 +17,7 @@ public abstract class InputProcessorBase implements InputProcessor {
     }
 
     public abstract void setViewport (Viewport view);
+    public abstract void resize  ();
 
     public LinkedList<Integer> getLastTeclas() {
         return lastTeclas;

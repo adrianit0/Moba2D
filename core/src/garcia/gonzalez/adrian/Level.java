@@ -32,8 +32,7 @@ public class Level {
 
     private Viewport viewport;
     private  GameplayScreen gameplay;
-
-    //TODO: Seguir con el escenarioAssets
+    
     private Escenario escenario;
 
     private Personaje personaje;
@@ -45,14 +44,11 @@ public class Level {
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
     private DelayedRemovalArray<Proyectil> proyectiles;
     private DelayedRemovalArray<Particula> particulas;
-    //TODO: Incluir lista para escenarioAssets,  plataformas
-
 
     public Level(Viewport viewport, GameplayScreen gameplay) {
         this.viewport = viewport;
         this.gameplay = gameplay;
 
-        // TODO: Incluir tambien la versión ANDROID
         input = gameplay.isPhoneDevice() ? new InputProcessorAndroid() : new InputProcessorDesktop();
         Gdx.input.setInputProcessor(input);
 
@@ -67,29 +63,25 @@ public class Level {
         Torre t1 = new Torre(Enums.Bando.ALIADO, -750, 8, this, null);
         Torre t2 = new Torre(Enums.Bando.ALIADO, -1050, 8, this, t1);
         Nexo t3 = new Nexo(Enums.Bando.ALIADO, -1200, 8, this, t2);
-        Torre t4 = new Torre(Enums.Bando.ALIADO, -1350, 8, this, null);
 
         Torre te1 = new Torre(Enums.Bando.ENEMIGO, 750, 8, this, null);
         Torre te2 = new Torre(Enums.Bando.ENEMIGO, 1050, 8, this, te1);
         Nexo te3 = new Nexo(Enums.Bando.ENEMIGO, 1200, 8, this, te2);
-        Torre te4 = new Torre(Enums.Bando.ENEMIGO, 1350, 8, this, null);
 
         entidades.add (t1);
         entidades.add (t2);
-        entidades.add (t3); // TODO: Sustituir por nexo
-        //entidades.add (t4); // TODO: Sustituir por tienda
+        entidades.add (t3);
 
         entidades.add (te1);
         entidades.add (te2);
-        entidades.add (te3); // TODO: Sustituir por nexo
-        //entidades.add (te4); // TODO: Sustituir por tienda
+        entidades.add (te3);
 
 
         //TODO: Borrar contenido de pruebas
 
 
         //Controlador controller, Bando bando, int x, int y, Level level
-        personaje = new Personaje2(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
+        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
         entidades.add(personaje);
 
         entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 1300, 5, this));

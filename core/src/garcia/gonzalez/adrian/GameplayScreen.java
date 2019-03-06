@@ -76,6 +76,8 @@ public class GameplayScreen extends ScreenAdapter {
         chaseCam.onResize(viewport, width, height);
         // TODO: Programar la HUD
         hud.getViewport().update(width, height, true);
+
+        level.getInput().resize();
     }
 
     @Override
@@ -114,6 +116,7 @@ public class GameplayScreen extends ScreenAdapter {
         // TODO: CONFIGURAR MODO 2 JUGADORES PANTALLA DIVIDIDAD
         //Gdx.gl.glViewport( Gdx.graphics.getWidth()/2,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight() );
         //level.render(batch);
+        grayScaleView.setGrayscale(false);
 
         // TODO: Ajustar hud onRender
         hud.render(batch, shapeRenderer);

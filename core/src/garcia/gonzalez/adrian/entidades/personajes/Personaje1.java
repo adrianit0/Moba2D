@@ -148,6 +148,13 @@ public class Personaje1 extends Personaje {
         bola.soltar(objetivo.getCenter());
     }
 
+    public void removeBalls () {
+        BolaEnergia energia = null;
+        while ((energia=nextBall())!=null) {
+            energia.eliminar();
+        }
+    }
+
     @Override
     public void onCreate() {
 
@@ -404,8 +411,7 @@ public class Personaje1 extends Personaje {
     @Override
     public boolean onDeath() {
         startAnimation(4);
-
-        Gdx.app.log("Muerto", "Estas muerto"); //TODO: Eliminar LOG
+        removeBalls();  // Eliminamos las bolas que tuviera cargada
         return super.onDeath();
     }
 

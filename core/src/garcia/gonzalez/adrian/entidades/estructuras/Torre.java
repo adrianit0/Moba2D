@@ -61,6 +61,9 @@ public class Torre extends Estructura {
 
     @Override
     public void onTickUpdate(float tickDelta) {
+        if (!estaVivo())
+            return;
+
         recarga+=tickDelta;
 
         if (recarga > tiempoRecarga) {

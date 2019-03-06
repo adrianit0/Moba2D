@@ -19,6 +19,11 @@ public class InputProcessorDesktop extends InputProcessorBase{
     }
 
     @Override
+    public void resize() {
+
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
         getTeclas().add(keycode);
         return true;

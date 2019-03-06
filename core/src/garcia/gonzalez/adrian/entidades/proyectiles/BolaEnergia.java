@@ -70,6 +70,10 @@ public class BolaEnergia extends Proyectil {
         lerp = 0;
     }
 
+    public void eliminar () {
+        finalizado=true;
+    }
+
     @Override
     public void onUpdate(float delta) {
         if (!activado)
