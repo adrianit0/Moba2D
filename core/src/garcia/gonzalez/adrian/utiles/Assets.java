@@ -32,7 +32,6 @@ public class Assets implements Disposable, AssetErrorListener {
 
     // Singleton plataforma
     public StructureAssets estructuraAssets;
-    public PlatformAssets platformAssets;
 
     // Singleton Overlay
     public OverlayAssets overlayAssets;
@@ -64,10 +63,6 @@ public class Assets implements Disposable, AssetErrorListener {
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
 
         overlayAssets = new OverlayAssets(atlas_habilidades);
-
-        // Cargamos el singleton de la plataforma
-        // TODO: Si no meto plataformas, borrar esto
-        platformAssets = new PlatformAssets(atlas_minions);
     }
 
     @Override
@@ -83,7 +78,6 @@ public class Assets implements Disposable, AssetErrorListener {
     /**
      * Assets del personaje número 1.
      * */
-    // TODO: Ponerle un nombre y refactorizarlo
     public class Character_01Assets {
         public final Animation<TextureRegion> idle;
         public final Animation<TextureRegion> running;
@@ -94,7 +88,6 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Animation<TextureRegion> death;
 
         public Character_01Assets (TextureAtlas atlas) {
-            //TODO: Cambiar el temporizador
             idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_IDLE, Animation.PlayMode.LOOP);
             running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_01_WALK, Animation.PlayMode.LOOP);
             jumping = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION*5, Constants.CHARACTER_01_JUMP, Animation.PlayMode.LOOP);
@@ -128,7 +121,6 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Animation<TextureRegion> death;
 
         public Character_02Assets (TextureAtlas atlas) {
-            //TODO: Cambiar el temporizador
             idle = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_IDLE, Animation.PlayMode.LOOP);
             running = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_WALK, Animation.PlayMode.LOOP);
             jumping = Utils.createAnimation(atlas, Constants.GENERIC_HABILITY_DURATION, Constants.CHARACTER_02_JUMP, Animation.PlayMode.LOOP);
@@ -151,7 +143,6 @@ public class Assets implements Disposable, AssetErrorListener {
             String _bando = bando==Enums.Bando.ALIADO ? Constants.MINION_ALIADO : Constants.MINION_ENEMIGO;
 
             // Creamos la animación para el movimiento de los minions
-            //TODO: Configurar minions rojos para que miren tambien hacia la derecha
             spawn = Utils.createAnimationMinions(atlas, Constants.MINION_SPAWN_DURATION, Constants.MINION_SPAWN, Animation.PlayMode.NORMAL, _bando);
             andar = Utils.createAnimationMinions(atlas, Constants.MINION_WALK_DURATION, Constants.MINION_WALK, Animation.PlayMode.LOOP, _bando);
             atacar = Utils.createAnimationMinions(atlas, Constants.MINION_ATTACK_DURATION, Constants.MINION_ATTACK, Animation.PlayMode.NORMAL, _bando);
@@ -169,8 +160,6 @@ public class Assets implements Disposable, AssetErrorListener {
         public final Animation<TextureRegion> explosion;
 
         public StructureAssets (TextureAtlas atlas) {
-
-            // TODO: Pasar a constante
             torreAliada = new Texture("images/torreAl.png");
             torreEnemiga = new Texture("images/torreEn.png");
 
@@ -183,19 +172,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
-    public class PlatformAssets {
-        //public final NinePatch platformNinePatch;
-
-        public PlatformAssets(TextureAtlas atlas) {
-            /*AtlasRegion region = atlas.findRegion(Constants.PLATFORM_SPRITE);
-
-            int edge = Constants.PLATFORM_EDGE;
-            platformNinePatch = new NinePatch(region, edge, edge, edge, edge);*/
-        }
-    }
-
     public class EscenarioAssets {
-        // TODO: Incluir el resto de decoraciones del escenarioAssets
         public Texture troncos1;
         public Texture troncos2;
         public Texture troncos3;
@@ -211,7 +188,6 @@ public class Assets implements Disposable, AssetErrorListener {
         public Texture suelo2;
 
         public EscenarioAssets() {
-            //TODO: Pasar esto a constantes
             troncos1 = new Texture("escenario/troncos_1.png");
             troncos2 = new Texture("escenario/troncos_2.png");
             troncos3 = new Texture("escenario/troncos_3.png");
@@ -246,7 +222,6 @@ public class Assets implements Disposable, AssetErrorListener {
         public final TextureRegion character02_hab03;
 
         public OverlayAssets (TextureAtlas atlas) {
-            // TODO: Seguir y meter el contenido en constantes
             mainHud = new Texture("GUI/interfaz_character.png");
             vida = new Texture("GUI/vida.png");
             mana = new Texture("GUI/mana.png");

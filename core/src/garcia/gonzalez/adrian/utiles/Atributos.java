@@ -22,17 +22,11 @@ public class Atributos {
         }
     }
 
-    // TODO: Seguir con las estadísticas
-    public Atributos(int saludMax /* .... */) {
-
-    }
-
-    //TODO: Eliminar despues de las pruebas
     /**
      * Pone un atributo a un personaje
      * */
     public void setAttr (AtribEnum atrib, float cantidad) {
-        estadisticas.put(atrib, new Stat (atrib, cantidad, 9));
+        estadisticas.put(atrib, new Stat (atrib, cantidad, 0));
     }
     public void setAttr (AtribEnum atrib, float cantidad, float porNivel) {
         estadisticas.put(atrib, new Stat (atrib, cantidad, porNivel));
@@ -108,6 +102,14 @@ public class Atributos {
         s.actual = nuevaVida;
     }
 
+    public void curarCompletamente () {
+        Stat salud = estadisticas.get(AtribEnum.SALUD);
+        Stat mana = estadisticas.get(AtribEnum.MANA);
+
+        salud.actual = salud.max;
+        mana.actual = mana.max;
+    }
+
     public void curarSalud (float heal) {
         if (heal<= 0)
             return;
@@ -121,7 +123,7 @@ public class Atributos {
         }
     }
 
-    public void quitarSalud (float damage, Entidad destinatario) {
+    public void quitarSalud (float damage, Entidad personaje, Entidad destinatario) {
         if (damage<=0)
             return;
         Stat s = estadisticas.get(AtribEnum.SALUD);
@@ -129,10 +131,8 @@ public class Atributos {
             return;
 
         s.actual -= damage;
-        // No se podran matar al personaje con DoT, el último golpe siempre lo deberá dar una entidad
-        // TODO: PODER MATAR UN PERSONAJE CON DOTS, incluido destinatario
         if (s.actual<=0)
-            s.actual=1;
+            personaje.morir(destinatario);
     }
 
     public void aumentarManaActual (float nuevaCantidad) {

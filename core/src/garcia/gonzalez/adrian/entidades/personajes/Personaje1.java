@@ -49,7 +49,6 @@ public class Personaje1 extends Personaje {
 
     private boolean jumping;
 
-    // TODO: Mejorar el Width y height
     private int width;
     private int height;
 
@@ -64,7 +63,10 @@ public class Personaje1 extends Personaje {
     private float distFrameAnterior;
     private float distanciaTotal;
     private BolaEnergia[] bolasPasiva;
-    private final Vector2[] ballPosition = { // TODO: Pasar a constantes
+
+    // Todas las posiciones en las que puede estar las bolas
+    // que orbitan sobre el personaje
+    private final Vector2[] ballPosition = {
             new Vector2(-30,25),
             new Vector2(15, 40),
             new Vector2(-15, 40),
@@ -79,11 +81,11 @@ public class Personaje1 extends Personaje {
                 new Habilidad(12, 100, Assets.instance.overlayAssets.character01_hab03),
                 bando, x, y, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 800);
+        getAtributos().setAttr(AtribEnum.SALUD, 900);
         getAtributos().setAttr(AtribEnum.MANA, 400);
         getAtributos().setAttr(AtribEnum.DEFENSA, 25);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
-        getAtributos().setAttr(AtribEnum.REG_MANA, 5);
+        getAtributos().setAttr(AtribEnum.REG_MANA, 8);
         getAtributos().setAttr(AtribEnum.ATAQUE, 80);
         getAtributos().setAttr(AtribEnum.SALTO, 350);
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 120);
@@ -157,7 +159,6 @@ public class Personaje1 extends Personaje {
 
     @Override
     public void onCreate() {
-
     }
 
     @Override
@@ -236,7 +237,6 @@ public class Personaje1 extends Personaje {
 
         animationFrame=frame;
 
-        //TODO: Ajustar los frames
         if (estado==MaquinaEstados.ATTACK_01 && frame==1) {
             if (getEstadoSalto()==EstadoSalto.SALTANDO) {
                 aplicarCC(new KnockUp("recoil_aereo_pers1", new Vector2(20*-getDireccion().getDir(),0), 0.25f), this);
@@ -250,14 +250,13 @@ public class Personaje1 extends Personaje {
 
             Entidad entity = level.getNearestEntity(this, rect);
             if (entity!=null) {
-                entity.recibirAtaque(getHabilityDamage(50, 0.8f), this);
+                entity.recibirAtaque(getBaseAndPorcentualValue(50, 0.8f), this);
                 generarParticula(new Particula(entity.getCenter(), Assets.instance.efectosPersonaje1.hit, new Vector2(32,32)));
                 throwBall(entity);
             }
 
         } else if (estado==MaquinaEstados.ATTACK_02 && frame==6) {
-            // TODO: Reajustarlo
-            aplicarCC(new HealOverTime("cura", getHabilityDamage(50, 1.5f), 5), this);
+            aplicarCC(new HealOverTime("cura", getBaseAndPorcentualValue(50, 0.75f), 2), this);
             Entidad entidad = level.getEntidad(getPosition(), 200, getBando().getContrario());
 
             if (entidad!=null) {
@@ -277,7 +276,7 @@ public class Personaje1 extends Personaje {
 
             Entidad entity = level.getNearestEntity(this, rect);
             if (entity!=null) {
-                entity.recibirAtaque(getHabilityDamage(100, 1.5f), this);
+                entity.recibirAtaque(getBaseAndPorcentualValue(100, 1.5f), this);
                 generarParticula(new Particula(entity.getCenter(), Assets.instance.efectosPersonaje1.hit, new Vector2(32,32)));
                 addBall();
                 throwBall(entity);
@@ -393,7 +392,7 @@ public class Personaje1 extends Personaje {
         Vector2 position = getPosition();
 
         Rectangle ataq = null;
-        final float distancia = 150f; //TODO: Pasar a constantes
+        final float distancia = 150f;
         if (getDireccion()==Direccion.DERECHA) {
             ataq = new Rectangle((col.x+col.width), col.height/4+position.y, distancia, col.height/2);
         } else{

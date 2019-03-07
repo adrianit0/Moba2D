@@ -49,7 +49,7 @@ public class BolaTorre extends Proyectil {
 
         if (entidad.getTipoEntidad() == Enums.TipoEntidad.PERSONAJE) {
             Unidad u = (Unidad) entidad;
-            float lanzamiento = (getCreador().getBando()== Enums.Bando.ALIADO) ? 500 : -500; // TODO: Hacer constante
+            float lanzamiento = (getCreador().getBando()== Enums.Bando.ALIADO) ? 500 : -500;
             // Lanzamos a los personajes de la torre para evitar que la torre los mate por error.
             // La torre siempre priorizará a los súbditos que estan dentro de su rango, por lo que
             // ese es el mejor momento para atacar a la torre.

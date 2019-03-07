@@ -23,9 +23,7 @@ public class AndroidOverlay extends Overlay {
 
     @Override
     public void onRender(SpriteBatch batch, BitmapFont font, ShapeRenderer shapeRenderer) {
-        // TODO: Seguir haciendolo
         Texture t = Assets.instance.overlayAssets.mainHud;
-
 
         font.getData().setScale(0.5f,0.5f);
         font.draw(batch, "Personaje 1", Constants.HUD_MARGIN, viewport.getWorldHeight()-Constants.HUD_MARGIN );
@@ -47,7 +45,6 @@ public class AndroidOverlay extends Overlay {
                 false,
                 false);
 
-        //TODO: Seguir y borrar esto
         Personaje personaje = getLevel().getPersonaje();
 
         float porcVida = (float)  personaje.getAtributos().getSaludActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
@@ -57,6 +54,17 @@ public class AndroidOverlay extends Overlay {
         float porcMana = (float) personaje.getAtributos().getManaActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.MANA);
         if (porcMana<0)
             porcMana=0;
+
+        if (!personaje.estaVivo()) {
+            font.getData().setScale(1.5f,1.5f);
+            font.setColor(Color.BLACK);
+            String time = personaje.getTiempoMuerto()+"";
+
+            font.draw(batch,
+                    time.length()==1?"0"+time:time,
+                    Constants.HUD_MARGIN*2,
+                    viewport.getWorldHeight()-t.getHeight()/2-Constants.HUD_MARGIN/2);
+        }
 
         Texture vida = Assets.instance.overlayAssets.vida;
         Texture t_mana = Assets.instance.overlayAssets.mana;
@@ -98,8 +106,7 @@ public class AndroidOverlay extends Overlay {
                 false);
 
 
-        //TODO: Programar el controlador para Android
-        final Vector2 tamHab = Constants.TAM_BOTONES;    //TODO: Convertir en constante
+        final Vector2 tamHab = Constants.TAM_BOTONES;
         Texture derecha =  Assets.instance.overlayAssets.derecha;
         Texture izquierda =  Assets.instance.overlayAssets.izquierda;
         Texture salto =  Assets.instance.overlayAssets.salto;

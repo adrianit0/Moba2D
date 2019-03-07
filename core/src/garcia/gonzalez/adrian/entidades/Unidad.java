@@ -19,12 +19,8 @@ import garcia.gonzalez.adrian.utiles.Constants;
  * */
 public abstract class Unidad extends Entidad {
 
-    //TODO: Meter los buffos
     private ArrayList<CC> crowdControl;
 
-    //TODO: Meter la gravityForce
-
-    //TODO: Meter el estado jumpForce
     private Direccion direccion;
     private EstadoSalto estadoSalto;
 
@@ -114,14 +110,11 @@ public abstract class Unidad extends Entidad {
             movePosition(new Vector2(knockUpForce.x*delta, knockUpForce.y*delta));
         }
 
-        // Si está por encima del suelo significa que tiene que caer
-        //TODO: Mejorar esto
-
         if (jumpForce >0) {
             estadoSalto = EstadoSalto.SALTANDO;
         }
 
-        movePosition(new Vector2 (0, (jumpForce +gravityForce) * delta)); //TODO: Mejorar la gravedad de los objetos
+        movePosition(new Vector2 (0, (jumpForce + gravityForce) * delta));
 
         if (y<5f) {
             // Si en el anterior frame estaba saltando
@@ -138,7 +131,6 @@ public abstract class Unidad extends Entidad {
                 onJumpStay();
         }
 
-        //TODO: MEJORAR
         if (estaVivo() && !moving) {
             onIdle(delta);
         }
@@ -155,13 +147,11 @@ public abstract class Unidad extends Entidad {
     }
 
     public final void resetJump () {
-        // TODO: Ver la viabilidad de esto
         gravityForce = 0;
         jumpForce = 0;
     }
 
     public final boolean hasCrowdControl(CrowdControl... cc) {
-        // TODO: Mover hacia abajo
         for (CC c : crowdControl) {
             for (CrowdControl t : cc) {
                 if (c.getTipo()==t)
@@ -171,12 +161,10 @@ public abstract class Unidad extends Entidad {
         return false;
     }
 
-    //TODO: Seguir
     /**
      * Mueve el personaje, este método no es heredable, usar en su lugar el método onMove().
      * */
     public final void mover(Direccion dir, float delta) {
-        //TODO: Preguntar al personaje si quiere utilizar la habilidad estando con CC
         if (!estaVivo() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP))
             return;
 
@@ -189,7 +177,6 @@ public abstract class Unidad extends Entidad {
 
         direccion = dir;
 
-        // TODO: Seguir
         float velocidad = getAtributos().getAttr(AtribEnum.VELOCIDAD);
 
         velocidad *= delta * direccion.getDir();
@@ -202,7 +189,6 @@ public abstract class Unidad extends Entidad {
      * Salta el personaje, este método no es heredable, en su lugar utilizar el método onJumpStart()
      * */
     public final void saltar() {
-        //TODO: Preguntar al personaje si quiere utilizar la habilidad estando con CC
         if (!estaVivo() || hasCrowdControl(CrowdControl.ATURDIMIENTO, CrowdControl.KNOCK_UP, CrowdControl.PESADO))
             return;
 
@@ -224,7 +210,6 @@ public abstract class Unidad extends Entidad {
 
         estadoSalto = EstadoSalto.SALTANDO;
 
-        // TODO: SEGUIR
         gravityForce=0;
         jumpForce = potenciaSalto;
     }

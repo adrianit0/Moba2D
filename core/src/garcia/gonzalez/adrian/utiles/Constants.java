@@ -34,12 +34,14 @@ public class Constants {
 
     public static final float GENERIC_HABILITY_DURATION = 0.15f;    // Duración para una animación genérica
 
+    public static final int ALLY_CHARACTER_SPAWN_POSITION = -1300;
+    public static final int ENEMY_CHARACTER_SPAWN_POSITION = 1300;
     public static final float TIME_FIRST_MINION_SPAWN = 5;   // Primera vez que spawnean los minions nada más empezar la partida
     public static final float TIME_MINION_SPAWN = 30;        // Tiempo que tarda en spawnearse los minions
 
     // PERSONAJE JUGABLE 01
     public static final float CHARACTER_01_RANGE_HABILITY_1 = 150f;
-    public static final float CHARACTER_01_PASSIVE_MAX_DISTANCE = 300; //TODO: Cambiar
+    public static final float CHARACTER_01_PASSIVE_MAX_DISTANCE = 300;
     public static final int CHARACTER_01_MAX_BALLS = 5;
     public static final String[] CHARACTER_01_IDLE = {
             "character_1-00", "character_1-01", "character_1-02", "character_1-03",
@@ -154,5 +156,9 @@ public class Constants {
 
     public static final float MINION_LAST_WHISPERS = 0.2f;
     public static final float MINION_DISSAPEAR_DURATION = 1f;
+
+    // STRUCTURES
+    public static final float TURRET_RELOAD_TIME = 1.20f;
+    public static final Vector2 TURRET_RANGE = new Vector2(350, 150);
 
 }

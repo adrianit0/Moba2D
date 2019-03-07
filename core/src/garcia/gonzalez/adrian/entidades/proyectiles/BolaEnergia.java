@@ -50,7 +50,7 @@ public class BolaEnergia extends Proyectil {
 
         if (entidad.getTipoEntidad().esUnidad()) {
             Unidad u = (Unidad) entidad;
-            float lanzamiento = (getPosition().x>entidad.getPosition().x) ? -300 : 300; //TODO: Hacer constante
+            float lanzamiento = (getPosition().x>entidad.getPosition().x) ? -300 : 300;
             u.aplicarCC(new KnockUp("Salto", new Vector2(lanzamiento, 0),0.5f), (Unidad) getCreador());
         }
         finalizado=true;

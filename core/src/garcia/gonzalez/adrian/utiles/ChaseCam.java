@@ -62,7 +62,7 @@ public class ChaseCam {
                 camera.position.y -= delta * Constants.CHASE_CAM_MOVE_SPEED;
             }
         }
-        // TODO: Mejorar esto (Añadir agua y bajar un poco la copa de los arboles)
+
         if (camera.position.y-Constants.WORLD_SIZE/5<0)
             camera.position.y = Constants.WORLD_SIZE/5;
     }

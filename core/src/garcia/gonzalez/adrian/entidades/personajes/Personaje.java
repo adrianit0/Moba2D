@@ -29,6 +29,9 @@ public abstract class Personaje extends Unidad {
     private Controlador controller;
     private Habilidad[] habilidades;
 
+    // Si está muerto
+    private float tiempoMuerto;
+
     public Personaje(Controlador controller, Habilidad hab1, Habilidad hab2, Habilidad hab3, Enums.Bando bando, int x, int y, Level level) {
         super(bando, x, y, TipoEntidad.PERSONAJE, level);
 
@@ -41,10 +44,6 @@ public abstract class Personaje extends Unidad {
     public abstract boolean onHabilityDown (int hab);
     public abstract boolean onHabilityStay (int hab, float delta);
     public abstract boolean onHabilityUp (int hab);
-
-    // TODO: Implementar QUEUE de habilidad
-    // public void startQueueHability ();
-    // public ... getQueueHability ();
 
     // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
     @Override
@@ -76,9 +75,7 @@ public abstract class Personaje extends Unidad {
             if (controller.onKeyDown(TeclasJugador.SALTAR)) {
                 saltar();
             }
-            if (controller.onKeyDown(TeclasJugador.AGACHAR)) {
-                // TODO: HACER ESTE INPUT
-            }
+            if (controller.onKeyDown(TeclasJugador.AGACHAR)) { }
             if (controller.onKeyDown(TeclasJugador.BOTON_HABILIDAD_1)) {
                 castHabilityDown(1);
             }
@@ -97,12 +94,8 @@ public abstract class Personaje extends Unidad {
             if (controller.onKeyPressing(TeclasJugador.MOVER_IZQUIERDA)) {
                 mover(Direccion.IZQUIERDA, delta);
             }
-            if (controller.onKeyPressing(TeclasJugador.SALTAR)) {
-                // TODO: HACER ESTE INPUT
-            }
-            if (controller.onKeyPressing(TeclasJugador.AGACHAR)) {
-                // TODO: HACER ESTE INPUT
-            }
+            if (controller.onKeyPressing(TeclasJugador.SALTAR)) { }
+            if (controller.onKeyPressing(TeclasJugador.AGACHAR)) { }
             if (controller.onKeyPressing(TeclasJugador.BOTON_HABILIDAD_1)) {
                 castHabilityStay(1, delta);
             }
@@ -114,18 +107,10 @@ public abstract class Personaje extends Unidad {
             }
 
             // PRESS UP
-            if (controller.onKeyUp(TeclasJugador.MOVER_DERECHA)) {
-                // TODO: HACER ESTE INPUT
-            }
-            if (controller.onKeyUp(TeclasJugador.MOVER_IZQUIERDA)) {
-                // TODO: HACER ESTE INPUT
-            }
-            if (controller.onKeyUp(TeclasJugador.SALTAR)) {
-                // TODO: HACER ESTE INPUT
-            }
-            if (controller.onKeyUp(TeclasJugador.AGACHAR)) {
-                // TODO: HACER ESTE INPUT
-            }
+            if (controller.onKeyUp(TeclasJugador.MOVER_DERECHA)) { }
+            if (controller.onKeyUp(TeclasJugador.MOVER_IZQUIERDA)) { }
+            if (controller.onKeyUp(TeclasJugador.SALTAR)) { }
+            if (controller.onKeyUp(TeclasJugador.AGACHAR)) { }
             if (controller.onKeyUp(TeclasJugador.BOTON_HABILIDAD_1)) {
                 castHabilityUp(1);
             }
@@ -137,8 +122,36 @@ public abstract class Personaje extends Unidad {
             }
         }
 
+        // Si está muerto le restamos tiempo de vida
+        if (!estaVivo()) {
+            tiempoMuerto -= delta;
+            if (tiempoMuerto<0) {
+                changePosition( new Vector2( getBando()==Bando.ALIADO ?
+                                Constants.ALLY_CHARACTER_SPAWN_POSITION :
+                                Constants.ENEMY_CHARACTER_SPAWN_POSITION,getPosition().y));
+
+                if (this==level.getPersonaje()) {
+                    level.setGrayscale(false);
+                }
+                tiempoMuerto=0;
+                getAtributos().curarCompletamente();
+                onSpawn();
+            }
+        }
+
+
+
         // aplicamos el update del padre
         super.update(delta);
+    }
+
+    // El tiempo en el que personaje está muerto. Resucita tras ese tiempo
+    public void setTiempoMuerto (float tiempo) {
+        tiempoMuerto = tiempo;
+    }
+
+    public int getTiempoMuerto () {
+        return (int) Math.ceil(tiempoMuerto);
     }
 
     @Override
@@ -211,12 +224,11 @@ public abstract class Personaje extends Unidad {
         hab.setUsed (false);
     }
 
-    // TODO: Cambiar el nombre a otro más acertado
     /**
      * A partir de un valor base más otro porcentual obtiene el daño para cualquiera de las
-     * habilidades. El funcionamiento
+     * habilidades.
      * */
-    public final int getHabilityDamage (float base, float porcentual) {
+    public final int getBaseAndPorcentualValue(float base, float porcentual) {
         return Math.round(base + getAtributos().getAttrPorc(AtribEnum.ATAQUE) * porcentual);
     }
 
@@ -280,15 +292,6 @@ public abstract class Personaje extends Unidad {
 
     @Override
     public void onSpawn() {
-
-    }
-
-    //TODO: Si no se va a usar el item buy, borrarlo
-    public void onItemBuy(Item item) {
-
-    }
-    //TODO: Si no se va a usar el item sell, borrarlo
-    public void onItemSell(Item item) {
 
     }
 

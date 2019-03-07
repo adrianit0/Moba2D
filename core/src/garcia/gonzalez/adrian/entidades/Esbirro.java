@@ -32,7 +32,6 @@ public class Esbirro extends Unidad {
     private boolean muerto = false;
     private long timeSinceMinionStartDying; // Le vamos a dar unos milisegundos para que el minion pueda lanzar su ataque si es que lo tuviera en cola
     private long timeSinceMinionDeath;
-    private long timeSinceMinionStartDissapear;
     private float dissapearRatio=1f;
 
     private Entidad seleccionado;
@@ -44,18 +43,18 @@ public class Esbirro extends Unidad {
 
     private MaquinaEstados estado;
 
-    public Esbirro(Bando bando, int x, int y, Level level) {
+    public Esbirro(Bando bando, int x, int y, Level level, int oleada) {
         super(bando, x, y, TipoEntidad.ESBIRRO, level);
 
         width=64;
         height=64;
 
         // Le damos valores por defecto
-
-        getAtributos().setAttr(AtribEnum.SALUD, 500);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 12);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 12);
-        getAtributos().setAttr(AtribEnum.VELOCIDAD, 50);
+        // Los esbirros se volveran más poderoso en cada oleada
+        getAtributos().setAttr(AtribEnum.SALUD, 500 + oleada*20);
+        getAtributos().setAttr(AtribEnum.ATAQUE, 15 + oleada*5);
+        getAtributos().setAttr(AtribEnum.DEFENSA, 12 + oleada);
+        getAtributos().setAttr(AtribEnum.VELOCIDAD, 80);
 
         estado=MaquinaEstados.SPAWN;
 
@@ -96,12 +95,9 @@ public class Esbirro extends Unidad {
 
     @Override
     public void onUpdate(float delta) {
-        //TODO: cambiar esto
-
 
         switch (estado) {
             case SPAWN:
-                // TODO: Refactorizar nombre
                 float elapsedTime2 = Utils.secondsSince(timeSinceMinionBorn);
                 boolean terminado2 = assets.spawn.isAnimationFinished(elapsedTime2);
 
@@ -126,9 +122,7 @@ public class Esbirro extends Unidad {
                 float elapsedTime = Utils.secondsSince(timeSinceStartAttack);
                 boolean terminado = assets.atacar.isAnimationFinished(elapsedTime);
 
-                // TODO: Cambiar (Los minions haran daño, no lanzaran por los aires al enemigo)
                 if (!attacked && elapsedTime> Constants.MINION_ATTACK_DURATION) {
-                    // TODO: Solo aplicar el Knock-Up si ataca a otro minion, no a un personaje
                     if (seleccionado.getTipoEntidad()==TipoEntidad.ESBIRRO)
                         ((Unidad)seleccionado).aplicarCC(new KnockUp("knock-Up minion", new Vector2(getBando()==Bando.ALIADO ? 20 : -20,150), 0.25f), this);
                     seleccionado.recibirAtaque(getAtributos().getAttr(AtribEnum.ATAQUE), this);
@@ -137,7 +131,6 @@ public class Esbirro extends Unidad {
 
                 if (terminado) {
                     estado=MaquinaEstados.ANDAR;
-                    //TODO: Cambiar todo esto
                     seleccionado=null;
                 }
                 break;
@@ -158,8 +151,6 @@ public class Esbirro extends Unidad {
             estado=MaquinaEstados.MUERTO;
             timeSinceMinionDeath = TimeUtils.nanoTime();
         }
-
-        //TODO: SEGUIR
     }
 
     @Override
@@ -169,10 +160,6 @@ public class Esbirro extends Unidad {
 
     @Override
     public void onRender(SpriteBatch batch) {
-        // TODO: Crear MECANIM
-        //TextureRegion region = Assets.instance.blueMinionAssets.;
-        // TODO: Hacer esto bien
-
         TextureRegion region;
         switch (estado) {
             case SPAWN:
@@ -187,13 +174,11 @@ public class Esbirro extends Unidad {
                 break;
             case ANDAR:
             default:
-                float walkTimeSeconds = MathUtils.nanoToSec * (TimeUtils.nanoTime() - 0); // TODO: Mirar que es ese 0 final
+                float walkTimeSeconds = MathUtils.nanoToSec * TimeUtils.nanoTime();
                 region = assets.andar.getKeyFrame(walkTimeSeconds);
                 break;
         }
 
-
-        //TODO: Incluir OFFSET
         width=region.getRegionWidth();
         height=region.getRegionHeight();
         Vector2 position = getPosition();
@@ -265,7 +250,7 @@ public class Esbirro extends Unidad {
 
     @Override
     public void onEntityKilled(Entidad objetivo) {
-        // TODO: Implementar onEntity Killed
+
     }
 
     @Override

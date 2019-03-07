@@ -37,6 +37,8 @@ public class Level {
 
     private Personaje personaje;
 
+    private int oleada;
+
     private float tickUpdate;
     private float minionSpawn;
     private InputProcessorBase input;
@@ -51,6 +53,8 @@ public class Level {
 
         input = gameplay.isPhoneDevice() ? new InputProcessorAndroid() : new InputProcessorDesktop();
         Gdx.input.setInputProcessor(input);
+
+        oleada=0;
 
         tickUpdate = 0;
         minionSpawn = Constants.TIME_MINION_SPAWN-Constants.TIME_FIRST_MINION_SPAWN;
@@ -76,15 +80,12 @@ public class Level {
         entidades.add (te2);
         entidades.add (te3);
 
-
-        //TODO: Borrar contenido de pruebas
-
-
         //Controlador controller, Bando bando, int x, int y, Level level
-        personaje = new Personaje1(new ControladorJugador1(), Enums.Bando.ALIADO, -1300,5, this);
+        personaje = new Personaje2(new ControladorJugador1(), Enums.Bando.ALIADO, Constants.ALLY_CHARACTER_SPAWN_POSITION,5, this);
         entidades.add(personaje);
 
-        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, 1300, 5, this));
+        // TODO: Incluir controlador
+        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, Constants.ENEMY_CHARACTER_SPAWN_POSITION, 5, this));
     }
 
     public InputProcessorBase getInput() {
@@ -113,16 +114,17 @@ public class Level {
 
         if (minionSpawn>Constants.TIME_MINION_SPAWN) {
             minionSpawn-=Constants.TIME_MINION_SPAWN;
+            oleada++;
 
             // Nacen los minions
-            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1120,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1160,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1200,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1240,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1120,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1160,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1200,5, this));
-            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1240,5, this));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1120,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1160,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1200,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ALIADO,-1240,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1120,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1160,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1200,5, this, oleada));
+            entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1240,5, this, oleada));
         }
 
         // Actualizamos los enemigos
@@ -130,7 +132,6 @@ public class Level {
             Entidad entidad = entidades.get(i);
             entidad.update(delta);
 
-            //TODO: Configurar que hacer cuando este muerto
             if (entidad.canBeCleaned()) {
                 entidades.removeIndex(i);
                 i--;
@@ -193,25 +194,31 @@ public class Level {
         batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        // TODO: Para mostrar la vida de los personajes
-        // TODO: Excepto la del personaje principal
+
         for (Entidad entidad : entidades) {
-            entidad.onHudRender(batch, shapeRenderer);
+            if (personaje!=entidad)
+                entidad.onHudRender(batch, shapeRenderer);
         }
 
         shapeRenderer.end();
+
+        /*
+        // SHAPERENDERER PARA EL DEBUG
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (Entidad e : entidades) {
-            //e.onDebugRender(shapeRenderer);
+            e.onDebugRender(shapeRenderer);
         }
         for (Proyectil p : proyectiles) {
-            //p.debugRender(shapeRenderer);
+            p.debugRender(shapeRenderer);
         }
 
-        shapeRenderer.end();
+        shapeRenderer.end();*/
     }
 
-    // TODO: Cambiar el nombre a otro más acertado
+    public int getOleada () {
+        return oleada;
+    }
+
     /**
      * A partir de un valor base más otro porcentual obtiene el daño para cualquiera de las
      * habilidades. El funcionamiento

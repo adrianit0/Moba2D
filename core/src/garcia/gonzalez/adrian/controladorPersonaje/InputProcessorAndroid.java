@@ -62,8 +62,8 @@ public class InputProcessorAndroid extends InputProcessorBase {
         Vector2 posScreen = new Vector2(screenX, screenY);
         Vector2 viewportPosition = viewport.unproject(posScreen);
 
-        // TODO: Hacer que el movil vibre
-        //Gdx.input.vibrate(100);
+        // Para que el jugador sepa que ha pulsado el botón
+        Gdx.input.vibrate(100);
 
         Gdx.app.log("touchDown", pointer+"");
 
@@ -124,6 +124,5 @@ public class InputProcessorAndroid extends InputProcessorBase {
         }
         return true;
     }
-
 }
 

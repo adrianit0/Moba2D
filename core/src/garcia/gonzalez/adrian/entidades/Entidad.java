@@ -8,19 +8,17 @@ import com.badlogic.gdx.math.Vector3;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.particulas.Particula;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.utiles.Atributos;
 
 public abstract class Entidad {
-    //TODO: BORRAR
     private Bando bando;
     private TipoEntidad tipoEntidad;
 
     protected float x;
     protected float y;
-
-    private int nivel;
 
     protected Level level;
 
@@ -33,6 +31,9 @@ public abstract class Entidad {
         this.bando = bando;
         this.level = level;
         this.tipoEntidad=tipoEntidad;
+
+        onCreate();
+        onSpawn();
     }
 
     public Bando getBando() {
@@ -56,7 +57,7 @@ public abstract class Entidad {
      * Un debug especial para saber entre otras cosas donde estan lo colisionadores
      * */
     public void onDebugRender (ShapeRenderer shapeRenderer) {
-        //TODO: Borrar o desactivar
+
     }
 
     public abstract int onAttack (int damage, Entidad objetivo);
@@ -73,12 +74,6 @@ public abstract class Entidad {
     public abstract void onLevelUp();
 
     public abstract boolean onDeath ();
-
-    // Métodos abstractos de colisión:
-    // TODO: Implementar, unicamente si hace falta
-    //public abstract void onCollisionEnter(Entidad e);
-    //public abstract void onCollisionStay(Entidad e, float delta);
-    //public abstract void onCollisionExit(Entidad e);
 
     public abstract Rectangle getCollider ();
     public abstract Vector2 getOffset();
@@ -210,17 +205,10 @@ public abstract class Entidad {
         // Le ponemos la vida de nuevo
         atributos.setSaludActual(vida);
 
-        // TODO: Actualizar HUD
-
         // Si este golpe ha matado este objetivo.
         // Es probable que el objetivo pueda seguir vivo si así funciona su personaje.
         if (vida<=0) {
-            onDeath();
-            destinatario.onEntityKilled(this);
-
-            if (this==level.getPersonaje()) {
-                level.setGrayscale(true);
-            }
+            morir (destinatario);
         }
 
         // Activamos el onAfterDefend
@@ -228,6 +216,23 @@ public abstract class Entidad {
 
         // Finalmente devolvemos el daño final y real inflingido
         return dmg;
+    }
+
+    public final void morir (Entidad asesino) {
+        onDeath();
+        asesino.onEntityKilled(this);
+
+        if (this==level.getPersonaje()) {
+            level.setGrayscale(true);
+        }
+
+        // Si es un personaje este estará muerto durante unos segundos
+        // Luego volverá a la fuente de inicio.
+        if (getTipoEntidad() == TipoEntidad.PERSONAJE) {
+            // Le asignamos el tiempo en el que está muerto.
+            // Contra más se alargue la partida, más tiempo estará muerto
+            ((Personaje) this).setTiempoMuerto(10+2*level.getOleada());
+        }
     }
 
     /**
@@ -249,7 +254,7 @@ public abstract class Entidad {
         }
 
         /**
-         * // TODO: Hacer
+         *
         if (hasCrowdControl(CrowdControl.SANGRADO)) {
             cantidad/=2;    // Si el objetivo está sangrando se curará la mitad
         }
@@ -270,8 +275,6 @@ public abstract class Entidad {
 
         // Le ponemos la vida de nuevo
         atributos.setSaludActual(vida);
-
-        //TODO: Actualizar HUD
 
         // Es probable que que el personaje tenga un item, pasiva o buff con efecto
         // a posteriori de la cura (Pe: "Consigue 10 de ataque durante 3s tras curarse").
@@ -314,7 +317,6 @@ public abstract class Entidad {
     /**
      * Mira si la entidad sigue viva o en su contrario ha muerto
      * */
-    //TODO: Mirar y mejorar (Si procede)
     public boolean estaVivo () {
         return atributos.getSaludActual()>0;
     }

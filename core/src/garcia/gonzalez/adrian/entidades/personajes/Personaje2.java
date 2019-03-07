@@ -1,6 +1,5 @@
 package garcia.gonzalez.adrian.entidades.personajes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +24,6 @@ import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.utiles.Assets;
 import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Habilidad;
-import garcia.gonzalez.adrian.utiles.Utils;
 import garcia.gonzalez.adrian.enums.Enums.*;
 
 /**
@@ -35,10 +33,10 @@ import garcia.gonzalez.adrian.enums.Enums.*;
  * Pasiva: Se cura un 3% de su vida máxima por cada unidad que mate (Un 15% si mata a otro personaje).
  *
  * Hab1: Prepara un ataque y arremete hacia delante con bastante potencia,
- *      inflingiendo 50 (+0.60) hasta 200 (+1.0) según lo que hayas cargado.
+ *      inflingiendo 80 (+0.80) hasta 300 (+2.0) (Max 400 a esbirros y torres) según lo que hayas cargado.
+ *      Además, quedará aturdido durante 1.5s.
  *
- * Hab2: Se mueve rapidamente hacia delante, mientras está en esta forma no podrá recibir daño
- *      de ninguna fuente.
+ * Hab2: Se mueve rapidamente hacia delante, mientras está en esta forma no podrá ser controlado.
  *
  * Hab3: Lanza una super explosión contra el suelo, apartando a todos los objetivos que hubiese dentro.
  *
@@ -51,7 +49,6 @@ public class Personaje2 extends Personaje {
 
     private boolean jumping;
 
-    // TODO: Mejorar el Width y height
     private int width;
     private int height;
 
@@ -66,17 +63,17 @@ public class Personaje2 extends Personaje {
 
     public Personaje2(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
-                new Habilidad(2, 20, Assets.instance.overlayAssets.character02_hab01),
+                new Habilidad(3, 20, Assets.instance.overlayAssets.character02_hab01),
                 new Habilidad(1, 30, Assets.instance.overlayAssets.character02_hab02),
-                new Habilidad(1, 120, Assets.instance.overlayAssets.character02_hab03),
+                new Habilidad(9, 100, Assets.instance.overlayAssets.character02_hab03),
                 bando, x, y, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 850);
-        getAtributos().setAttr(AtribEnum.MANA, 350);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 35);
-        getAtributos().setAttr(AtribEnum.REG_SALUD, 8);
-        getAtributos().setAttr(AtribEnum.REG_MANA, 4);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 90);
+        getAtributos().setAttr(AtribEnum.SALUD, 1250);
+        getAtributos().setAttr(AtribEnum.MANA, 450);
+        getAtributos().setAttr(AtribEnum.DEFENSA, 40);
+        getAtributos().setAttr(AtribEnum.REG_SALUD, 12);
+        getAtributos().setAttr(AtribEnum.REG_MANA, 6);
+        getAtributos().setAttr(AtribEnum.ATAQUE, 110);
         getAtributos().setAttr(AtribEnum.SALTO, 380);
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 140);
 
@@ -96,7 +93,7 @@ public class Personaje2 extends Personaje {
             animationTime+=delta;
         }
         if (estado==MaquinaEstados.ATTACK_02) {
-            final Vector2 distancia = new Vector2(500*delta*getDireccion().getDir(), 0);    // TODO: Convertir velocidad en constante
+            final Vector2 distancia = new Vector2(500*delta*getDireccion().getDir(), 0);
             resetJump();
             movePosition(distancia);
         } else if (estado==MaquinaEstados.ATTACK_01 && animationFrame<7) {
@@ -159,17 +156,28 @@ public class Personaje2 extends Personaje {
 
             List<Entidad> enemigos = level.getCollisionEntities(areaDamage, getBando().getContrario());
             // Calcula el daño que recibiran los enemigos, dependerá de cuanto has cargado el golpe
-            int damage = getHabilityDamage(MathUtils.lerp(50, 200, fuerzaTotal), MathUtils.lerp(0.6f, 1.0f, fuerzaTotal));
-            float potenciaGolpe = MathUtils.lerp(0, 800, fuerzaTotal);
+            int damage = getBaseAndPorcentualValue(MathUtils.lerp(80, 300, fuerzaTotal), MathUtils.lerp(0.8f, 2.0f, fuerzaTotal));
+            float potenciaGolpe = MathUtils.lerp(10, 800, fuerzaTotal);
             // Aplicamos el daño dentro del rango de ataque
             for (Entidad entidad : enemigos) {
-                entidad.recibirAtaque(damage, this);
+                if (entidad.getTipoEntidad()==TipoEntidad.ESBIRRO ||
+                        entidad.getTipoEntidad()==TipoEntidad.TORRE) {
+                    entidad.recibirAtaque(Math.min(damage, 400), this);
+                } else {
+                    entidad.recibirAtaque(damage, this);
+                }
+
                 if (entidad.getTipoEntidad().esUnidad()) {
                     ((Unidad)entidad).aplicarCC(new KnockUp(
                             "Golpe KnockBack",
                             new Vector2(potenciaGolpe*getDireccion().getDir(),
                                     -potenciaGolpe),
                             0.5f),
+                            this);
+                    ((Unidad)entidad).aplicarCC(new DebuffCC(
+                                    "Golpe aturdidor",
+                                    CrowdControl.ATURDIMIENTO,
+                                    1.5f),
                             this);
                 }
             }
@@ -224,15 +232,11 @@ public class Personaje2 extends Personaje {
                     rangoAtaque.x, rangoAtaque.y);
 
             List<Entidad> enemigos = level.getCollisionEntities(areaEfecto, getBando().getContrario());
-            int damage = getHabilityDamage(150, 1.0f);
+            int damage = getBaseAndPorcentualValue(250, 1.0f);
             float potenciaGolpe = 800;
             // Aplicamos el daño dentro del rango de ataque
             for (Entidad entidad : enemigos) {
-                if (entidad.getTipoEntidad()==TipoEntidad.TORRE) {
-                    entidad.recibirAtaque(damage*2, this);
-                } else {
-                    entidad.recibirAtaque(damage, this);
-                }
+                entidad.recibirAtaque(damage, this);
 
                 if (entidad.getTipoEntidad().esUnidad()) {
                     ((Unidad)entidad).aplicarCC(new KnockUp(
@@ -247,15 +251,12 @@ public class Personaje2 extends Personaje {
 
     @Override
     public int onBeforeDefend(int damage, Entidad destinatario) {
-        if (estado==MaquinaEstados.ATTACK_02)
-            return 0;
-
         return super.onBeforeDefend(damage, destinatario);
     }
 
     @Override
     public boolean onCrownControl(CC cc, Unidad destinatario) {
-        if (estado==MaquinaEstados.ATTACK_02 && cc.getTipo()==CrowdControl.KNOCK_UP)
+        if (estado==MaquinaEstados.ATTACK_02 && cc.getTipo().getTipo()==TipoCC.DEBUFF)
             return false;
         return super.onCrownControl(cc, destinatario);
     }

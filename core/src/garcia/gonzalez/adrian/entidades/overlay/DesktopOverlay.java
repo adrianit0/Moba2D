@@ -24,12 +24,7 @@ public class DesktopOverlay extends Overlay {
 
     @Override
     public void onRender(SpriteBatch batch, BitmapFont font, ShapeRenderer shapeRenderer) {
-        // TODO: Seguir haciendolo
         Texture t = Assets.instance.overlayAssets.mainHud;
-
-        // TODO: Borrar
-        //font.draw(batch, "HOLA QUE TALL!!???", 20, 50 );
-
 
         font.getData().setScale(0.5f,0.5f);
         font.draw(batch, "Personaje 1", Constants.HUD_MARGIN, viewport.getWorldHeight()-Constants.HUD_MARGIN );
@@ -51,7 +46,6 @@ public class DesktopOverlay extends Overlay {
                 false,
                 false);
 
-        //TODO: Seguir y borrar esto
         Personaje personaje = getLevel().getPersonaje();
 
         float porcVida = (float)  personaje.getAtributos().getSaludActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
@@ -61,6 +55,19 @@ public class DesktopOverlay extends Overlay {
         float porcMana = (float) personaje.getAtributos().getManaActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.MANA);
         if (porcMana<0)
             porcMana=0;
+
+        if (!personaje.estaVivo()) {
+            font.getData().setScale(1.5f,1.5f);
+            font.setColor(Color.BLACK);
+            String time = personaje.getTiempoMuerto()+"";
+
+            font.draw(batch,
+                    time.length()==1?"0"+time:time,
+                    Constants.HUD_MARGIN*2,
+                    viewport.getWorldHeight()-t.getHeight()/2-Constants.HUD_MARGIN/2);
+        }
+        font.setColor(Color.WHITE);
+        font.getData().setScale(0.5f,0.5f);
 
         Texture vida = Assets.instance.overlayAssets.vida;
         Texture t_mana = Assets.instance.overlayAssets.mana;
@@ -103,8 +110,8 @@ public class DesktopOverlay extends Overlay {
 
 
         Habilidad[] habilidades = personaje.getHabilidades();
-        final Vector2 tamHab = new Vector2(32,32);      //TODO: Convertir en constante
-        final String[] botones = { "J", "K", "L" };         // TODO: Convertir en constante
+        final Vector2 tamHab = new Vector2(32,32);
+        final String[] botones = { "J", "K", "L" };
         final int mana = personaje.getAtributos().getManaActual();
 
         for (int i = 0; i < habilidades.length; i++) {

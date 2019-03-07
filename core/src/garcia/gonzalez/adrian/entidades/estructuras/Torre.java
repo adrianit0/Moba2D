@@ -1,6 +1,5 @@
 package garcia.gonzalez.adrian.entidades.estructuras;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,8 +26,10 @@ public class Torre extends Estructura {
 
     private float recarga;
 
-    private final float tiempoRecarga = 1.20f; //TODO: Hacer constante
-    private final Vector2 rangoAtaque = new Vector2(350, 150); //TODO: Convertir en constante
+    private final float tiempoRecarga;
+    private final Vector2 rangoAtaque;
+
+    private float dissapearRatio;
 
     public Torre(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
@@ -41,7 +42,11 @@ public class Torre extends Estructura {
         // Mientras que esta torre no esté destruida no se podrá destruir esta
         this.superior = superior;
 
+        tiempoRecarga = Constants.TURRET_RELOAD_TIME;
+        rangoAtaque = Constants.TURRET_RANGE;
         recarga=0;
+
+        dissapearRatio=1;
     }
 
     @Override
@@ -56,7 +61,9 @@ public class Torre extends Estructura {
 
     @Override
     public void onUpdate(float delta) {
-
+        if(!estaVivo()) {
+            dissapearRatio-=delta;
+        }
     }
 
     @Override
@@ -104,8 +111,10 @@ public class Torre extends Estructura {
 
         width=textura.getWidth();
         height=textura.getWidth();
-        Vector2 position = getPosition();
         Vector2 offset = getOffset();
+
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, dissapearRatio);//set alpha to 0.3
 
         batch.draw(
                 textura,
@@ -119,6 +128,8 @@ public class Torre extends Estructura {
                 textura.getHeight(),
                 getBando()==Bando.ENEMIGO,
                 false);
+
+        batch.setColor(c.r, c.g, c.b, 1f);
     }
 
     @Override
@@ -136,7 +147,7 @@ public class Torre extends Estructura {
         shapeRenderer.rect(
                 getBando()==Bando.ALIADO ? col.x-2 : col.x+10,
                 col.y+col.height+12,
-                17, 24);    //TODO Convertir en constante su punto medio
+                17, 24);
 
         // ZONA DE RIESGO
 
@@ -144,8 +155,6 @@ public class Torre extends Estructura {
                 col.x+col.width/2-rangoAtaque.x/2,
                 0,
                 rangoAtaque.x, rangoAtaque.y);
-        // TODO: Crear constante del dangerousZone
-
 
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(dangerous.x, dangerous.y, dangerous.width, dangerous.height);
@@ -212,7 +221,6 @@ public class Torre extends Estructura {
 
     @Override
     public boolean onDeath() {
-        // TODO: Destruir
         return false;
     }
 
@@ -241,6 +249,6 @@ public class Torre extends Estructura {
 
     @Override
     public boolean canBeCleaned() {
-        return false;
+        return dissapearRatio<=0;
     }
 }

@@ -22,7 +22,7 @@ public class DamageOverTime extends CC {
 
     @Override
     public void aplicandoCCTick(Unidad unidad, float deltaTick) {
-        unidad.getAtributos().quitarSalud(cantidad*deltaTick/getDuracion(), entidad);
+        unidad.getAtributos().quitarSalud(cantidad*deltaTick/getDuracion(), unidad, entidad);
     }
 
     @Override
