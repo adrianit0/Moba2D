@@ -25,13 +25,14 @@ import garcia.gonzalez.adrian.entidades.personajes.Personaje1;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje2;
 import garcia.gonzalez.adrian.entidades.proyectiles.Proyectil;
 import garcia.gonzalez.adrian.enums.Enums;
+import garcia.gonzalez.adrian.screens.GameplayScreen;
 import garcia.gonzalez.adrian.utiles.Constants;
 import garcia.gonzalez.adrian.utiles.Escenario;
 
 public class Level {
 
     private Viewport viewport;
-    private  GameplayScreen gameplay;
+    private GameplayScreen gameplay;
     
     private Escenario escenario;
 

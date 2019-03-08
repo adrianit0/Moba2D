@@ -1,6 +1,7 @@
 package garcia.gonzalez.adrian.utiles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -81,6 +82,17 @@ public class Utils {
             sprites.add(atlas.findRegion(String.format(s, extraInfo)));
         }
         return new Animation(duracion, sprites, playmode);
+    }
+
+    /**
+     * Crea una animación a partir de un array de String para por ejemplo los minions
+     * */
+    public static Animation<Texture> createAnimationTexture (float duracion, String[] animaciones, Animation.PlayMode playmode) {
+        Array<Texture> sprites = new Array<Texture>();
+        for (String s : animaciones) {
+            sprites.add(new Texture(s));
+        }
+        return new Animation<Texture>(duracion, sprites, playmode);
     }
 
     public static float secondsSince(long timeNanos) {

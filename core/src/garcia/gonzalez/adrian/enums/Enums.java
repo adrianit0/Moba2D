@@ -140,4 +140,10 @@ public class Enums {
         BOTON_HABILIDAD_2,
         BOTON_HABILIDAD_3
     }
+
+    public enum Dificultad {
+        JUSTO,      // Ambas partes del mapa son iguales
+        INJUSTO,    // El enemigo tiene mejores atributos que los tuyos
+        DESVENTAJA  // Los propios minions podrian matarte
+    }
 }

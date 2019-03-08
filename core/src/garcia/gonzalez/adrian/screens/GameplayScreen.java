@@ -1,4 +1,4 @@
-package garcia.gonzalez.adrian;
+package garcia.gonzalez.adrian.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.entidades.overlay.AndroidOverlay;
 import garcia.gonzalez.adrian.entidades.overlay.DesktopOverlay;
 import garcia.gonzalez.adrian.entidades.overlay.Overlay;
@@ -39,9 +40,6 @@ public class GameplayScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        // Inicializamos el singleton de los assets
-        Assets.instance.init();
-
         timeSinceGameStarted=0;
 
         // Creamos el ViewPort
@@ -56,6 +54,10 @@ public class GameplayScreen extends ScreenAdapter {
         grayScaleView = new GrayScaleView(batch);
 
         level.getInput().setViewport(hud.getViewport());
+    }
+
+    public long getTimeSinceGameStarted () {
+        return timeSinceGameStarted;
     }
 
     public boolean isPhoneDevice () {

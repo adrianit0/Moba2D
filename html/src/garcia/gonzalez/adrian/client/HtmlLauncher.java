@@ -3,7 +3,7 @@ package garcia.gonzalez.adrian.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import garcia.gonzalez.adrian.MobaGame;
+import garcia.gonzalez.adrian.screens.MobaGame;
 
 public class HtmlLauncher extends GwtApplication {
 

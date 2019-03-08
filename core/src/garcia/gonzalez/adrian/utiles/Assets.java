@@ -34,6 +34,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public StructureAssets estructuraAssets;
 
     // Singleton Overlay
+    public MenuAssets menuAssets;
     public OverlayAssets overlayAssets;
 
 
@@ -62,6 +63,7 @@ public class Assets implements Disposable, AssetErrorListener {
         blueMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ALIADO);
         redMinionAssets = new MinionAssets(atlas_minions, Enums.Bando.ENEMIGO);
 
+        menuAssets = new MenuAssets();
         overlayAssets = new OverlayAssets(atlas_habilidades);
     }
 
@@ -202,6 +204,16 @@ public class Assets implements Disposable, AssetErrorListener {
             suelo1 = new Texture("escenario/suelo_1.png");
             suelo2 = new Texture("escenario/suelo_2.png");
         }
+    }
+
+    public class MenuAssets {
+        public final Animation<Texture> fondo;
+
+        public MenuAssets () {
+            fondo = Utils.createAnimationTexture(Constants.GENERIC_HABILITY_DURATION, Constants.escenario, Animation.PlayMode.LOOP);
+
+        }
+
     }
 
     public class OverlayAssets {

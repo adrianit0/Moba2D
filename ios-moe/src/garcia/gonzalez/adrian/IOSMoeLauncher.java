@@ -3,7 +3,7 @@ package garcia.gonzalez.adrian;
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
 import com.badlogic.gdx.backends.iosmoe.IOSApplicationConfiguration;
 import org.moe.natj.general.Pointer;
-import garcia.gonzalez.adrian.MobaGame;
+import garcia.gonzalez.adrian.screens.MobaGame;
 
 import apple.uikit.c.UIKit;
 

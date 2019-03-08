@@ -2,7 +2,7 @@ package garcia.gonzalez.adrian.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import garcia.gonzalez.adrian.MobaGame;
+import garcia.gonzalez.adrian.screens.MobaGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

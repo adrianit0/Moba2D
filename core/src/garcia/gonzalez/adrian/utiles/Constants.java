@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 
 public class Constants {
     // CONFIGURACION INICIAL
+    public static final Color MENU_BACKGROUND_COLOR = Color.BLACK;
     public static final Color BACKGROUND_COLOR = Color.SKY;
     public static final float WORLD_SIZE = 240; // Para la cámara
     public static final float HUD_VIEWPORT_SIZE = 240;  // Para el HUD
@@ -17,6 +18,26 @@ public class Constants {
     public static final String TEXTURE_ATLAS_CHARACTERS = "images/characters.atlas";
     public static final String TEXTURE_ATLAS_HABILITIES = "images/habilidades.atlas";
 
+    // CONFIGURACION MENU
+    public static final float DIFFICULTY_WORLD_SIZE = 480;
+
+    public static final String GAME_NAME = "Moba2D";
+    public static final String[] escenario = {
+            "menu/menu_00.png", "menu/menu_01.png", "menu/menu_02.png", "menu/menu_03.png",
+            "menu/menu_04.png", "menu/menu_05.png", "menu/menu_06.png", "menu/menu_07.png",
+            "menu/menu_08.png", "menu/menu_09.png", "menu/menu_10.png", "menu/menu_11.png",
+            "menu/menu_12.png", "menu/menu_13.png", "menu/menu_14.png", "menu/menu_15.png",
+            "menu/menu_16.png", "menu/menu_17.png", "menu/menu_18.png", "menu/menu_19.png",
+            "menu/menu_20.png", "menu/menu_21.png", "menu/menu_22.png", "menu/menu_23.png"
+    };
+
+    public static final Vector2 EASY_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE / 5, DIFFICULTY_WORLD_SIZE / 4);
+    public static final Vector2 MEDIUM_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE / 2, DIFFICULTY_WORLD_SIZE / 4);
+    public static final Vector2 HARD_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE * 4 / 5, DIFFICULTY_WORLD_SIZE / 4);
+
+    public static final float DIFFICULTY_BUBBLE_RADIUS = 60f;
+
+    // CONFIGURACION PARTIDA
     public static final float CHASE_CAM_MOVE_SPEED = 30;   // Velocidad de la camara
     public static final float CHASE_CAM_MOVE_INCREMENT = 0.15f;
     public static final float CHASE_CAM_SEPARATION = 50;
