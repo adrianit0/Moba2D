@@ -106,7 +106,7 @@ public class InputProcessorAndroid extends InputProcessorBase {
                     getTeclas().add(entry.getValue());
                     teclas.put(pointer, entry.getValue());
                 }
-                // TODO: Seguir con esto para arreglarlo
+                // Con esto deberia entrar en un botón al arrastrar desde fuera hasta dentro de un botón virtual.
                 /*else {
                     getTeclas().add(entry.getValue());
                     teclas.put(pointer, entry.getValue());

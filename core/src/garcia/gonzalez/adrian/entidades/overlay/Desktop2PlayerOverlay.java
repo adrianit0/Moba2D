@@ -225,7 +225,7 @@ public class Desktop2PlayerOverlay extends Overlay {
         if (porcMana<0)
             porcMana=0;
 
-        if (!p2.estaVivo()) { // TODO Poner correctamente esto
+        if (!p2.estaVivo()) {
             font.getData().setScale(1.5f,1.5f);
             font.setColor(Color.BLACK);
             String time = p2.getTiempoMuerto()+"";

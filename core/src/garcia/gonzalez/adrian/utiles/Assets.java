@@ -238,7 +238,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
             lazoTitulo = new Texture("menu/titulo.png");
 
-            int edge = 19;//TODO: Pasar a constante
+            int edge = 19;
             fondoPersonaje = new NinePatch(new Texture("menu/fondoPersonaje.png"), edge, edge, edge, edge);
         }
 
