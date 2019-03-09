@@ -66,7 +66,7 @@ public class InputProcessorAndroid extends InputProcessorBase {
             if (entry.getKey().contains(viewportPosition)) {
                 // Para que el jugador sepa que ha pulsado el botón
                 Gdx.input.vibrate(50);
-                getTeclas().add(entry.getValue());
+                addTecla(entry.getValue());
                 teclas.put(pointer, entry.getValue());
                 break;
             }
@@ -79,11 +79,9 @@ public class InputProcessorAndroid extends InputProcessorBase {
         Vector2 posScreen = new Vector2(screenX, screenY);
         Vector2 viewportPosition = viewport.unproject(posScreen);
 
-        Gdx.app.log("touchUp", pointer+"");
-
         for (Map.Entry<Rectangle, Integer> entry : botones.entrySet()) {
             if (entry.getKey().contains(viewportPosition)) {
-                getTeclas().remove(entry.getValue());
+                removeTecla(entry.getValue());
                 teclas.put(pointer, -1);
                 break;
             }
@@ -96,28 +94,29 @@ public class InputProcessorAndroid extends InputProcessorBase {
         Vector2 posScreen = new Vector2(screenX, screenY);
         Vector2 viewportPosition = viewport.unproject(posScreen);
 
-        Gdx.app.log("touchDragged", pointer+"");
-
         boolean encontrado = false;
         for (Map.Entry<Rectangle, Integer> entry : botones.entrySet()) {
             if (entry.getKey().contains(viewportPosition)) {
-                if (getTeclas().contains(pointer) && getTeclas().get(pointer)!=entry.getValue()) {
-                    getTeclas().remove(getTeclas().get(pointer));
-                    getTeclas().add(entry.getValue());
+                if (teclas.containsKey(pointer) && getTecla(pointer)!=entry.getValue()) {
+                    // Para que el jugador sepa que ha pulsado el botón
+                    Gdx.input.vibrate(50);
+                    removeTecla(getTecla(pointer));
+                    addTecla(entry.getValue());
+                    teclas.put(pointer, entry.getValue());
+                } else if (getTecla(pointer)==-1) {
+                    // Para que el jugador sepa que ha pulsado el botón
+                    Gdx.input.vibrate(50);
+                    addTecla(entry.getValue());
                     teclas.put(pointer, entry.getValue());
                 }
-                // Con esto deberia entrar en un botón al arrastrar desde fuera hasta dentro de un botón virtual.
-                /*else {
-                    getTeclas().add(entry.getValue());
-                    teclas.put(pointer, entry.getValue());
-                }*/
 
                 encontrado=true;
                 break;
             }
         }
         if (!encontrado) {
-            getTeclas().remove(teclas.get(pointer));
+            removeTecla(teclas.get(pointer));
+            teclas.remove(pointer);
         }
         return true;
     }

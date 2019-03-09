@@ -19,8 +19,24 @@ public abstract class InputProcessorBase implements InputProcessor {
     public abstract void setViewport (Viewport view);
     public abstract void resize  ();
 
-    public final LinkedList<Integer> getTeclas() {
-        return teclas;
+    public final void addTecla (Integer tecla) {
+        if (!contieneTecla(tecla))
+            teclas.add(tecla);
+    }
+
+    public final void removeTecla (Integer tecla) {
+        if (contieneTecla(tecla))
+            teclas.remove(tecla);
+    }
+
+    public final boolean contieneTecla (Integer tecla) {
+        return teclas.contains(tecla);
+    }
+
+    public final Integer getTecla (Integer pointer) {
+        if (pointer>=teclas.size())
+            return -1;
+        return teclas.get(pointer);
     }
 
     public final void nextFrame () {

@@ -25,13 +25,13 @@ public class InputProcessorDesktop extends InputProcessorBase{
 
     @Override
     public boolean keyDown(int keycode) {
-        getTeclas().add(keycode);
+        addTecla(keycode);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        getTeclas().remove(new Integer(keycode));
+        removeTecla(new Integer(keycode));
         return true;
     }
 }
