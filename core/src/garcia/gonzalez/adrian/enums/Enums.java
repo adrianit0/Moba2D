@@ -43,6 +43,10 @@ public class Enums {
         }
     }
 
+    public enum EstadoPartida {
+        VICTORIA, DERROTA
+    }
+
     /**
      * Atributos del personaje.
      * */
@@ -142,8 +146,8 @@ public class Enums {
     }
 
     public enum Dificultad {
-        JUSTO,      // Ambas partes del mapa son iguales
-        INJUSTO,    // El enemigo tiene mejores atributos que los tuyos
-        DESVENTAJA  // Los propios minions podrian matarte
+        FACIL,      // Ambas partes del mapa son iguales
+        TWO_PLAYER,    // El enemigo tiene mejores atributos que los tuyos
+        NORMAL  // Los propios minions podrian matarte
     }
 }

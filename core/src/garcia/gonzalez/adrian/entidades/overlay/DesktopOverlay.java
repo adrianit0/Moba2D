@@ -18,8 +18,12 @@ import garcia.gonzalez.adrian.utiles.Habilidad;
 
 public class DesktopOverlay extends Overlay {
 
-    public DesktopOverlay(Level level, float viewportSize) {
+    private Personaje personaje;
+
+    public DesktopOverlay(Level level, float viewportSize, Personaje personaje) {
         super(level, viewportSize);
+
+        this.personaje = personaje;
     }
 
     @Override
@@ -45,8 +49,6 @@ public class DesktopOverlay extends Overlay {
                 t.getHeight(),
                 false,
                 false);
-
-        Personaje personaje = getLevel().getPersonaje();
 
         float porcVida = (float)  personaje.getAtributos().getSaludActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
         if (porcVida<0)

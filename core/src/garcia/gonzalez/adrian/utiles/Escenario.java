@@ -2,6 +2,8 @@ package garcia.gonzalez.adrian.utiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import javax.swing.text.View;
@@ -15,14 +17,22 @@ public class Escenario {
     private final float h = 256;
     private final float oH = -10;  // offset de height
 
-    public Escenario (Viewport view) {
-        this.view = view;
+    private long animatationStarted;
+
+    public Escenario () {
+        this.animatationStarted = TimeUtils.nanoTime();
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, Viewport actual) {
+        view = actual;
 
         float posX = view.getCamera().position.x;
         float posY = view.getCamera().position.y-view.getCamera().viewportHeight/2;
+
+        Texture t = Assets.instance.escenarioAssets.fondo.getKeyFrame(Utils.secondsSince(animatationStarted));
+        float width = t.getWidth()*view.getWorldHeight()/t.getHeight();
+
+        batch.draw(t, view.getScreenWidth()/8-width/2 + posX -150, posY, width, view.getWorldHeight());
 
         for (int i = -5; i < 6; i++) {
             batch.draw(Assets.instance.escenarioAssets.troncos5, posX*0.9f+w*i-oW, posY*0.25f-oH, w, h);

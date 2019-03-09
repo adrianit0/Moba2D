@@ -17,8 +17,12 @@ import garcia.gonzalez.adrian.utiles.Habilidad;
 
 public class AndroidOverlay extends Overlay {
 
-    public AndroidOverlay(Level level, float viewportSize) {
+    private Personaje personaje;
+
+    public AndroidOverlay(Level level, float viewportSize, Personaje personaje) {
         super(level, viewportSize);
+
+        this.personaje = personaje;
     }
 
     @Override
@@ -44,8 +48,6 @@ public class AndroidOverlay extends Overlay {
                 t.getHeight(),
                 false,
                 false);
-
-        Personaje personaje = getLevel().getPersonaje();
 
         float porcVida = (float)  personaje.getAtributos().getSaludActual()/personaje.getAtributos().getMaxAttr(Enums.AtribEnum.SALUD);
         if (porcVida<0)

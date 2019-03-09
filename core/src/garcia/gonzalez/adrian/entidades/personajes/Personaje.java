@@ -130,9 +130,9 @@ public abstract class Personaje extends Unidad {
                                 Constants.ALLY_CHARACTER_SPAWN_POSITION :
                                 Constants.ENEMY_CHARACTER_SPAWN_POSITION,getPosition().y));
 
-                if (this==level.getPersonaje()) {
+                /*if (this==level.getMainCharacter()) {
                     level.setGrayscale(false);
-                }
+                }*/
                 tiempoMuerto=0;
                 getAtributos().curarCompletamente();
                 onSpawn();

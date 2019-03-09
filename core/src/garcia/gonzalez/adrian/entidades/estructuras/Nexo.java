@@ -145,7 +145,8 @@ public class Nexo extends Estructura{
 
     @Override
     public boolean onDeath() {
-        //TODO: Cuando un nexo es destruido se acaba la partida
+        // Si el nexo destruido es el aliado entonces significará que has perdido
+        level.terminarPartida(getBando()==Bando.ALIADO?EstadoPartida.DERROTA:EstadoPartida.VICTORIA);
         return true;
     }
 

@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 public class Constants {
     // CONFIGURACION INICIAL
     public static final Color MENU_BACKGROUND_COLOR = Color.BLACK;
-    public static final Color BACKGROUND_COLOR = Color.SKY;
+    public static final Color BACKGROUND_COLOR = Color.DARK_GRAY;
     public static final float WORLD_SIZE = 240; // Para la cámara
     public static final float HUD_VIEWPORT_SIZE = 240;  // Para el HUD
     public static final float HUD_MARGIN = 5;
@@ -21,8 +21,8 @@ public class Constants {
     // CONFIGURACION MENU
     public static final float DIFFICULTY_WORLD_SIZE = 480;
 
-    public static final String GAME_NAME = "Moba2D";
-    public static final String[] escenario = {
+    public static final String GAME_NAME = "Nexus Defense";
+    public static final String[] FONDO_MENU_DIFICULTAD = {
             "menu/menu_00.png", "menu/menu_01.png", "menu/menu_02.png", "menu/menu_03.png",
             "menu/menu_04.png", "menu/menu_05.png", "menu/menu_06.png", "menu/menu_07.png",
             "menu/menu_08.png", "menu/menu_09.png", "menu/menu_10.png", "menu/menu_11.png",
@@ -31,17 +31,27 @@ public class Constants {
             "menu/menu_20.png", "menu/menu_21.png", "menu/menu_22.png", "menu/menu_23.png"
     };
 
-    public static final Vector2 EASY_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE / 5, DIFFICULTY_WORLD_SIZE / 4);
-    public static final Vector2 MEDIUM_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE / 2, DIFFICULTY_WORLD_SIZE / 4);
-    public static final Vector2 HARD_CENTER = new Vector2(DIFFICULTY_WORLD_SIZE * 4 / 5, DIFFICULTY_WORLD_SIZE / 4);
+    public static final String[] FONDO_MENU_PERSONAJE = {
+            "menu/fondo2_0.png", "menu/fondo2_1.png", "menu/fondo2_2.png", "menu/fondo2_3.png"
+    };
 
-    public static final float DIFFICULTY_BUBBLE_RADIUS = 60f;
+    public static final String[] FONDO_PARTIDA = {
+            "escenario/fondo_juego_0.png", "escenario/fondo_juego_1.png",
+            "escenario/fondo_juego_2.png", "escenario/fondo_juego_3.png"
+    };
+
+    public static final Vector2 MENU_BUTTON_SIZE = new Vector2(114, 45);
+    public static final float MENU_BUTTON_Y = 120;
+
+    public static final Vector2 MENU_CHARACTER_SIZE = new Vector2(120, 200);
+
 
     // CONFIGURACION PARTIDA
     public static final float CHASE_CAM_MOVE_SPEED = 30;   // Velocidad de la camara
     public static final float CHASE_CAM_MOVE_INCREMENT = 0.15f;
     public static final float CHASE_CAM_SEPARATION = 50;
     public static final float CHASE_CAM_MIN_HEIGHT = 50;
+    public static final float CHASE_CAM_MIN_HEIGHT_2_PLAYER = 100;
 
     public static final Vector2 HUD_CHARACTER_LIFE_SIZE = new Vector2(50, 8);
     public static final Vector2 HUD_MINION_LIFE_SIZE = new Vector2(30, 4);
@@ -61,6 +71,7 @@ public class Constants {
     public static final float TIME_MINION_SPAWN = 30;        // Tiempo que tarda en spawnearse los minions
 
     // PERSONAJE JUGABLE 01
+    public static final String CHARACTER_01_NAME = "Yone";
     public static final float CHARACTER_01_RANGE_HABILITY_1 = 150f;
     public static final float CHARACTER_01_PASSIVE_MAX_DISTANCE = 300;
     public static final int CHARACTER_01_MAX_BALLS = 5;
@@ -120,6 +131,7 @@ public class Constants {
     };
 
     // PERSONAJE JUGABLE 02
+    public static final String CHARACTER_02_NAME = "Kurosuke";
     public static final String[] CHARACTER_02_IDLE = {
             "character_02-000", "character_02-001", "character_02-002", "character_02-003",
             "character_02-004", "character_02-005", "character_02-006", "character_02-007",

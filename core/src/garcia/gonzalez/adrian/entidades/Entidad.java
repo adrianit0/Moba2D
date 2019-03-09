@@ -222,9 +222,9 @@ public abstract class Entidad {
         onDeath();
         asesino.onEntityKilled(this);
 
-        if (this==level.getPersonaje()) {
+        /*if (this==level.getMainCharacter()) {
             level.setGrayscale(true);
-        }
+        }*/
 
         // Si es un personaje este estará muerto durante unos segundos
         // Luego volverá a la fuente de inicio.

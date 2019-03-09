@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.prism.image.ViewPort;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,12 +32,9 @@ import garcia.gonzalez.adrian.utiles.Escenario;
 
 public class Level {
 
-    private Viewport viewport;
     private GameplayScreen gameplay;
     
     private Escenario escenario;
-
-    private Personaje personaje;
 
     private int oleada;
 
@@ -44,23 +42,25 @@ public class Level {
     private float minionSpawn;
     private InputProcessorBase input;
 
+    private boolean partidaTeminada;
+
     private DelayedRemovalArray<Entidad> entidades; // Personajes, aliados, torres, etc
     private DelayedRemovalArray<Proyectil> proyectiles;
     private DelayedRemovalArray<Particula> particulas;
 
-    public Level(Viewport viewport, GameplayScreen gameplay) {
-        this.viewport = viewport;
+    public Level(GameplayScreen gameplay) {
         this.gameplay = gameplay;
 
         input = gameplay.isPhoneDevice() ? new InputProcessorAndroid() : new InputProcessorDesktop();
         Gdx.input.setInputProcessor(input);
 
         oleada=0;
+        partidaTeminada = false;
 
         tickUpdate = 0;
         minionSpawn = Constants.TIME_MINION_SPAWN-Constants.TIME_FIRST_MINION_SPAWN;
 
-        escenario = new Escenario(this.viewport);
+        escenario = new Escenario();
         entidades = new DelayedRemovalArray<Entidad>();
         proyectiles = new DelayedRemovalArray<Proyectil>();
         particulas = new DelayedRemovalArray<Particula>();
@@ -80,13 +80,21 @@ public class Level {
         entidades.add (te1);
         entidades.add (te2);
         entidades.add (te3);
+    }
 
-        //Controlador controller, Bando bando, int x, int y, Level level
-        personaje = new Personaje2(new ControladorJugador1(), Enums.Bando.ALIADO, Constants.ALLY_CHARACTER_SPAWN_POSITION,5, this);
-        entidades.add(personaje);
+    public void terminarPartida (Enums.EstadoPartida estado) {
+        partidaTeminada = true;
+        gameplay.getFinPartidaOverlay().setEstado(estado);
+    }
 
-        // TODO: Incluir controlador
-        entidades.add(new Personaje1(null, Enums.Bando.ENEMIGO, Constants.ENEMY_CHARACTER_SPAWN_POSITION, 5, this));
+    public boolean partidaTerminada () {
+        return partidaTeminada;
+    }
+
+    public void addCharacter (Personaje character) {
+        entidades.add(character);
+
+        character.changePosition(new Vector2(character.getBando()== Enums.Bando.ALIADO ? Constants.ALLY_CHARACTER_SPAWN_POSITION : Constants.ENEMY_CHARACTER_SPAWN_POSITION, 5));
     }
 
     public InputProcessorBase getInput() {
@@ -95,10 +103,6 @@ public class Level {
 
     public void setGrayscale (boolean state) {
         gameplay.getGrayScaleView().setGrayscaleTime(state);
-    }
-
-    public Personaje getPersonaje () {
-        return personaje;
     }
 
     public void generarProyecitl (Proyectil p) {
@@ -110,6 +114,9 @@ public class Level {
     }
 
     public void update(float delta) {
+        if (partidaTeminada)
+            return;
+
         tickUpdate+=delta;
         minionSpawn+=delta;
 
@@ -158,21 +165,15 @@ public class Level {
             tickUpdate=0;
         }
 
-        /*explosions.begin();
-        for (int i = 0; i < explosions.size; i++) {
-            if (explosions.get(i).isFinished()) {
-                explosions.removeIndex(i);
-            }
-        }
-        explosions.end();*/
 
-        input.nextFrame();  // siguiente framea
+        input.nextFrame();  // siguiente frame
     }
 
-    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer, Personaje objetivo, Viewport viewport) {
+        //mainCharaceter = objetivo;
         batch.begin();
 
-        escenario.render(batch);
+        escenario.render(batch, viewport);
 
         for (int i = 0; i < entidades.size; i++) {
             entidades.get(i).render(batch);
@@ -197,7 +198,7 @@ public class Level {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for (Entidad entidad : entidades) {
-            if (personaje!=entidad)
+            if (objetivo!=entidad)
                 entidad.onHudRender(batch, shapeRenderer);
         }
 

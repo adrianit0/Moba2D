@@ -2,6 +2,7 @@ package garcia.gonzalez.adrian.screens;
 
 import com.badlogic.gdx.Game;
 
+import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.enums.Enums.*;
 import garcia.gonzalez.adrian.screens.GameplayScreen;
 import garcia.gonzalez.adrian.utiles.Assets;
@@ -14,11 +15,18 @@ public class MobaGame extends Game {
         // Inicializamos el singleton de los assets
         Assets.instance.init();
 
-		setScreen(new MenuScreen (this));
+		irMenu();
 	}
 
-	public void empezarPartida (Dificultad dificultad) {
-		// TODO: Ponerle la dificultad
-		setScreen(new GameplayScreen());
+	public void seleccionarPersonaje (Dificultad dificultad) {
+		setScreen(new ChooseCharacterScreen(this, dificultad));
 	}
+
+	public void empezarPartida (Dificultad dificultad, int personajeID) {
+		setScreen(new GameplayScreen(this, dificultad, personajeID));
+	}
+
+	public void irMenu () {
+        setScreen(new MenuScreen (this));
+    }
 }

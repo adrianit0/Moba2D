@@ -62,13 +62,10 @@ public class InputProcessorAndroid extends InputProcessorBase {
         Vector2 posScreen = new Vector2(screenX, screenY);
         Vector2 viewportPosition = viewport.unproject(posScreen);
 
-        // Para que el jugador sepa que ha pulsado el botón
-        Gdx.input.vibrate(100);
-
-        Gdx.app.log("touchDown", pointer+"");
-
         for (Map.Entry<Rectangle, Integer> entry : botones.entrySet()) {
             if (entry.getKey().contains(viewportPosition)) {
+                // Para que el jugador sepa que ha pulsado el botón
+                Gdx.input.vibrate(50);
                 getTeclas().add(entry.getValue());
                 teclas.put(pointer, entry.getValue());
                 break;

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.sql.Time;
 
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.enums.Enums;
 
 public class ChaseCam {
@@ -23,15 +24,18 @@ public class ChaseCam {
     private final float velocidad;
     private final float incrementoVelocidad;
 
-    public ChaseCam(Camera camera, Entidad target) {
-        this.camera = camera;
-        this.target = target;
+    private boolean modo2Jugadores;
 
+    public ChaseCam(Camera camera, Personaje target, boolean modo2Jugadores) {
+        this.camera = camera;
+
+        this.target = target;
         velocidad = Constants.CHASE_CAM_MOVE_SPEED;
         separacion = target.getBando()== Enums.Bando.ALIADO ? Constants.CHASE_CAM_SEPARATION : -Constants.CHASE_CAM_SEPARATION;
         incrementoVelocidad = Constants.CHASE_CAM_MOVE_INCREMENT;
 
         following=true;
+        this.modo2Jugadores =modo2Jugadores;
     }
 
     public void onResize (Viewport view, int width, int height) {
@@ -41,6 +45,7 @@ public class ChaseCam {
 
     // Actualizamos la posición de la cámara respecto a la posición de GigaGal
     public void update(float delta) {
+
         if (following) {
             chaseCamera(target.getPosition3D(), delta);
         } else {
@@ -73,6 +78,7 @@ public class ChaseCam {
      * */
     private void chaseCamera (Vector3 posicionPersonaje, float delta) {
         float _distancia = camera.position.dst(posicionPersonaje);
+
         if(Math.abs(_distancia) >= 0.25f) {
             // Cogemos la distancia máxima que recorrerá la cámara en este frame
             float step = velocidad * (1 + (_distancia * incrementoVelocidad)) * delta;
@@ -82,11 +88,12 @@ public class ChaseCam {
             // Calculamos el trozo de distancia que recorrerá desde la posición actual hasta la
             // posición de destino
             Vector3 dst = Utils.moveTowards(camera.position, _persPosition, step);
-            dst.y = dst.y < Constants.CHASE_CAM_MIN_HEIGHT ? Constants.CHASE_CAM_MIN_HEIGHT : dst.y;
+            if (!modo2Jugadores)
+                dst.y = dst.y < Constants.CHASE_CAM_MIN_HEIGHT ? Constants.CHASE_CAM_MIN_HEIGHT : dst.y;
+            else
+                dst.y = dst.y < Constants.CHASE_CAM_MIN_HEIGHT_2_PLAYER ? Constants.CHASE_CAM_MIN_HEIGHT_2_PLAYER : dst.y;
             // Añadimos esa distancia
             camera.position.set(dst);
         }
     }
-
-
 }

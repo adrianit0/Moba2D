@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -175,21 +176,25 @@ public class Assets implements Disposable, AssetErrorListener {
     }
 
     public class EscenarioAssets {
-        public Texture troncos1;
-        public Texture troncos2;
-        public Texture troncos3;
-        public Texture troncos4;
-        public Texture troncos5;
+        public final Animation<Texture> fondo;
 
-        public Texture luz1;
-        public Texture luz2;
+        public final Texture troncos1;
+        public final Texture troncos2;
+        public final Texture troncos3;
+        public final Texture troncos4;
+        public final Texture troncos5;
 
-        public Texture copa;
+        public final Texture luz1;
+        public final Texture luz2;
 
-        public Texture suelo1;
-        public Texture suelo2;
+        public final Texture copa;
+
+        public final Texture suelo1;
+        public final Texture suelo2;
 
         public EscenarioAssets() {
+            fondo = Utils.createAnimationTexture(Constants.GENERIC_HABILITY_DURATION, Constants.FONDO_PARTIDA, Animation.PlayMode.LOOP);
+
             troncos1 = new Texture("escenario/troncos_1.png");
             troncos2 = new Texture("escenario/troncos_2.png");
             troncos3 = new Texture("escenario/troncos_3.png");
@@ -207,11 +212,34 @@ public class Assets implements Disposable, AssetErrorListener {
     }
 
     public class MenuAssets {
-        public final Animation<Texture> fondo;
+        public final Animation<Texture> fondoMenu;
+        public final Animation<Texture> fondoSeleccionPersonaje;
+
+        public final Texture nombreJuego;
+
+        public final Texture botonFacil;
+        public final Texture botonNormal;
+        public final Texture botonDificil;
+
+        public final Texture lazoTitulo;
+
+        public final NinePatch fondoPersonaje;
+
 
         public MenuAssets () {
-            fondo = Utils.createAnimationTexture(Constants.GENERIC_HABILITY_DURATION, Constants.escenario, Animation.PlayMode.LOOP);
+            fondoMenu = Utils.createAnimationTexture(Constants.GENERIC_HABILITY_DURATION, Constants.FONDO_MENU_DIFICULTAD, Animation.PlayMode.LOOP);
+            fondoSeleccionPersonaje = Utils.createAnimationTexture(Constants.GENERIC_HABILITY_DURATION, Constants.FONDO_MENU_PERSONAJE, Animation.PlayMode.LOOP);
 
+            nombreJuego = new Texture("menu/nombreJuego.png");
+
+            botonFacil = new Texture("menu/caja1.png");
+            botonNormal = new Texture("menu/caja2.png");
+            botonDificil = new Texture("menu/caja3.png");
+
+            lazoTitulo = new Texture("menu/titulo.png");
+
+            int edge = 19;//TODO: Pasar a constante
+            fondoPersonaje = new NinePatch(new Texture("menu/fondoPersonaje.png"), edge, edge, edge, edge);
         }
 
     }
@@ -233,6 +261,10 @@ public class Assets implements Disposable, AssetErrorListener {
         public final TextureRegion character02_hab02;
         public final TextureRegion character02_hab03;
 
+        public final Texture fondoOscuro;
+        public final Texture victoria;
+        public final Texture derrota;
+
         public OverlayAssets (TextureAtlas atlas) {
             mainHud = new Texture("GUI/interfaz_character.png");
             vida = new Texture("GUI/vida.png");
@@ -249,6 +281,10 @@ public class Assets implements Disposable, AssetErrorListener {
             character02_hab01 = atlas.findRegion("habilidades-062");
             character02_hab02 = atlas.findRegion("habilidades-087");
             character02_hab03 = atlas.findRegion("habilidades-046");
+
+            fondoOscuro = new Texture("GUI/fondo.png");
+            victoria = new Texture("GUI/victoria.png");
+            derrota = new Texture("GUI/derrota.png");
         }
     }
 }
