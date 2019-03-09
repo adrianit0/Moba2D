@@ -30,6 +30,7 @@ public class DesktopOverlay extends Overlay {
     public void onRender(SpriteBatch batch, BitmapFont font, ShapeRenderer shapeRenderer) {
         Texture t = Assets.instance.overlayAssets.mainHud;
 
+        font.setColor(Color.WHITE);
         font.getData().setScale(0.5f,0.5f);
         font.draw(batch, "Personaje 1", Constants.HUD_MARGIN, viewport.getWorldHeight()-Constants.HUD_MARGIN );
         batch.draw(

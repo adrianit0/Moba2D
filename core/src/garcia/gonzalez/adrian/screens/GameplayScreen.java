@@ -12,8 +12,10 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import garcia.gonzalez.adrian.Level;
 import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
+import garcia.gonzalez.adrian.controladorPersonaje.ControladorInteligenciaArtificial;
 import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
 import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador2;
+import garcia.gonzalez.adrian.controladorPersonaje.InteligenciaArtificialGenerica;
 import garcia.gonzalez.adrian.entidades.overlay.AndroidOverlay;
 import garcia.gonzalez.adrian.entidades.overlay.Desktop2PlayerOverlay;
 import garcia.gonzalez.adrian.entidades.overlay.DesktopOverlay;
@@ -84,8 +86,10 @@ public class GameplayScreen extends ScreenAdapter {
         level.addCharacter(p1);    // Metemos al personaje principal
 
         // PERSONAJE 2. Su personaje será quien no elija el jugador 1
-        // TODO: añadir controlador a la IA
         p2 = getPersonaje(personajeID==0?1:0, dificultad== Enums.Dificultad.TWO_PLAYER ? new ControladorJugador2() : null, Enums.Bando.ENEMIGO, level);
+        // Si no es otro jugador metemos una IA genérica.
+        if (dificultad!= Enums.Dificultad.TWO_PLAYER)
+            p2.setController(new ControladorInteligenciaArtificial(new InteligenciaArtificialGenerica(p2, level)));
         level.addCharacter(p2);
 
         // SELECCIONA EL HUD SEGÚN LAS NECESIDADES QUE SE TENGA EN CADA PARTIDA.
@@ -118,6 +122,10 @@ public class GameplayScreen extends ScreenAdapter {
         }
 
         return new Personaje1(controlador, bando, 0, 0, level);
+    }
+
+    public Enums.Dificultad getDificultad() {
+        return dificultad;
     }
 
     public FinPartidaOverlay getFinPartidaOverlay() {

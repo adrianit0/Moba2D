@@ -68,8 +68,8 @@ public class MenuScreen extends InputAdapter implements Screen {
         Vector2 MEDIUM_CENTER = new Vector2( viewport.getWorldWidth()/2, Constants.MENU_BUTTON_Y);
         Vector2 HARD_CENTER = new Vector2( viewport.getWorldWidth()*3/4, Constants.MENU_BUTTON_Y);
 
-        botonesDificultad.put(new Rectangle(EASY_CENTER.x-tam.x/2,  EASY_CENTER.y-tam.y/2, tam.x, tam.y), Enums.Dificultad.FACIL);
-        botonesDificultad.put(new Rectangle(MEDIUM_CENTER.x-tam.x/2,  MEDIUM_CENTER.y-tam.y/2, tam.x, tam.y), Enums.Dificultad.NORMAL);
+        botonesDificultad.put(new Rectangle(EASY_CENTER.x-tam.x/2,  EASY_CENTER.y-tam.y/2, tam.x, tam.y), Enums.Dificultad.NORMAL);
+        botonesDificultad.put(new Rectangle(MEDIUM_CENTER.x-tam.x/2,  MEDIUM_CENTER.y-tam.y/2, tam.x, tam.y), Enums.Dificultad.DIFICIL);
         // El modo 2 jugadores estará desactivado en ANDROID por obvias razones
         if (!isPhoneDevice())
             botonesDificultad.put(new Rectangle(HARD_CENTER.x-tam.x/2,  HARD_CENTER.y-tam.y/2, tam.x, tam.y), Enums.Dificultad.TWO_PLAYER);

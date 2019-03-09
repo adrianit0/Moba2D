@@ -34,10 +34,19 @@ public class Torre extends Estructura {
     public Torre(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 1000);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 40);
-        getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 155);
+        // Si tienes puesto enemigo su torre será mucho más poderosa
+        // Pero la tuya sigue siendo igual de mala
+        if (level.getDificultad()==Dificultad.DIFICIL && bando==Bando.ENEMIGO) {
+            getAtributos().setAttr(AtribEnum.SALUD, 2500);
+            getAtributos().setAttr(AtribEnum.DEFENSA, 60);
+            getAtributos().setAttr(AtribEnum.REG_SALUD, 10);
+            getAtributos().setAttr(AtribEnum.ATAQUE, 288);
+        } else {
+            getAtributos().setAttr(AtribEnum.SALUD, 1000);
+            getAtributos().setAttr(AtribEnum.DEFENSA, 40);
+            getAtributos().setAttr(AtribEnum.REG_SALUD, 5);
+            getAtributos().setAttr(AtribEnum.ATAQUE, 155);
+        }
 
         // Mientras que esta torre no esté destruida no se podrá destruir esta
         this.superior = superior;

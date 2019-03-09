@@ -48,6 +48,7 @@ public class Personaje2 extends Personaje {
     };
 
     private boolean jumping;
+    private boolean doubleJump;
 
     private int width;
     private int height;
@@ -63,23 +64,24 @@ public class Personaje2 extends Personaje {
 
     public Personaje2(Controlador controller, Bando bando, int x, int y, Level level) {
         super(controller,
-                new Habilidad(3, 20, Assets.instance.overlayAssets.character02_hab01),
+                new Habilidad(2, 0, Assets.instance.overlayAssets.character02_hab01),
                 new Habilidad(1, 30, Assets.instance.overlayAssets.character02_hab02),
                 new Habilidad(9, 100, Assets.instance.overlayAssets.character02_hab03),
                 bando, x, y, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 1250);
+        getAtributos().setAttr(AtribEnum.SALUD, 750);
         getAtributos().setAttr(AtribEnum.MANA, 450);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 40);
+        getAtributos().setAttr(AtribEnum.DEFENSA, 35);
         getAtributos().setAttr(AtribEnum.REG_SALUD, 12);
         getAtributos().setAttr(AtribEnum.REG_MANA, 6);
         getAtributos().setAttr(AtribEnum.ATAQUE, 110);
-        getAtributos().setAttr(AtribEnum.SALTO, 380);
+        getAtributos().setAttr(AtribEnum.SALTO, 310);
         getAtributos().setAttr(AtribEnum.VELOCIDAD, 140);
 
         estado = MaquinaEstados.IDLE;
         animation =false;
         animationTime=0;
+        doubleJump=true;
     }
 
     @Override
@@ -280,7 +282,14 @@ public class Personaje2 extends Personaje {
         jumping=true;
         if (!animation)
             estado=MaquinaEstados.JUMPING;
-        return super.onJumpStart(estadoSalto);
+
+        if (doubleJump && estadoSalto==EstadoSalto.SALTANDO) {
+            doubleJump=false;
+            return true;
+        }
+
+
+        return doubleJump;
     }
 
     @Override
@@ -292,6 +301,7 @@ public class Personaje2 extends Personaje {
     @Override
     public void onJumpFinish() {
         jumping=false;
+        doubleJump=true;
     }
 
     @Override

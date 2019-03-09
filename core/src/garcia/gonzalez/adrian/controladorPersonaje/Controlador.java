@@ -18,7 +18,14 @@ public abstract class Controlador {
         input = (InputProcessorBase) Gdx.input.getInputProcessor();
     }
 
-    public void setPersonaje (Personaje personaje) {
+    public Controlador (InputProcessorBase inputProcessor) {
+        this.input = inputProcessor;
+    }
+
+    public void update(float delta) {
+    }
+
+    public final void setPersonaje (Personaje personaje) {
         this.personaje = personaje;
     }
 

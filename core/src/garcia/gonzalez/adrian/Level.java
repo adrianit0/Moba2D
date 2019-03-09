@@ -12,6 +12,7 @@ import com.sun.prism.image.ViewPort;
 import java.util.LinkedList;
 import java.util.List;
 
+import garcia.gonzalez.adrian.controladorPersonaje.Controlador;
 import garcia.gonzalez.adrian.controladorPersonaje.ControladorJugador1;
 import garcia.gonzalez.adrian.controladorPersonaje.InputProcessorAndroid;
 import garcia.gonzalez.adrian.controladorPersonaje.InputProcessorBase;
@@ -37,6 +38,7 @@ public class Level {
     private Escenario escenario;
 
     private int oleada;
+    private Enums.Dificultad dificultad;
 
     private float tickUpdate;
     private float minionSpawn;
@@ -56,6 +58,7 @@ public class Level {
 
         oleada=0;
         partidaTeminada = false;
+        dificultad = gameplay.getDificultad();
 
         tickUpdate = 0;
         minionSpawn = Constants.TIME_MINION_SPAWN-Constants.TIME_FIRST_MINION_SPAWN;
@@ -120,6 +123,7 @@ public class Level {
         tickUpdate+=delta;
         minionSpawn+=delta;
 
+        // Cada vez que pase un tiempo generamos una nueva oleada de minions
         if (minionSpawn>Constants.TIME_MINION_SPAWN) {
             minionSpawn-=Constants.TIME_MINION_SPAWN;
             oleada++;
@@ -135,7 +139,7 @@ public class Level {
             entidades.add (new Esbirro(Enums.Bando.ENEMIGO,1240,5, this, oleada));
         }
 
-        // Actualizamos los enemigos
+        // Actualizamos las entidades, aquí comprende cualquier elemento que tenga vida en el juego
         for (int i = 0; i < entidades.size; i++) {
             Entidad entidad = entidades.get(i);
             entidad.update(delta);
@@ -143,6 +147,14 @@ public class Level {
             if (entidad.canBeCleaned()) {
                 entidades.removeIndex(i);
                 i--;
+            }
+
+            // Si la entidad es un personaje vamos a actualizar su controlador
+            // No es necesario para el InputProcessor, pero si para la IA
+            if (entidad.getTipoEntidad()== Enums.TipoEntidad.PERSONAJE) {
+                Controlador c = ((Personaje) entidad).getController();
+                if (c!=null)
+                    c.update(delta);
             }
         }
 
@@ -221,6 +233,10 @@ public class Level {
         return oleada;
     }
 
+    public Enums.Dificultad getDificultad() {
+        return dificultad;
+    }
+
     /**
      * A partir de un valor base más otro porcentual obtiene el daño para cualquiera de las
      * habilidades. El funcionamiento
@@ -255,6 +271,16 @@ public class Level {
         LinkedList<Entidad> ent = new LinkedList<Entidad>();
         for(Entidad e : entidades) {
             if (e.estaVivo() && pos.dst(e.getPosition()) < distancia) {
+                ent.add(e);
+            }
+        }
+        return ent;
+    }
+
+    public List<Entidad> getEntidades (Vector2 pos, float distancia, Enums.Bando bando) {
+        LinkedList<Entidad> ent = new LinkedList<Entidad>();
+        for(Entidad e : entidades) {
+            if (e.estaVivo() && pos.dst(e.getPosition()) < distancia && e.getBando()==bando) {
                 ent.add(e);
             }
         }

@@ -22,9 +22,15 @@ public class Nexo extends Estructura{
     public Nexo(Enums.Bando bando, int x, int y, Level level, Torre superior) {
         super(bando, x, y, Enums.TipoEntidad.TORRE, level);
 
-        getAtributos().setAttr(AtribEnum.SALUD, 2500);
-        getAtributos().setAttr(AtribEnum.DEFENSA, -10);
-        getAtributos().setAttr(AtribEnum.REG_SALUD, 20);
+        if (level.getDificultad()==Dificultad.DIFICIL && bando==Bando.ENEMIGO) {
+            getAtributos().setAttr(AtribEnum.SALUD, 3000);
+            getAtributos().setAttr(AtribEnum.DEFENSA, 0);
+            getAtributos().setAttr(AtribEnum.REG_SALUD, 50);
+        } else {
+            getAtributos().setAttr(AtribEnum.SALUD, 2500);
+            getAtributos().setAttr(AtribEnum.DEFENSA, -10);
+            getAtributos().setAttr(AtribEnum.REG_SALUD, 20);
+        }
 
         // Mientras que esta torre no esté destruida no se podrá destruir esta
         this.superior = superior;

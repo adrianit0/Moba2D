@@ -29,6 +29,7 @@ public class AndroidOverlay extends Overlay {
     public void onRender(SpriteBatch batch, BitmapFont font, ShapeRenderer shapeRenderer) {
         Texture t = Assets.instance.overlayAssets.mainHud;
 
+        font.setColor(Color.WHITE);
         font.getData().setScale(0.5f,0.5f);
         font.draw(batch, "Personaje 1", Constants.HUD_MARGIN, viewport.getWorldHeight()-Constants.HUD_MARGIN );
         batch.draw(
@@ -67,6 +68,8 @@ public class AndroidOverlay extends Overlay {
                     Constants.HUD_MARGIN*2,
                     viewport.getWorldHeight()-t.getHeight()/2-Constants.HUD_MARGIN/2);
         }
+
+        font.getData().setScale(0.5f,0.5f);
 
         Texture vida = Assets.instance.overlayAssets.vida;
         Texture t_mana = Assets.instance.overlayAssets.mana;

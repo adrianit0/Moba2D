@@ -33,6 +33,7 @@ public class Desktop2PlayerOverlay extends Overlay {
         // JUGADOR 1
         Texture t = Assets.instance.overlayAssets.mainHud;
 
+        font.setColor(Color.WHITE);
         font.getData().setScale(0.5f,0.5f);
         font.draw(batch, "Jugador 1", Constants.HUD_MARGIN, viewport.getWorldHeight()-Constants.HUD_MARGIN );
         batch.draw(

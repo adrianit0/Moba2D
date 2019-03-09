@@ -39,6 +39,14 @@ public abstract class Personaje extends Unidad {
         this.habilidades = new Habilidad[] { hab1, hab2, hab3};
     }
 
+    public void setController (Controlador controller) {
+        this.controller = controller;
+    }
+
+    public Controlador getController() {
+        return controller;
+    }
+
     // MÉTODOS ABSTRACTOS
     public abstract boolean canCastHability (int hab);
     public abstract boolean onHabilityDown (int hab);

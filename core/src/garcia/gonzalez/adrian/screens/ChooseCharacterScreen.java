@@ -64,9 +64,8 @@ public class ChooseCharacterScreen extends InputAdapter implements Screen {
     }
 
     private void crearBotones () {
-        Vector2 CHARACTER_1 = new Vector2( viewport.getWorldWidth()/4, Constants.MENU_BUTTON_Y);
-        Vector2 CHARACTER_2 = new Vector2( viewport.getWorldWidth()/2, Constants.MENU_BUTTON_Y);
-        Vector2 CHARACTER_3 = new Vector2( viewport.getWorldWidth()*3/4, Constants.MENU_BUTTON_Y);
+        Vector2 CHARACTER_1 = new Vector2( viewport.getWorldWidth()/3, Constants.MENU_BUTTON_Y);
+        Vector2 CHARACTER_2 = new Vector2( viewport.getWorldWidth()*2/3, Constants.MENU_BUTTON_Y);
 
         Vector2 tam = Constants.MENU_CHARACTER_SIZE;
 
@@ -92,21 +91,18 @@ public class ChooseCharacterScreen extends InputAdapter implements Screen {
 
 
 
-        Vector2 CHARACTER_1 = new Vector2( viewport.getWorldWidth()/4, Constants.MENU_BUTTON_Y);
-        Vector2 CHARACTER_2 = new Vector2( viewport.getWorldWidth()/2, Constants.MENU_BUTTON_Y);
-        Vector2 CHARACTER_3 = new Vector2( viewport.getWorldWidth()*3/4, Constants.MENU_BUTTON_Y);
+        Vector2 CHARACTER_1 = new Vector2( viewport.getWorldWidth()/3, Constants.MENU_BUTTON_Y);
+        Vector2 CHARACTER_2 = new Vector2( viewport.getWorldWidth()*2/3, Constants.MENU_BUTTON_Y);
 
         Vector2 tam = Constants.MENU_CHARACTER_SIZE;
 
         Assets.instance.menuAssets.fondoPersonaje.draw(batch, CHARACTER_1.x-tam.x/2, CHARACTER_1.y, tam.x, tam.y);
         Assets.instance.menuAssets.fondoPersonaje.draw(batch, CHARACTER_2.x-tam.x/2, CHARACTER_2.y, tam.x, tam.y);
-        Assets.instance.menuAssets.fondoPersonaje.draw(batch, CHARACTER_3.x-tam.x/2, CHARACTER_3.y, tam.x, tam.y);
 
         Texture lazo = Assets.instance.menuAssets.lazoTitulo;
 
         batch.draw(lazo, CHARACTER_1.x-lazo.getWidth()/6, CHARACTER_1.y - lazo.getHeight()/3, lazo.getWidth()/3, lazo.getHeight()/2);
         batch.draw(lazo, CHARACTER_2.x-lazo.getWidth()/6, CHARACTER_2.y - lazo.getHeight()/3, lazo.getWidth()/3, lazo.getHeight()/2);
-        batch.draw(lazo, CHARACTER_3.x-lazo.getWidth()/6, CHARACTER_3.y - lazo.getHeight()/3, lazo.getWidth()/3, lazo.getHeight()/2);
 
         TextureRegion p1 = Assets.instance.personaje1.idle.getKeyFrame(Utils.secondsSince(timeStarted));
         TextureRegion p2 = Assets.instance.personaje2.idle.getKeyFrame(Utils.secondsSince(timeStarted));
@@ -117,7 +113,6 @@ public class ChooseCharacterScreen extends InputAdapter implements Screen {
         final String CHOOSE_DIFFICULT = "Selecciona un personaje";
         final String NOMBRE_1 = Constants.CHARACTER_01_NAME;
         final String NOMBRE_2 = Constants.CHARACTER_02_NAME;
-        final String NOMBRE_3 = "???";
 
         // Usamos los GlyphLayout para saber la posición final que tendrá el texto
         // y así poder situarlo en la pantalla en el centro
@@ -125,13 +120,15 @@ public class ChooseCharacterScreen extends InputAdapter implements Screen {
         // Para el outline de la frase
         font.getData().setScale(3f);
         font.setColor(Color.BLACK);
-        font.draw(batch, CHOOSE_DIFFICULT, CHARACTER_2.x+2, CHARACTER_2.y + 302 + chooseDifficult.height / 2, 0, Align.center, false);
-        font.draw(batch, CHOOSE_DIFFICULT, CHARACTER_2.x+2, CHARACTER_2.y + 298 + chooseDifficult.height / 2, 0, Align.center, false);
-        font.draw(batch, CHOOSE_DIFFICULT, CHARACTER_2.x-2, CHARACTER_2.y + 302 + chooseDifficult.height / 2, 0, Align.center, false);
-        font.draw(batch, CHOOSE_DIFFICULT, CHARACTER_2.x-2, CHARACTER_2.y + 298 + chooseDifficult.height / 2, 0, Align.center, false);
+        final Vector2 posTexto = new Vector2(viewport.getWorldWidth()/2, CHARACTER_2.y + 300 + chooseDifficult.height / 2);
+
+        font.draw(batch, CHOOSE_DIFFICULT, posTexto.x+2,posTexto.y+2, 0, Align.center, false);
+        font.draw(batch, CHOOSE_DIFFICULT, posTexto.x+2,posTexto.y-2, 0, Align.center, false);
+        font.draw(batch, CHOOSE_DIFFICULT, posTexto.x-2,posTexto.y+2, 0, Align.center, false);
+        font.draw(batch, CHOOSE_DIFFICULT, posTexto.x-2,posTexto.y-2, 0, Align.center, false);
 
         font.setColor(Color.WHITE);
-        font.draw(batch, CHOOSE_DIFFICULT, CHARACTER_2.x, CHARACTER_2.y + 300 + chooseDifficult.height / 2, 0, Align.center, false);
+        font.draw(batch, CHOOSE_DIFFICULT, posTexto.x, posTexto.y, 0, Align.center, false);
 
         font.getData().setScale(1.5f);
         font.setColor(Color.BLACK);
@@ -140,9 +137,6 @@ public class ChooseCharacterScreen extends InputAdapter implements Screen {
 
         final GlyphLayout mediumLayout = new GlyphLayout(font, NOMBRE_2);
         font.draw(batch, NOMBRE_2, CHARACTER_2.x, CHARACTER_2.y + mediumLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout hardLayout = new GlyphLayout(font, NOMBRE_3);
-        font.draw(batch, NOMBRE_3, CHARACTER_3.x, CHARACTER_3.y + hardLayout.height / 2, 0, Align.center, false);
 
         batch.end();
     }

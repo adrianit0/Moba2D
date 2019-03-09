@@ -51,10 +51,18 @@ public class Esbirro extends Unidad {
 
         // Le damos valores por defecto
         // Los esbirros se volveran más poderoso en cada oleada
-        getAtributos().setAttr(AtribEnum.SALUD, 500 + oleada*20);
-        getAtributos().setAttr(AtribEnum.ATAQUE, 15 + oleada*5);
-        getAtributos().setAttr(AtribEnum.DEFENSA, 12 + oleada);
-        getAtributos().setAttr(AtribEnum.VELOCIDAD, 80);
+        if (level.getDificultad()==Dificultad.DIFICIL && bando==Bando.ENEMIGO) {
+            getAtributos().setAttr(AtribEnum.SALUD, 800 + oleada*20);
+            getAtributos().setAttr(AtribEnum.ATAQUE, 15 + oleada*10);
+            getAtributos().setAttr(AtribEnum.DEFENSA, 5 + oleada*2);
+            getAtributos().setAttr(AtribEnum.VELOCIDAD, 80);
+        } else {
+            getAtributos().setAttr(AtribEnum.SALUD, 500 + oleada*20);
+            getAtributos().setAttr(AtribEnum.ATAQUE, 15 + oleada*5);
+            getAtributos().setAttr(AtribEnum.DEFENSA, 12 + oleada);
+            getAtributos().setAttr(AtribEnum.VELOCIDAD, 80);
+        }
+
 
         estado=MaquinaEstados.SPAWN;
 

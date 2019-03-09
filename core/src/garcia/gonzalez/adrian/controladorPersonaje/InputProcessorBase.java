@@ -19,28 +19,24 @@ public abstract class InputProcessorBase implements InputProcessor {
     public abstract void setViewport (Viewport view);
     public abstract void resize  ();
 
-    public LinkedList<Integer> getLastTeclas() {
-        return lastTeclas;
-    }
-
-    public LinkedList<Integer> getTeclas() {
+    public final LinkedList<Integer> getTeclas() {
         return teclas;
     }
 
-    public void nextFrame () {
+    public final void nextFrame () {
         lastTeclas = new LinkedList<Integer>(teclas);
     }
 
-    public boolean isKeyDown (int keycode) {
+    public final boolean isKeyDown (int keycode) {
         //Gdx.app.log("KeyDOWN", "LT: "+lastTeclas+" AL: "+teclas + " keycode: " +keycode);
         return !lastTeclas.contains(keycode) && teclas.contains(keycode);
     }
 
-    public boolean isKeyPressing (int keycode) {
+    public final boolean isKeyPressing (int keycode) {
         return lastTeclas.contains(keycode) && teclas.contains(keycode);
     }
 
-    public boolean isKeyUp (int keycode) {
+    public final boolean isKeyUp (int keycode) {
         //Gdx.app.log("KeyUP", "LT: "+lastTeclas+" AL: "+teclas + " keycode: " +keycode);
         return lastTeclas.contains(keycode) && !teclas.contains(keycode);
     }

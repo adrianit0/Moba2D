@@ -146,8 +146,9 @@ public class Enums {
     }
 
     public enum Dificultad {
-        FACIL,      // Ambas partes del mapa son iguales
-        TWO_PLAYER,    // El enemigo tiene mejores atributos que los tuyos
-        NORMAL  // Los propios minions podrian matarte
+        NORMAL,         // Ambas partes del mapa son iguales
+        DIFICIL,        // Si te descuidad, los propios minions podrian matarte
+        TWO_PLAYER      // Modo de 2 jugadores. Solo compatible con PC
+
     }
 }
