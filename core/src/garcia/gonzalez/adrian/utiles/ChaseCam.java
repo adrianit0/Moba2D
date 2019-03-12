@@ -10,13 +10,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.sql.Time;
 
 import garcia.gonzalez.adrian.entidades.Entidad;
+import garcia.gonzalez.adrian.entidades.Unidad;
 import garcia.gonzalez.adrian.entidades.personajes.Personaje;
 import garcia.gonzalez.adrian.enums.Enums;
 
 public class ChaseCam {
 
     private Camera camera;
-    private Entidad target;
+    private Personaje target;
 
     private boolean following;
 
@@ -31,7 +32,7 @@ public class ChaseCam {
 
         this.target = target;
         velocidad = Constants.CHASE_CAM_MOVE_SPEED;
-        separacion = target.getBando()== Enums.Bando.ALIADO ? Constants.CHASE_CAM_SEPARATION : -Constants.CHASE_CAM_SEPARATION;
+        separacion = Constants.CHASE_CAM_SEPARATION;
         incrementoVelocidad = Constants.CHASE_CAM_MOVE_INCREMENT;
 
         following=true;
@@ -46,26 +47,26 @@ public class ChaseCam {
     // Actualizamos la posición de la cámara respecto a la posición de GigaGal
     public void update(float delta) {
 
-        if (following) {
+        if (target.estaVivo()) {
             chaseCamera(target.getPosition3D(), delta);
         } else {
             // Si pulsamos las teclas A S D W mientras está en modo no following
             // Modificaremos la posición de la cámara
-            if (Gdx.input.isKeyPressed(Keys.A)) {
-                camera.position.x -= delta * Constants.CHASE_CAM_MOVE_SPEED;
+            if (target.getController().onKeyPressing(Enums.TeclasJugador.MOVER_IZQUIERDA)) {
+                camera.position.x -= delta * Constants.CHASE_CAM_MOVE_SPEED_DEATH;
             }
 
-            if (Gdx.input.isKeyPressed(Keys.D)) {
-                camera.position.x += delta * Constants.CHASE_CAM_MOVE_SPEED;
+            if (target.getController().onKeyPressing(Enums.TeclasJugador.MOVER_DERECHA)) {
+                camera.position.x += delta * Constants.CHASE_CAM_MOVE_SPEED_DEATH;
             }
 
-            if (Gdx.input.isKeyPressed(Keys.W)) {
+            /*if (Gdx.input.isKeyPressed(Keys.W)) {
                 camera.position.y += delta * Constants.CHASE_CAM_MOVE_SPEED;
             }
 
             if (Gdx.input.isKeyPressed(Keys.S)) {
                 camera.position.y -= delta * Constants.CHASE_CAM_MOVE_SPEED;
-            }
+            }*/
         }
 
         if (camera.position.y-Constants.WORLD_SIZE/5<0)
@@ -84,6 +85,8 @@ public class ChaseCam {
             float step = velocidad * (1 + (_distancia * incrementoVelocidad)) * delta;
             // Situamos la posición que queremos que esté el personaje situado respecto la cámara
             // (Este paso es por si queremos incluirle un offset)
+            float separacion = target.getDireccion()== Enums.Direccion.DERECHA ? Constants.CHASE_CAM_SEPARATION : -Constants.CHASE_CAM_SEPARATION;
+
             Vector3 _persPosition = new Vector3(posicionPersonaje.x + separacion, posicionPersonaje.y, posicionPersonaje.z);
             // Calculamos el trozo de distancia que recorrerá desde la posición actual hasta la
             // posición de destino

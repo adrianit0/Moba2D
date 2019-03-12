@@ -28,10 +28,17 @@ public abstract class Entidad {
         this.x=x;
         this.y=y;
         atributos = new Atributos();
+
+        // Atributos por defecto
+        atributos.setAttr(AtribEnum.SALUD, 300);
+        atributos.setAttr(AtribEnum.VELOCIDAD, 300);
+        atributos.setAttr(AtribEnum.SALTO, 180);
+
         this.bando = bando;
         this.level = level;
         this.tipoEntidad=tipoEntidad;
 
+        // Lanzamos los eventos de crear y spawnear
         onCreate();
         onSpawn();
     }

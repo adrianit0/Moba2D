@@ -54,20 +54,32 @@ public abstract class Personaje extends Unidad {
     public abstract boolean onHabilityUp (int hab);
 
     // METODOS QUE SIGUEN ABSTRACTOS DE LOS PADRES, por lo que tendrá que implementarlo sus hijos
-    @Override
-    public abstract void onCreate();
+
     @Override
     public abstract void onUpdate(float delta);
     @Override
     public abstract void onTickUpdate(float tickDelta);
     @Override
     public abstract void onRender(SpriteBatch batch);
+
     @Override
-    public abstract int onAttack(int damage, Entidad objetivo);
+    public void onCreate() {
+
+    }
+
+    @Override
+    public int onAttack(int damage, Entidad objetivo) {
+        return damage;
+    }
 
     @Override
     public boolean onMove(Enums.Direccion dir, float delta) {
         return true;
+    }
+
+    @Override
+    public void onIdle(float delta) {
+
     }
 
     @Override

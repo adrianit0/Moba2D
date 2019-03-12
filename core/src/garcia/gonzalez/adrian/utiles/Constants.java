@@ -47,8 +47,9 @@ public class Constants {
 
 
     // CONFIGURACION PARTIDA
-    public static final float CHASE_CAM_MOVE_SPEED = 30;   // Velocidad de la camara
-    public static final float CHASE_CAM_MOVE_INCREMENT = 0.15f;
+    public static final float CHASE_CAM_MOVE_SPEED = 25;   // Velocidad de la camara
+    public static final float CHASE_CAM_MOVE_SPEED_DEATH = 400;   // Velocidad de la camara
+    public static final float CHASE_CAM_MOVE_INCREMENT = 0.10f;
     public static final float CHASE_CAM_SEPARATION = 50;
     public static final float CHASE_CAM_MIN_HEIGHT = 50;
     public static final float CHASE_CAM_MIN_HEIGHT_2_PLAYER = 100;
